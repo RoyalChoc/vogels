@@ -1,0 +1,93 @@
+{
+    "BOFBN712-1": {
+        "Stamnummer": "BOFBN712",
+        "Ringnummer": "1",
+        "Ringmaat": "4.0 mm",
+        "Geslacht": "Man",
+        "Mutatie": "Blauw Witborst",
+        "Status": "Actief",
+        "Herkomst": "Eigen kweek",
+        "Kooi": "Kooi 01",
+        "Kweekjaar": "2024",
+        "Vader": "",
+        "Moeder": ""
+    },
+    "BOFBN712-2": {
+        "Stamnummer": "BOFBN712",
+        "Ringnummer": "2",
+        "Ringmaat": "4.0 mm",
+        "Geslacht": "Pop",
+        "Mutatie": "Blauw",
+        "Status": "Actief",
+        "Herkomst": "Eigen kweek",
+        "Kooi": "Kooi 01",
+        "Kweekjaar": "2024",
+        "Vader": "",
+        "Moeder": ""
+    },
+    "BOFBN712-4": {
+        "Stamnummer": "BOFBN712",
+        "Ringnummer": "4",
+        "Ringmaat": "4.0 mm",
+        "Geslacht": "Man",
+        "Mutatie": "Wildkleur",
+        "Status": "Actief",
+        "Herkomst": "Eigen kweek",
+        "Kooi": "Kooi 01",
+        "Kweekjaar": "2026",
+        "Vader": "BOFBN712 - 1",
+        "Moeder": "BOFBN712 - 2"
+    },
+    "BOFBN712-3": {
+        "Stamnummer": "BOFBN712",
+        "Ringnummer": "3",
+        "Ringmaat": "4.0 mm",
+        "Geslacht": "Pop",
+        "Mutatie": "Blauw",
+        "Status": "Actief",
+        "Herkomst": "Eigen kweek",
+        "Kooi": "Kooi 01",
+        "Kweekjaar": "2026",
+        "Vader": "BOFBN712 - 1",
+        "Moeder": "BOFBN712 - 2"
+    },
+    "BOFBN712-5": {
+        "Stamnummer": "BOFBN712",
+        "Ringnummer": "5",
+        "Ringmaat": "4.0 mm",
+        "Geslacht": "Man",
+        "Mutatie": "Zwarte Witborst",
+        "Status": "Actief",
+        "Herkomst": "Eigen kweek",
+        "Kooi": "Kooi 05",
+        "Kweekjaar": "2027",
+        "Vader": "BOFBN712 - 4",
+        "Moeder": "BOFBN712 - 3"
+    },
+    "BOFBN712-6": {
+        "Stamnummer": "BOFBN712",
+        "Ringnummer": "6",
+        "Ringmaat": "4.0 mm",
+        "Geslacht": "Pop",
+        "Mutatie": "Blauw",
+        "Status": "Actief",
+        "Herkomst": "Eigen kweek",
+        "Kooi": "Kooi 05",
+        "Kweekjaar": "2027",
+        "Vader": "BOFBN712 - 4",
+        "Moeder": "BOFBN712 - 3"
+    },
+    "BOFBN712-7": {
+        "Stamnummer": "BOFBN712",
+        "Ringnummer": "7",
+        "Ringmaat": "4.0 mm",
+        "Geslacht": "Pop",
+        "Mutatie": "Wildkleur",
+        "Status": "Actief",
+        "Herkomst": "Eigen kweek",
+        "Kooi": "Kooi 05",
+        "Kweekjaar": "2027",
+        "Vader": "BOFBN712 - 4",
+        "Moeder": "BOFBN712 - 3"
+    }
+}

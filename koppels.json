@@ -1,0 +1,23 @@
+{
+    "Koppel 1": {
+        "man": "BOFBN712 - 1",
+        "pop": "BOFBN712 - 2",
+        "kooi": "Kooi 01",
+        "kweekjaar": "2026",
+        "jongen": [
+            "BOFBN712 - 3",
+            "BOFBN712 - 4"
+        ]
+    },
+    "Koppel 2": {
+        "man": "BOFBN712 - 4",
+        "pop": "BOFBN712 - 3",
+        "kooi": "Kooi 02",
+        "kweekjaar": "2026",
+        "jongen": [
+            "BOFBN712 - 5",
+            "BOFBN712 - 6",
+            "BOFBN712 - 7"
+        ]
+    }
+}
