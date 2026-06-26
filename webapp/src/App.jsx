@@ -138,6 +138,14 @@ function TreeNode({ node }) {
   )
 }
 
+function flattenTreeRows(node, depth = 0, rows = []) {
+  if (!node) return rows
+  const indent = '  '.repeat(depth)
+  rows.push([`${indent}${node.label}`, node.meta || '-'])
+  ;(node.children || []).forEach((child) => flattenTreeRows(child, depth + 1, rows))
+  return rows
+}
+
 function PrintIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -441,6 +449,47 @@ function App() {
     openPrintDocument(`Koppelkaart - ${selectedCouple}`, html)
   }
 
+  function exportSelectedCouplePdf() {
+    if (!selectedCouple || !couples[selectedCouple]) {
+      setStatus('Selecteer eerst een koppel om op te slaan als PDF.')
+      return
+    }
+
+    const c = couples[selectedCouple]
+    const man = findBirdByName(birds, c.man)
+    const pop = findBirdByName(birds, c.pop)
+    const generatedAt = new Date().toLocaleString('nl-BE')
+    const fileStamp = new Date().toISOString().slice(0, 10)
+
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
+    doc.setFontSize(16)
+    doc.text(`Koppelkaart - ${selectedCouple}`, 12, 12)
+    doc.setFontSize(10)
+    doc.setTextColor(84, 102, 114)
+    doc.text(`Gegenereerd op ${generatedAt}`, 12, 17)
+    doc.text(`Man: ${c.man} (${man?.Mutatie || '-'} | ${man?.Status || '-'})`, 12, 22)
+    doc.text(`Pop: ${c.pop} (${pop?.Mutatie || '-'} | ${pop?.Status || '-'})`, 12, 27)
+    doc.text(`Kooi/Jaar: ${c.kooi || '-'} / ${c.kweekjaar || '-'}`, 12, 32)
+
+    autoTable(doc, {
+      startY: 36,
+      head: [['Jong', 'Ringmaat', 'Geslacht', 'Mutatie', 'Jaar']],
+      body: (c.jongen || []).length
+        ? (c.jongen || []).map((naam) => {
+            const j = findBirdByName(birds, naam)
+            return [naam, j?.Ringmaat || '-', j?.Geslacht || '-', j?.Mutatie || '-', j?.Kweekjaar || '-']
+          })
+        : [['Geen jongen geregistreerd', '-', '-', '-', '-']],
+      margin: { left: 10, right: 10 },
+      styles: { fontSize: 9, cellPadding: 2, lineWidth: 0.1 },
+      headStyles: { fillColor: [15, 115, 115] },
+      alternateRowStyles: { fillColor: [247, 251, 252] },
+    })
+
+    doc.save(`koppelkaart-${selectedCouple}-${fileStamp}.pdf`)
+    setStatus('PDF opgeslagen: koppelkaart.')
+  }
+
   function printTree(type) {
     if (!activeTreeBird) {
       setStatus('Selecteer eerst een vogel in de stamboom-tab.')
@@ -451,6 +500,41 @@ function App() {
     const tree = type === 'descendants' ? descendants : ancestors
     const html = `<p><strong>Startvogel:</strong> ${esc(vogelNaam(activeTreeBird))}</p><ul class="tree">${treeToHtml(tree)}</ul>`
     openPrintDocument(`Stamboom - ${label}`, html)
+  }
+
+  function exportTreePdf(type) {
+    if (!activeTreeBird) {
+      setStatus('Selecteer eerst een vogel in de stamboom-tab.')
+      return
+    }
+
+    const label = type === 'descendants' ? 'Nakomelingen' : 'Voorouders'
+    const tree = type === 'descendants' ? descendants : ancestors
+    const rows = flattenTreeRows(tree)
+    const generatedAt = new Date().toLocaleString('nl-BE')
+    const fileStamp = new Date().toISOString().slice(0, 10)
+
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+    doc.setFontSize(16)
+    doc.text(`Stamboom - ${label}`, 12, 12)
+    doc.setFontSize(10)
+    doc.setTextColor(84, 102, 114)
+    doc.text(`Gegenereerd op ${generatedAt}`, 12, 17)
+    doc.text(`Startvogel: ${vogelNaam(activeTreeBird)}`, 12, 22)
+
+    autoTable(doc, {
+      startY: 26,
+      head: [['Vogel', 'Info']],
+      body: rows,
+      margin: { left: 10, right: 10 },
+      styles: { fontSize: 9, cellPadding: 2, lineWidth: 0.1 },
+      headStyles: { fillColor: [15, 115, 115] },
+      alternateRowStyles: { fillColor: [247, 251, 252] },
+      columnStyles: { 0: { cellWidth: 92 } },
+    })
+
+    doc.save(`stamboom-${label.toLowerCase()}-${fileStamp}.pdf`)
+    setStatus(`PDF opgeslagen: stamboom ${label.toLowerCase()}.`)
   }
 
   function clearBirdForm() {
@@ -941,12 +1025,17 @@ function App() {
               </select>
             </div>
 
-            <div className="rowActions">
+            <div className="rowActions singleLineActions">
               <button type="button" className="primary" onClick={saveCouple}>
                 {selectedCouple ? 'Wijzig koppel' : 'Nieuw koppel'}
               </button>
-              <button type="button" className="ghost" onClick={printSelectedCouple}>
-                Afdruk koppel
+              <button type="button" className="iconAction print" onClick={printSelectedCouple}>
+                <PrintIcon />
+                <span>Afdruk koppel</span>
+              </button>
+              <button type="button" className="iconAction pdf" onClick={exportSelectedCouplePdf}>
+                <PdfIcon />
+                <span>Koppel als PDF</span>
               </button>
               <button type="button" className="danger" onClick={deleteCouple}>
                 Verwijder koppel
@@ -1012,7 +1101,7 @@ function App() {
         <section className="panel">
           <article className="card">
             <h2>Stamboom viewer</h2>
-            <div className="rowActions compact">
+            <div className="rowActions compact singleLineActions">
               <select value={selectedBirdKey} onChange={(e) => setSelectedBirdKey(e.target.value)}>
                 <option value="">Selecteer startvogel</option>
                 {birdEntries.map(([key, bird]) => (
@@ -1021,11 +1110,21 @@ function App() {
                   </option>
                 ))}
               </select>
-              <button type="button" className="ghost" onClick={() => printTree('ancestors')}>
-                Afdruk voorouders
+              <button type="button" className="iconAction print" onClick={() => printTree('ancestors')}>
+                <PrintIcon />
+                <span>Afdruk voorouders</span>
               </button>
-              <button type="button" className="ghost" onClick={() => printTree('descendants')}>
-                Afdruk nakomelingen
+              <button type="button" className="iconAction pdf" onClick={() => exportTreePdf('ancestors')}>
+                <PdfIcon />
+                <span>Voorouders PDF</span>
+              </button>
+              <button type="button" className="iconAction print" onClick={() => printTree('descendants')}>
+                <PrintIcon />
+                <span>Afdruk nakomelingen</span>
+              </button>
+              <button type="button" className="iconAction pdf" onClick={() => exportTreePdf('descendants')}>
+                <PdfIcon />
+                <span>Nakomelingen PDF</span>
               </button>
             </div>
 

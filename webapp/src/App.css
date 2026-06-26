@@ -153,6 +153,18 @@
   gap: 0.5rem;
 }
 
+.singleLineActions {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 0.15rem;
+}
+
+.singleLineActions > * {
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
 .rowActions button,
 .coupleCard {
   border: 1px solid var(--line);
