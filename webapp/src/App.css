@@ -1,0 +1,396 @@
+.appShell {
+  width: min(1240px, 100% - 2rem);
+  margin: 1.2rem auto 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.heroBar {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1rem;
+  border: 1px solid var(--line);
+  background: linear-gradient(140deg, rgba(255, 252, 238, 0.96), rgba(232, 250, 246, 0.93));
+  border-radius: 24px;
+  padding: 1.2rem 1.3rem;
+  box-shadow: var(--shadow-soft);
+  animation: rise 0.45s ease;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent-deep);
+}
+
+.heroBar h1 {
+  margin: 0.35rem 0 0.45rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+}
+
+.subline {
+  margin: 0;
+  color: var(--ink-soft);
+  max-width: 58ch;
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.kpiGrid article {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.7rem 0.8rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.kpiGrid span {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.kpiGrid strong {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  color: var(--accent-deep);
+}
+
+.statusBar {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.7rem 0.85rem;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--ink-soft);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.tabs button {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.tabs button:hover {
+  transform: translateY(-1px);
+}
+
+.tabs button.active {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #ffffff;
+}
+
+.panel {
+  display: grid;
+  gap: 1rem;
+  animation: rise 0.35s ease;
+}
+
+.panel.split {
+  grid-template-columns: 1.25fr 0.95fr;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow-soft);
+  padding: 1rem;
+}
+
+.card h2,
+.card h3 {
+  margin: 0 0 0.8rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.formGrid input,
+.formGrid select,
+.listHead input,
+.rowActions select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+}
+
+.rowActions {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.rowActions button,
+.coupleCard {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--ink);
+  padding: 0.58rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+button.primary {
+  border-color: transparent;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+
+button.ghost {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+button.danger {
+  background: #fff6f1;
+  border-color: #f8c9b8;
+  color: #8f2f11;
+}
+
+.listHead {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.listHead h2 {
+  margin: 0;
+}
+
+.listHeadActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.listHeadActions input {
+  min-width: 280px;
+}
+
+.tableWrap {
+  margin-top: 0.7rem;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+thead {
+  background: #f7fbfc;
+}
+
+th,
+td {
+  padding: 0.62rem 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+tbody tr:hover {
+  background: #fbfdfd;
+}
+
+tbody tr.selected {
+  background: #edf8f7;
+}
+
+.childEditor {
+  margin-top: 0.9rem;
+  border-top: 1px dashed var(--line);
+  padding-top: 0.8rem;
+}
+
+.chips,
+.chipList {
+  list-style: none;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chips li,
+.chipList li {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 0.25rem 0.3rem 0.25rem 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chips button,
+.chipList button {
+  border: none;
+  background: #fde5db;
+  color: #7a3118;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.coupleCards {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.coupleCard {
+  text-align: left;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.coupleCard p,
+.coupleCard small {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.coupleCard.active {
+  border-color: transparent;
+  background: linear-gradient(135deg, rgba(255, 151, 97, 0.22), rgba(0, 167, 139, 0.2));
+}
+
+.treeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.treeWrap {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.7rem;
+  min-height: 220px;
+  background: rgba(255, 255, 255, 0.7);
+  overflow: auto;
+}
+
+.treeRoot,
+.treeRoot ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.treeNode {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  padding: 0.5rem 0.6rem;
+  margin: 0.45rem 0;
+  background: #ffffff;
+}
+
+.treeNode h4 {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.treeNode p {
+  margin: 0.2rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1050px) {
+  .heroBar,
+  .panel.split,
+  .treeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .appShell {
+    width: min(100% - 1rem, 1240px);
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .tabs button {
+    padding-inline: 0.2rem;
+  }
+
+  .listHeadActions {
+    width: 100%;
+  }
+
+  .listHeadActions input {
+    min-width: 0;
+    flex: 1;
+  }
+}
