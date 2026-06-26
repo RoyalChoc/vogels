@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { jsPDF } from 'jspdf'
+import autoTable from 'jspdf-autotable'
 import './App.css'
 import { options, seedBirds, seedCouples } from './data/seedData'
 
@@ -133,6 +135,43 @@ function TreeNode({ node }) {
         </ul>
       ) : null}
     </li>
+  )
+}
+
+function PrintIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M6 9V4h12v5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <rect
+        x="4"
+        y="9"
+        width="16"
+        height="8"
+        rx="2"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <rect x="7" y="14" width="10" height="6" rx="1.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17" cy="12" r="1" fill="currentColor" />
+    </svg>
+  )
+}
+
+function PdfIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <path d="M14 3v5h5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M8.6 16.8h6.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M8.6 13.7h3.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
   )
 }
 
@@ -316,6 +355,50 @@ function App() {
     </table>`
 
     openPrintDocument('Vogeloverzicht', html)
+  }
+
+  function exportBirdOverviewPdf() {
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
+    const generatedAt = new Date().toLocaleString('nl-BE')
+    const fileStamp = new Date().toISOString().slice(0, 10)
+
+    doc.setFontSize(16)
+    doc.text('Vogeloverzicht', 12, 12)
+    doc.setFontSize(10)
+    doc.setTextColor(84, 102, 114)
+    doc.text(`Gegenereerd op ${generatedAt}`, 12, 17)
+
+    autoTable(doc, {
+      startY: 21,
+      head: [['Naam', 'Ringmaat', 'Geslacht', 'Mutatie', 'Status', 'Herkomst', 'Kooi', 'Jaar', 'Vader', 'Moeder']],
+      body: filteredBirds.map(([, bird]) => [
+        vogelNaam(bird),
+        bird.Ringmaat || '-',
+        bird.Geslacht || '-',
+        bird.Mutatie || '-',
+        bird.Status || '-',
+        bird.Herkomst || '-',
+        bird.Kooi || '-',
+        bird.Kweekjaar || '-',
+        bird.Vader || '-',
+        bird.Moeder || '-',
+      ]),
+      margin: { left: 10, right: 10 },
+      styles: {
+        fontSize: 8,
+        cellPadding: 1.9,
+        lineWidth: 0.1,
+      },
+      headStyles: {
+        fillColor: [15, 115, 115],
+      },
+      alternateRowStyles: {
+        fillColor: [247, 251, 252],
+      },
+    })
+
+    doc.save(`vogeloverzicht-${fileStamp}.pdf`)
+    setStatus('PDF opgeslagen: vogeloverzicht.')
   }
 
   function printSelectedCouple() {
@@ -764,8 +847,13 @@ function App() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-                <button type="button" className="ghost" onClick={printBirdOverview}>
-                  Afdrukken
+                <button type="button" className="iconAction print" onClick={printBirdOverview}>
+                  <PrintIcon />
+                  <span>Afdrukken</span>
+                </button>
+                <button type="button" className="iconAction pdf" onClick={exportBirdOverviewPdf}>
+                  <PdfIcon />
+                  <span>Opslaan als PDF</span>
                 </button>
               </div>
             </div>

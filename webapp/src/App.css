@@ -193,12 +193,53 @@ button.danger {
 
 .listHeadActions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   align-items: center;
 }
 
 .listHeadActions input {
   min-width: 280px;
+}
+
+.iconAction {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.54rem 0.88rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 7px 18px rgba(18, 42, 44, 0.14);
+}
+
+.iconAction svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+.iconAction:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.iconAction:active {
+  transform: translateY(0);
+}
+
+.iconAction.print {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0f7373, #00a78b);
+}
+
+.iconAction.pdf {
+  color: #ffffff;
+  background: linear-gradient(135deg, #1e3336, #345f66);
 }
 
 .tableWrap {
@@ -392,5 +433,10 @@ tbody tr.selected {
   .listHeadActions input {
     min-width: 0;
     flex: 1;
+  }
+
+  .iconAction {
+    justify-content: center;
+    flex: 1 1 auto;
   }
 }
