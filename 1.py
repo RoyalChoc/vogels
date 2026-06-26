@@ -437,11 +437,13 @@ body {{ margin: 0; background: var(--bg); color: var(--text); font-family: "Sego
   .node-grid {{ grid-template-columns: 1fr; }}
 }}
 @media print {{
-  body {{ background: #fff; }}
+  * {{ -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }}
+  body {{ background: var(--bg); }}
   .wrapper {{ max-width: none; padding: 8mm; }}
   .hint {{ display: none; }}
-  .tree {{ border: none; background: #fff; padding: 0; }}
-  .node {{ break-inside: avoid; page-break-inside: avoid; }}
+  .tree {{ background: #eef2f7; border: 1px solid #dbe3ee; padding: 10px; }}
+  .node {{ break-inside: avoid; page-break-inside: avoid; border: 1px solid #dbe3ee; border-left: 6px solid var(--accent); background: var(--card); }}
+  .header {{ background: linear-gradient(135deg, var(--accent), #334155) !important; -webkit-print-color-adjust: exact; }}
 }}
 </style>
 </head>
@@ -778,8 +780,10 @@ body {{
 }}
 
 @media print {{
+  * {{ -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }}
+  
   body {{
-    background: #fff;
+    background: var(--bg);
   }}
   
   .wrapper {{
@@ -792,11 +796,22 @@ body {{
   }}
   
   .koppel-card {{
-    border: 1px solid #ddd;
+    border: 1px solid var(--border);
+    border-left: 6px solid var(--accent);
+    background: var(--card);
+  }}
+  
+  .header {{
+    background: linear-gradient(135deg, var(--accent), #a855f7) !important;
+    -webkit-print-color-adjust: exact;
   }}
   
   .jongen-table {{
     page-break-inside: avoid;
+  }}
+  
+  .jongen-table thead {{
+    background: #f1f5f9;
   }}
 }}
 </style>
