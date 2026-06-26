@@ -611,7 +611,7 @@ function App() {
         <div>
           <p className="eyebrow">Splendid Parkieten</p>
           <h1>Voliere Command Center</h1>
-          <p className="subline">Moderne React-webapp voor vogels, koppels en stambomen.</p>
+          <p className="subline">Moderne webapp voor vogels, koppels en stambomen.</p>
         </div>
 
         <div className="kpiGrid">
