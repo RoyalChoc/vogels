@@ -210,8 +210,9 @@ button.danger {
   align-items: center;
 }
 
-.listHeadActions input {
-  min-width: 280px;
+.listHeadActions input,
+.listHeadActions select {
+  min-width: 200px;
 }
 
 .iconAction {
