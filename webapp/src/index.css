@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@400;600;700&display=swap');
+
+:root {
+  --bg-a: #fff6de;
+  --bg-b: #e4f9f5;
+  --ink: #1c2b2f;
+  --ink-soft: #4b6369;
+  --line: #d7e5e7;
+  --accent: #ff975f;
+  --accent-2: #00a78b;
+  --accent-deep: #0f7373;
+
+  --font-body: 'Sora', 'Segoe UI', sans-serif;
+  --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+
+  --shadow-soft: 0 14px 34px rgba(19, 69, 74, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(1200px 420px at 88% -2%, rgba(255, 151, 97, 0.36), transparent 54%),
+    radial-gradient(1000px 460px at -6% 20%, rgba(0, 167, 139, 0.25), transparent 58%),
+    linear-gradient(160deg, var(--bg-a), var(--bg-b));
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  color: #102427;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
