@@ -19,8 +19,8 @@
 
 .eyebrow {
   margin: 0;
-  font-size: 0.75rem;
-  letter-spacing: 0.16em;
+  font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--accent-deep);
@@ -348,6 +348,36 @@ tbody tr:hover {
 
 tbody tr.selected {
   background: #edf8f7;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.16rem 0.52rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid #c6d5d7;
+  background: #f4f8f8;
+  color: #294245;
+}
+
+.statusPill.active {
+  background: #e9f9ee;
+  border-color: #9ed5ac;
+  color: #1f6b35;
+}
+
+.statusPill.deceased {
+  background: #feeceb;
+  border-color: #f2b3af;
+  color: #9f2d24;
+}
+
+.statusPill.sold {
+  background: #eaf2ff;
+  border-color: #aac2f0;
+  color: #1f4ea3;
 }
 
 .childEditor {

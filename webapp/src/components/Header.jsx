@@ -3,28 +3,17 @@ export default function Header({
   totalCouples,
   totalChildren,
   childrenPerBirthYear,
-  childrenStatusFilter,
-  onChildrenStatusFilterChange,
 }) {
   return (
     <header className="heroBar">
       <div>
         <p className="eyebrow">Splendid Parkieten</p>
-        <h1>Voliere Command Center</h1>
-        <p className="subline">Moderne webapp voor vogels, koppels en stambomen.</p>
+        <h1>Voliere bestand</h1>
+        <p className="subline">App voor vogels</p>
 
         <section className="yearOverview">
           <div className="yearOverviewHead">
             <h2>Jongen per geboortejaar</h2>
-            <select
-              value={childrenStatusFilter}
-              onChange={(event) => onChildrenStatusFilterChange(event.target.value)}
-              aria-label="Filter jongenstatus"
-            >
-              <option value="active-only">Alleen actief</option>
-              <option value="active-sold">Actief + verkocht</option>
-              <option value="all">Alles incl. overleden</option>
-            </select>
           </div>
           {childrenPerBirthYear.length === 0 ? (
             <p>Geen jongen gekoppeld.</p>

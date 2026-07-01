@@ -1,6 +1,14 @@
 import { PrintIcon, PdfIcon } from '../icons'
 import { vogelNaam } from '../../utils/birdUtils'
 
+function getStatusBadgeClass(status) {
+  const normalized = String(status || '').trim().toLowerCase()
+  if (normalized === 'actief') return 'statusPill active'
+  if (normalized === 'overleden') return 'statusPill deceased'
+  if (normalized === 'verkocht') return 'statusPill sold'
+  return 'statusPill'
+}
+
 export default function BirdList({
   filteredBirds,
   selectedBirdKey,
@@ -36,6 +44,7 @@ export default function BirdList({
           <thead>
             <tr>
               <th>Naam</th>
+              <th>Status</th>
               <th>Geslacht</th>
               <th>Mutatie</th>
               <th>Kooi</th>
@@ -50,6 +59,9 @@ export default function BirdList({
                 onClick={() => onSelectBird(key)}
               >
                 <td>{vogelNaam(bird)}</td>
+                <td>
+                  <span className={getStatusBadgeClass(bird.Status)}>{bird.Status || '-'}</span>
+                </td>
                 <td>{bird.Geslacht || '-'}</td>
                 <td>{bird.Mutatie || '-'}</td>
                 <td>{bird.Kooi || '-'}</td>
