@@ -39,6 +39,64 @@
   max-width: 58ch;
 }
 
+.yearOverview {
+  margin-top: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.7rem 0.8rem;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.yearOverviewHead {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.yearOverview h2 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.yearOverview select {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  padding: 0.35rem 0.45rem;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.yearOverview p {
+  margin: 0.5rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.yearList {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.yearList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.38rem 0.5rem;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.yearList strong {
+  color: var(--accent-deep);
+}
+
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -428,6 +486,15 @@ tbody tr.selected {
 
   .kpiGrid {
     grid-template-columns: 1fr;
+  }
+
+  .yearList {
+    grid-template-columns: 1fr;
+  }
+
+  .yearOverviewHead {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .tabs {

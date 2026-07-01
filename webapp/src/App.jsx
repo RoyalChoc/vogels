@@ -48,6 +48,20 @@ const emptyCouple = {
   kweekjaar: String(new Date().getFullYear()),
 }
 
+const EXCLUDED_BIRD_STATUSES = new Set(['verkocht', 'overleden'])
+const DECEASED_STATUS = 'overleden'
+const SOLD_STATUS = 'verkocht'
+
+function normalizeStatus(status) {
+  return String(status || '').trim().toLowerCase()
+}
+
+function shouldIncludeChildInOverview(status, filter) {
+  if (filter === 'all') return true
+  if (filter === 'active-sold') return status !== DECEASED_STATUS
+  return status !== DECEASED_STATUS && status !== SOLD_STATUS
+}
+
 function App() {
   const initial = loadState(seedBirds, seedCouples)
   const [birds, setBirds] = useState(initial.birds)
@@ -63,6 +77,7 @@ function App() {
   const [selectedCouple, setSelectedCouple] = useState(null)
   const [coupleForm, setCoupleForm] = useState(emptyCouple)
   const [newChild, setNewChild] = useState('')
+  const [childrenStatusFilter, setChildrenStatusFilter] = useState('active-only')
 
   const [status, setStatus] = useState('Klaar voor beheer.')
 
@@ -80,6 +95,23 @@ function App() {
         return aa.localeCompare(bb)
       }),
     [birds],
+  )
+
+  const birdsByName = useMemo(() => {
+    const map = new Map()
+    birdEntries.forEach(([, bird]) => {
+      map.set(vogelNaam(bird), bird)
+    })
+    return map
+  }, [birdEntries])
+
+  const totalBirds = useMemo(
+    () =>
+      birdEntries.reduce(
+        (sum, [, bird]) => (EXCLUDED_BIRD_STATUSES.has(normalizeStatus(bird.Status)) ? sum : sum + 1),
+        0,
+      ),
+    [birdEntries],
   )
 
   const filteredBirds = useMemo(() => {
@@ -134,9 +166,34 @@ function App() {
     })
   }, [selectedCouple, couples, allBirdNames, birds])
 
+  const childrenPerBirthYear = useMemo(() => {
+    const totalsByYear = {}
+
+    Object.values(couples).forEach((couple) => {
+      ;(couple.jongen || []).forEach((childName) => {
+        const child = birdsByName.get(childName)
+        if (!child) return
+
+        const year = String(child.Kweekjaar || 'Onbekend')
+        if (totalsByYear[year] === undefined) {
+          totalsByYear[year] = 0
+        }
+
+        const childStatus = normalizeStatus(child.Status)
+        if (shouldIncludeChildInOverview(childStatus, childrenStatusFilter)) {
+          totalsByYear[year] += 1
+        }
+      })
+    })
+
+    return Object.entries(totalsByYear)
+      .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }))
+      .map(([year, count]) => ({ year, count }))
+  }, [couples, birdsByName, childrenStatusFilter])
+
   const totalChildren = useMemo(
-    () => Object.values(couples).reduce((sum, c) => sum + (c.jongen?.length || 0), 0),
-    [couples],
+    () => childrenPerBirthYear.reduce((sum, item) => sum + item.count, 0),
+    [childrenPerBirthYear],
   )
 
   const activeTreeBird = selectedBirdKey ? birds[selectedBirdKey] : null
@@ -448,9 +505,12 @@ function App() {
   return (
     <main className="appShell">
       <Header
-        totalBirds={Object.keys(birds).length}
+        totalBirds={totalBirds}
         totalCouples={Object.keys(couples).length}
         totalChildren={totalChildren}
+        childrenPerBirthYear={childrenPerBirthYear}
+        childrenStatusFilter={childrenStatusFilter}
+        onChildrenStatusFilterChange={setChildrenStatusFilter}
       />
 
       <StatusBar message={status} />
