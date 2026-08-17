@@ -229,6 +229,7 @@
 
 .formGrid input,
 .formGrid select,
+.formGrid textarea,
 .listHead input,
 .rowActions select {
   width: 100%;
@@ -238,6 +239,15 @@
   color: var(--ink);
   padding: 0.6rem 0.7rem;
   font: inherit;
+}
+
+.formGrid textarea {
+  resize: vertical;
+  min-height: 5.8rem;
+}
+
+.formGrid .fullWidth {
+  grid-column: 1 / -1;
 }
 
 .rowActions {
@@ -372,6 +382,28 @@ td {
   text-align: left;
   border-bottom: 1px solid var(--line);
   font-size: 0.92rem;
+}
+
+.tableFilters th {
+  padding-top: 0.42rem;
+  padding-bottom: 0.52rem;
+  background: #f2f8f9;
+}
+
+.tableFilters select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--ink);
+  padding: 0.34rem 0.42rem;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.cellFilterStack {
+  display: grid;
+  gap: 0.3rem;
 }
 
 tbody tr {

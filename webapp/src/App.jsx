@@ -1,7 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
-import { options, seedBirds, seedCouples } from './data/seedData'
+import { seedBirds, seedCouples } from './data/seedData'
 import { loadState, saveState } from './utils/storage'
+import { factorOptions } from './data/factorOptions'
+import { gezoomdOptions } from './data/gezoomdOptions'
+import { mutatieOptions } from './data/mutatieOptions'
+import { splitOptions } from './data/splitOptions'
 import { 
   vogelNaam, 
   vogelKey, 
@@ -14,6 +18,7 @@ import {
   exportBirdOverviewPdf,
   printSelectedCouple,
   exportSelectedCouplePdf,
+  printBreedingCards,
   printTree,
   exportTreePdf,
   printFullTree,
@@ -32,12 +37,19 @@ const emptyBird = {
   Ringmaat: '',
   Geslacht: '',
   Mutatie: '',
+  Gezoomd: '',
+  Factor: '',
+  Split1: '',
+  Split2: '',
+  Split3: '',
+  Split4: '',
   Status: '',
   Herkomst: '',
   Kooi: '',
   Kweekjaar: String(new Date().getFullYear()),
   Vader: '',
   Moeder: '',
+  Opmerking: '',
 }
 
 const emptyCouple = {
@@ -45,7 +57,11 @@ const emptyCouple = {
   man: '',
   pop: '',
   kooi: '',
-  kweekjaar: String(new Date().getFullYear()),
+  kweekjaar: '',
+  // Kweekkaart velden - rondes met eitjes
+  rondes: [],
+  aantalJongUit: '',
+  opmerkingKweek: '',
 }
 
 const EXCLUDED_BIRD_STATUSES = new Set(['verkocht', 'overleden'])
@@ -54,9 +70,39 @@ function normalizeStatus(status) {
   return String(status || '').trim().toLowerCase()
 }
 
+function normalizeBirdSplits(bird) {
+  const legacySplit = String(bird?.Split || '').trim()
+  return {
+    ...bird,
+    Factor: bird?.Factor ?? '',
+    Gezoomd: bird?.Gezoomd ?? '',
+    Split1: bird?.Split1 ?? legacySplit,
+    Split2: bird?.Split2 ?? '',
+    Split3: bird?.Split3 ?? '',
+    Split4: bird?.Split4 ?? '',
+    Opmerking: bird?.Opmerking ?? '',
+  }
+}
+
+function normalizeBirdsMap(birdsMap) {
+  return Object.fromEntries(
+    Object.entries(birdsMap || {}).map(([key, bird]) => [key, normalizeBirdSplits(bird)]),
+  )
+}
+
+function parseYear(value) {
+  const parsed = Number.parseInt(String(value || '').trim(), 10)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
+function isAllowedChildYear(childYear, coupleYear) {
+  if (childYear === null || coupleYear === null) return false
+  return childYear === coupleYear || childYear === coupleYear + 1
+}
+
 function App() {
   const initial = loadState(seedBirds, seedCouples)
-  const [birds, setBirds] = useState(initial.birds)
+  const [birds, setBirds] = useState(() => normalizeBirdsMap(initial.birds))
   const [couples, setCouples] = useState(initial.couples)
 
   const [tab, setTab] = useState('vogels')
@@ -69,8 +115,13 @@ function App() {
   const [selectedCouple, setSelectedCouple] = useState(null)
   const [coupleForm, setCoupleForm] = useState(emptyCouple)
   const [newChild, setNewChild] = useState('')
+  const [selectedBreedingCouples, setSelectedBreedingCouples] = useState([])
 
   const [status, setStatus] = useState('Klaar voor beheer.')
+
+  useEffect(() => {
+    setSelectedBreedingCouples((current) => current.filter((name) => Boolean(couples[name])))
+  }, [couples])
 
   function persist(nextBirds, nextCouples) {
     setBirds(nextBirds)
@@ -113,37 +164,65 @@ function App() {
     [birdEntries],
   )
 
+  const availableMaleNamesForNewCouple = useMemo(() => {
+    const targetYear = String(coupleForm.kweekjaar || '').trim()
+    if (!targetYear) return []
+
+    const usedMen = new Set(
+      Object.values(couples)
+        .filter((c) => String(c.kweekjaar || '').trim() === targetYear)
+        .map((c) => c.man),
+    )
+
+    return maleNames.filter((name) => !usedMen.has(name))
+  }, [coupleForm.kweekjaar, couples, maleNames])
+
+  const availableFemaleNamesForNewCouple = useMemo(() => {
+    const targetYear = String(coupleForm.kweekjaar || '').trim()
+    if (!targetYear) return []
+
+    const usedWomen = new Set(
+      Object.values(couples)
+        .filter((c) => String(c.kweekjaar || '').trim() === targetYear)
+        .map((c) => c.pop),
+    )
+
+    return femaleNames.filter((name) => !usedWomen.has(name))
+  }, [coupleForm.kweekjaar, couples, femaleNames])
+
+  const maleNamesForCoupleForm = selectedCouple ? maleNames : availableMaleNamesForNewCouple
+  const femaleNamesForCoupleForm = selectedCouple ? femaleNames : availableFemaleNamesForNewCouple
+
   const allBirdNames = useMemo(() => birdEntries.map(([, b]) => vogelNaam(b)).sort(), [birdEntries])
 
   const validChildrenForSelectedCouple = useMemo(() => {
     if (!selectedCouple || !couples[selectedCouple]) return allBirdNames
 
     const couple = couples[selectedCouple]
-    const man = findBirdByName(birds, couple.man)
-    const woman = findBirdByName(birds, couple.pop)
+    const coupleYear = parseYear(couple.kweekjaar)
+    if (coupleYear === null) return []
 
-    // Get all children already assigned to any couple
-    const usedChildren = new Set()
-    Object.values(couples).forEach((c) => {
-      (c.jongen || []).forEach((child) => usedChildren.add(child))
+    const usedChildrenInOtherCouples = new Set()
+    const birdsUsedAsPartnerInOtherCouples = new Set()
+
+    Object.entries(couples).forEach(([name, c]) => {
+      if (name === selectedCouple) return
+
+      ;(c.jongen || []).forEach((child) => usedChildrenInOtherCouples.add(child))
+      if (c.man) birdsUsedAsPartnerInOtherCouples.add(c.man)
+      if (c.pop) birdsUsedAsPartnerInOtherCouples.add(c.pop)
     })
 
-    // Minimum year a child should have (must be born after both parents)
-    const minYearForChild = Math.max(
-      man?.Kweekjaar ? parseInt(man.Kweekjaar) + 1 : -Infinity,
-      woman?.Kweekjaar ? parseInt(woman.Kweekjaar) + 1 : -Infinity,
-    )
-
     return allBirdNames.filter((childName) => {
-      // Not already used in another couple
-      if (usedChildren.has(childName)) return false
+      if (childName === couple.man || childName === couple.pop) return false
+      if (usedChildrenInOtherCouples.has(childName)) return false
+      if (birdsUsedAsPartnerInOtherCouples.has(childName)) return false
 
-      // Must be old enough (Kweekjaar must be >= minYearForChild)
       const child = findBirdByName(birds, childName)
       if (!child) return false
 
-      const childYear = parseInt(child.Kweekjaar)
-      if (childYear < minYearForChild) return false
+      const childYear = parseYear(child.Kweekjaar)
+      if (!isAllowedChildYear(childYear, coupleYear)) return false
 
       return true
     })
@@ -274,11 +353,22 @@ function App() {
       pop: c.pop,
       kooi: c.kooi,
       kweekjaar: c.kweekjaar,
+      rondes: Array.isArray(c.rondes) ? c.rondes : [],
+      aantalJongUit: c.aantalJongUit || '',
+      opmerkingKweek: c.opmerkingKweek || '',
     })
+  }
+
+  function createExtraCouple() {
+    setSelectedCouple(null)
+    setCoupleForm(emptyCouple)
+    setNewChild('')
+    setStatus('Formulier klaar voor een extra koppel.')
   }
 
   function saveCouple() {
     const name = coupleForm.name.trim()
+    const isEditingCurrent = Boolean(selectedCouple && selectedCouple === name)
 
     if (!name || !coupleForm.man || !coupleForm.pop || !coupleForm.kooi || !coupleForm.kweekjaar) {
       setStatus('Vul alle koppelvelden in.')
@@ -301,8 +391,9 @@ function App() {
     }
 
     const dup = Object.entries(couples).some(([k, c]) => {
-      if (selectedCouple && k === selectedCouple) return false
-      return c.man === coupleForm.man && c.pop === coupleForm.pop
+      if (isEditingCurrent && k === selectedCouple) return false
+      if (c.man !== coupleForm.man || c.pop !== coupleForm.pop) return false
+      return String(c.kweekjaar || '').trim() === coupleForm.kweekjaar
     })
 
     if (dup) {
@@ -310,22 +401,31 @@ function App() {
       return
     }
 
-    if (!selectedCouple && couples[name]) {
+    if (!isEditingCurrent) {
+      const usedManInYear = Object.values(couples).some(
+        (c) => String(c.kweekjaar || '').trim() === coupleForm.kweekjaar && c.man === coupleForm.man,
+      )
+      if (usedManInYear) {
+        setStatus('Deze man is al gekozen in dit kweekjaar.')
+        return
+      }
+
+      const usedPopInYear = Object.values(couples).some(
+        (c) => String(c.kweekjaar || '').trim() === coupleForm.kweekjaar && c.pop === coupleForm.pop,
+      )
+      if (usedPopInYear) {
+        setStatus('Deze pop is al gekozen in dit kweekjaar.')
+        return
+      }
+    }
+
+    if (!isEditingCurrent && couples[name]) {
       setStatus('Koppelnaam bestaat al.')
       return
     }
 
-    if (selectedCouple && selectedCouple !== name && couples[name]) {
-      setStatus('Nieuwe koppelnaam bestaat al.')
-      return
-    }
-
     const nextCouples = { ...couples }
-    const oldChildren = selectedCouple ? couples[selectedCouple]?.jongen || [] : []
-
-    if (selectedCouple && selectedCouple !== name) {
-      delete nextCouples[selectedCouple]
-    }
+    const oldChildren = isEditingCurrent ? couples[selectedCouple]?.jongen || [] : []
 
     nextCouples[name] = {
       man: coupleForm.man,
@@ -333,11 +433,14 @@ function App() {
       kooi: coupleForm.kooi,
       kweekjaar: coupleForm.kweekjaar,
       jongen: oldChildren,
+      rondes: Array.isArray(coupleForm.rondes) ? coupleForm.rondes : [],
+      aantalJongUit: coupleForm.aantalJongUit || '',
+      opmerkingKweek: coupleForm.opmerkingKweek || '',
     }
 
     persist(birds, nextCouples)
     setSelectedCouple(name)
-    setStatus(`Koppel opgeslagen: ${name}`)
+    setStatus(isEditingCurrent ? `Koppel gewijzigd: ${name}` : `Nieuw koppel toegevoegd: ${name}`)
   }
 
   function deleteCouple() {
@@ -365,6 +468,28 @@ function App() {
 
     if (newChild === c.man || newChild === c.pop) {
       setStatus('Partner kan niet als jong toegevoegd worden.')
+      return
+    }
+
+    const childBird = findBirdByName(birds, newChild)
+    const childYear = parseYear(childBird?.Kweekjaar)
+    const coupleYear = parseYear(c.kweekjaar)
+    if (!isAllowedChildYear(childYear, coupleYear)) {
+      if (coupleYear === null) {
+        setStatus('Koppel heeft geen geldig kweekjaar.')
+      } else {
+        setStatus(`Jong moet kweekjaar ${coupleYear} of ${coupleYear + 1} hebben.`)
+      }
+      return
+    }
+
+    const inOtherPair = Object.entries(couples).find(([name, info]) => {
+      if (name === selectedCouple) return false
+      return info.man === newChild || info.pop === newChild
+    })
+
+    if (inOtherPair) {
+      setStatus(`Vogel zit als partner in ${inOtherPair[0]} en kan geen jong zijn.`)
       return
     }
 
@@ -448,6 +573,15 @@ function App() {
     }
   }
 
+  function handlePrintBreedingCards() {
+    try {
+      printBreedingCards(selectedBreedingCouples, couples, birds, mutatieOptions, splitOptions, gezoomdOptions, factorOptions)
+      setStatus(`Kweekkaarten geopend: ${selectedBreedingCouples.length} geselecteerd(e) koppel(s).`)
+    } catch (error) {
+      setStatus(error.message)
+    }
+  }
+
   function handlePrintTree(type) {
     try {
       printTree(type, selectedBirdKey, birds, ancestors, descendants)
@@ -519,20 +653,26 @@ function App() {
         <CouplesTab
           coupleForm={coupleForm}
           setCoupleForm={setCoupleForm}
-          maleNames={maleNames}
-          femaleNames={femaleNames}
+          maleNames={maleNamesForCoupleForm}
+          femaleNames={femaleNamesForCoupleForm}
           selectedCouple={selectedCouple}
           couples={couples}
           validChildrenNames={validChildrenForSelectedCouple}
           newChild={newChild}
           setNewChild={setNewChild}
           onFormSave={saveCouple}
+          onFormNew={createExtraCouple}
           onFormPrint={handlePrintCouple}
           onFormExportPdf={handleExportCouplePdf}
           onFormDelete={deleteCouple}
           onSelectCouple={selectCouple}
+          onCreateCouple={createExtraCouple}
           onAddChild={addChildToCouple}
           onRemoveChild={removeChildFromCouple}
+          selectedBreedingCouples={selectedBreedingCouples}
+          onBreedingSelectionChange={setSelectedBreedingCouples}
+          onPrintBreedingCards={handlePrintBreedingCards}
+          birds={birds}
         />
       )}
 
