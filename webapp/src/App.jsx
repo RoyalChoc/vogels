@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
-import { seedBirds, seedCouples } from './data/seedData'
 import { loadState, saveState } from './utils/storage'
 import { factorOptions } from './data/factorOptions'
 import { gezoomdOptions } from './data/gezoomdOptions'
@@ -65,6 +64,8 @@ const emptyCouple = {
 }
 
 const EXCLUDED_BIRD_STATUSES = new Set(['verkocht', 'overleden'])
+const EMPTY_BIRDS = {}
+const EMPTY_COUPLES = {}
 
 function normalizeStatus(status) {
   return String(status || '').trim().toLowerCase()
@@ -101,9 +102,8 @@ function isAllowedChildYear(childYear, coupleYear) {
 }
 
 function App() {
-  const initial = loadState(seedBirds, seedCouples)
-  const [birds, setBirds] = useState(() => normalizeBirdsMap(initial.birds))
-  const [couples, setCouples] = useState(initial.couples)
+  const [birds, setBirds] = useState(() => normalizeBirdsMap(EMPTY_BIRDS))
+  const [couples, setCouples] = useState(EMPTY_COUPLES)
 
   const [tab, setTab] = useState('vogels')
   const [search, setSearch] = useState('')
@@ -120,13 +120,32 @@ function App() {
   const [status, setStatus] = useState('Klaar voor beheer.')
 
   useEffect(() => {
+    let cancelled = false
+
+    async function hydrateFromFiles() {
+      const nextState = await loadState(EMPTY_BIRDS, EMPTY_COUPLES)
+      if (cancelled) return
+
+      setBirds(normalizeBirdsMap(nextState.birds))
+      setCouples(nextState.couples)
+    }
+
+    hydrateFromFiles()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
     setSelectedBreedingCouples((current) => current.filter((name) => Boolean(couples[name])))
   }, [couples])
 
   function persist(nextBirds, nextCouples) {
     setBirds(nextBirds)
     setCouples(nextCouples)
-    saveState(nextBirds, nextCouples)
+
+    void saveState(nextBirds, nextCouples)
   }
 
   const birdEntries = useMemo(
