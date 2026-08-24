@@ -1,24 +1,26 @@
-import { factorOptions } from '../../data/factorOptions'
-import { gezoomdOptions } from '../../data/gezoomdOptions'
-import { geslachtOptions } from '../../data/geslachtOptions'
-import { herkomstOptions } from '../../data/herkomstOptions'
-import { kooienOptions } from '../../data/kooiOptions'
-import { kweekjaarOptions } from '../../data/kweekjaarOptions'
-import { mutatieOptions } from '../../data/mutatieOptions'
-import { ringmaatOptions } from '../../data/ringmaatOptions'
-import { statusOptions } from '../../data/statusOptions'
-import { splitOptions } from '../../data/splitOptions'
-
 export default function BirdForm({
   birdForm,
   setBirdForm,
   editingBirdKey,
   maleNames,
   femaleNames,
+  optionSets,
+  contactOptions,
   onSave,
   onClear,
   onDelete,
 }) {
+  const factorOptions = optionSets?.factor || []
+  const gezoomdOptions = optionSets?.gezoomd || []
+  const geslachtOptions = optionSets?.geslacht || []
+  const herkomstOptions = optionSets?.herkomst || []
+  const kooienOptions = optionSets?.kooien || []
+  const kweekjaarOptions = optionSets?.jaren || []
+  const mutatieOptions = optionSets?.mutaties || []
+  const ringmaatOptions = optionSets?.ringmaten || []
+  const statusOptions = optionSets?.status || []
+  const splitOptions = optionSets?.split || []
+
   const splitFields = ['Split1', 'Split2', 'Split3', 'Split4']
 
   function splitOptionsFor(fieldName) {
@@ -123,6 +125,18 @@ export default function BirdForm({
           {herkomstOptions.map((item) => (
             <option key={item} value={item}>
               {item}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={birdForm.AankoopContactId || ''}
+          onChange={(e) => setBirdForm({ ...birdForm, AankoopContactId: e.target.value })}
+        >
+          <option value="">Aangekocht bij (contact)</option>
+          {contactOptions.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.label}
             </option>
           ))}
         </select>

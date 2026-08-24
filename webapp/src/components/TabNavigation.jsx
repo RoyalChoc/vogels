@@ -14,6 +14,34 @@ export default function TabNavigation({ activeTab, onTabChange }) {
       >
         Stamboom
       </button>
+      <button
+        type="button"
+        className={activeTab === 'contacten' ? 'active' : ''}
+        onClick={() => onTabChange('contacten')}
+      >
+        Contacten
+      </button>
+      <button
+        type="button"
+        className={activeTab === 'calculator' ? 'active' : ''}
+        onClick={() => onTabChange('calculator')}
+      >
+        Calculator
+      </button>
+      <button
+        type="button"
+        className={activeTab === 'splendid-calculator' ? 'active' : ''}
+        onClick={() => onTabChange('splendid-calculator')}
+      >
+        Splendid Calculator
+      </button>
+      <button
+        type="button"
+        className={activeTab === 'beheer' ? 'active' : ''}
+        onClick={() => onTabChange('beheer')}
+      >
+        Beheer
+      </button>
     </nav>
   )
 }

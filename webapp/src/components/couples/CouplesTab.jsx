@@ -8,6 +8,7 @@ export default function CouplesTab({
   setCoupleForm,
   maleNames,
   femaleNames,
+  optionSets,
   selectedCouple,
   couples,
   validChildrenNames,
@@ -43,6 +44,7 @@ export default function CouplesTab({
         setCoupleForm={setCoupleForm}
         maleNames={maleNames}
         femaleNames={femaleNames}
+        optionSets={optionSets}
         selectedCouple={selectedCouple}
         onSave={onFormSave}
         onNew={onFormNew}

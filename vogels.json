@@ -17,7 +17,8 @@
     "Kweekjaar": "2022",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "BVPAP045-003": {
     "Stamnummer": "BVPAP045",
@@ -37,7 +38,8 @@
     "Kweekjaar": "2023",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "BOFBN712-1": {
     "Stamnummer": "BOFBN712",
@@ -57,7 +59,8 @@
     "Kweekjaar": "2024",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "BOFBN712-2": {
     "Stamnummer": "BOFBN712",
@@ -77,7 +80,8 @@
     "Kweekjaar": "2024",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "PSNL02492-009": {
     "Stamnummer": "PSNL02492",
@@ -97,7 +101,8 @@
     "Kweekjaar": "2024",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "PSNL02492-039": {
     "Stamnummer": "PSNL02492",
@@ -117,7 +122,8 @@
     "Kweekjaar": "2024",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "WK-54": {
     "Stamnummer": "WK",
@@ -137,7 +143,8 @@
     "Kweekjaar": "2024",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "BOFBJ777-022": {
     "Stamnummer": "BOFBJ777",
@@ -157,7 +164,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": "contact-1787548132867"
   },
   "BOFBJ777-031": {
     "Stamnummer": "BOFBJ777",
@@ -177,7 +185,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "BOFBN712-007": {
     "Stamnummer": "BOFBN712",
@@ -197,7 +206,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": "contact-1787546990844"
   },
   "DB 153-2": {
     "Stamnummer": "DB 153",
@@ -217,7 +227,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": "contact-1787548216084"
   },
   "Geen-1823": {
     "Stamnummer": "Geen",
@@ -237,7 +248,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": "contact-1787548216084"
   },
   "Niet geringd-Licht Blauwe ring": {
     "Stamnummer": "Niet geringd",
@@ -257,7 +269,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": "contact-1787546990844"
   },
   "PSNL02492-33": {
     "Stamnummer": "PSNL02492",
@@ -277,7 +290,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "PSNL87133-012": {
     "Stamnummer": "PSNL87133",
@@ -297,7 +311,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "PSNL87133-015": {
     "Stamnummer": "PSNL87133",
@@ -317,27 +332,8 @@
     "Kweekjaar": "2025",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
-  },
-  "11111TEst-BV712333": {
-    "Stamnummer": "11111TEst",
-    "Ringnummer": "BV712333",
-    "Ringmaat": "4.0 mm",
-    "Geslacht": "Man",
-    "Mutatie": "Albino",
-    "Gezoomd": "",
-    "Factor": "",
-    "Split1": "",
-    "Split2": "",
-    "Split3": "",
-    "Split4": "",
-    "Status": "",
-    "Herkomst": "",
-    "Kooi": "",
-    "Kweekjaar": "2026",
-    "Vader": "",
-    "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "BOFBN712-3": {
     "Stamnummer": "BOFBN712",
@@ -357,7 +353,8 @@
     "Kweekjaar": "2026",
     "Vader": "BOFBN712 - 1",
     "Moeder": "BOFBN712 - 2",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": "contact-1787546990844"
   },
   "BOFBN712-4": {
     "Stamnummer": "BOFBN712",
@@ -377,7 +374,8 @@
     "Kweekjaar": "2026",
     "Vader": "BOFBN712 - 1",
     "Moeder": "BOFBN712 - 2",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "PEP2025-34": {
     "Stamnummer": "PEP2025",
@@ -397,7 +395,8 @@
     "Kweekjaar": "2026",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "PEP2025-41": {
     "Stamnummer": "PEP2025",
@@ -417,7 +416,8 @@
     "Kweekjaar": "2026",
     "Vader": "",
     "Moeder": "",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": "contact-1787547811600"
   },
   "BOFBN712-5": {
     "Stamnummer": "BOFBN712",
@@ -437,7 +437,8 @@
     "Kweekjaar": "2027",
     "Vader": "BOFBN712 - 4",
     "Moeder": "BOFBN712 - 3",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
   },
   "BOFBN712-6": {
     "Stamnummer": "BOFBN712",
@@ -457,7 +458,8 @@
     "Kweekjaar": "2027",
     "Vader": "BOFBN712 - 4",
     "Moeder": "BOFBN712 - 3",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": "contact-1787546990844"
   },
   "BOFBN712-7": {
     "Stamnummer": "BOFBN712",
@@ -477,6 +479,70 @@
     "Kweekjaar": "2027",
     "Vader": "BOFBN712 - 4",
     "Moeder": "BOFBN712 - 3",
-    "Opmerking": ""
+    "Opmerking": "",
+    "AankoopContactId": ""
+  },
+  "PSNL08 198-030": {
+    "Stamnummer": "PSNL08 198",
+    "Ringnummer": "030",
+    "Ringmaat": "4.0 mm",
+    "Geslacht": "Man",
+    "Mutatie": "Wildkleur",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "Actief",
+    "Herkomst": "Aangekocht",
+    "Kooi": "",
+    "Kweekjaar": "2022",
+    "Vader": "",
+    "Moeder": "",
+    "Opmerking": "",
+    "AankoopContactId": ""
+  },
+  "PSNL08 198-040": {
+    "Stamnummer": "PSNL08 198",
+    "Ringnummer": "040",
+    "Ringmaat": "4.0 mm",
+    "Geslacht": "Man",
+    "Mutatie": "Blauw Witborst",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "Actief",
+    "Herkomst": "Aangekocht",
+    "Kooi": "",
+    "Kweekjaar": "2023",
+    "Vader": "",
+    "Moeder": "",
+    "Opmerking": "",
+    "AankoopContactId": ""
+  },
+  "WTCAR50-226": {
+    "Stamnummer": "WTCAR50",
+    "Ringnummer": "226",
+    "Ringmaat": "3.8 mm",
+    "Geslacht": "Pop",
+    "Mutatie": "Creme Ino",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "Actief",
+    "Herkomst": "Aangekocht",
+    "Kooi": "",
+    "Kweekjaar": "2024",
+    "Vader": "",
+    "Moeder": "",
+    "Opmerking": "",
+    "AankoopContactId": ""
   }
 }

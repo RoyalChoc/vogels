@@ -1,0 +1,1224 @@
+{
+  "summary": {
+    "generatedAt": "2026-08-24T07:21:57.265Z",
+    "caseCount": 47,
+    "unstableCount": 0
+  },
+  "results": [
+    {
+      "id": "INO-01",
+      "post": {},
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen__F:100.0000|0.1 groen",
+      "sig2": "M:100.0000|1.0 groen__F:100.0000|0.1 groen",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen"
+        }
+      ]
+    },
+    {
+      "id": "INO-02",
+      "post": {
+        "msm[1]": "1ino"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen__F:50.0000|0.1 ino || 50.0000|0.1 groen",
+      "sig2": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen__F:50.0000|0.1 ino || 50.0000|0.1 groen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /ino"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 ino"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        }
+      ]
+    },
+    {
+      "id": "INO-03",
+      "post": {
+        "msm[1]": "2ino"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen__F:50.0000|0.1 ino || 50.0000|0.1 groen",
+      "sig2": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen__F:50.0000|0.1 ino || 50.0000|0.1 groen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /ino"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 ino"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        }
+      ]
+    },
+    {
+      "id": "INO-04",
+      "post": {
+        "msm[1]": "1ino*pd"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pallid(isabel) || 50.0000|1.0 groen__F:50.0000|0.1 groen || 50.0000|0.1 pallid(isabel)",
+      "sig2": "M:50.0000|1.0 groen /pallid(isabel) || 50.0000|1.0 groen__F:50.0000|0.1 groen || 50.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pallid(isabel)"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "INO-05",
+      "post": {
+        "msm[1]": "2ino*pd"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pallid(isabel) || 50.0000|1.0 groen__F:50.0000|0.1 groen || 50.0000|0.1 pallid(isabel)",
+      "sig2": "M:50.0000|1.0 groen /pallid(isabel) || 50.0000|1.0 groen__F:50.0000|0.1 groen || 50.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pallid(isabel)"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "INO-06",
+      "post": {
+        "msm[0]": "ino"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /ino__F:100.0000|0.1 ino",
+      "sig2": "M:100.0000|1.0 groen /ino__F:100.0000|0.1 ino",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /ino"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 ino"
+        }
+      ]
+    },
+    {
+      "id": "INO-07",
+      "post": {
+        "msm[0]": "ino",
+        "msm[1]": "1ino"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /ino__F:100.0000|0.1 ino",
+      "sig2": "M:100.0000|1.0 groen /ino__F:100.0000|0.1 ino",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /ino"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 ino"
+        }
+      ]
+    },
+    {
+      "id": "INO-08",
+      "post": {
+        "msm[0]": "ino",
+        "msm[1]": "2ino"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /ino__F:100.0000|0.1 ino",
+      "sig2": "M:100.0000|1.0 groen /ino__F:100.0000|0.1 ino",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /ino"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 ino"
+        }
+      ]
+    },
+    {
+      "id": "INO-09",
+      "post": {
+        "msm[0]": "ino",
+        "msm[1]": "1ino*pd"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen /pallid(isabel)__F:50.0000|0.1 ino || 50.0000|0.1 pallid(isabel)",
+      "sig2": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen /pallid(isabel)__F:50.0000|0.1 ino || 50.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /ino"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pallid(isabel)"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 ino"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "INO-10",
+      "post": {
+        "msm[0]": "ino",
+        "msm[1]": "2ino*pd"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen /pallid(isabel)__F:50.0000|0.1 ino || 50.0000|0.1 pallid(isabel)",
+      "sig2": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen /pallid(isabel)__F:50.0000|0.1 ino || 50.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /ino"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pallid(isabel)"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 ino"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "INO-11",
+      "post": {
+        "msm[0]": "ino*pd"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /pallid(isabel)__F:100.0000|0.1 pallid(isabel)",
+      "sig2": "M:100.0000|1.0 groen /pallid(isabel)__F:100.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /pallid(isabel)"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "INO-12",
+      "post": {
+        "msm[0]": "ino*pd",
+        "msm[1]": "1ino"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen /pallid(isabel)__F:50.0000|0.1 ino || 50.0000|0.1 pallid(isabel)",
+      "sig2": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen /pallid(isabel)__F:50.0000|0.1 ino || 50.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /ino"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pallid(isabel)"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 ino"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "INO-13",
+      "post": {
+        "msm[0]": "ino*pd",
+        "msm[1]": "2ino"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen /pallid(isabel)__F:50.0000|0.1 ino || 50.0000|0.1 pallid(isabel)",
+      "sig2": "M:50.0000|1.0 groen /ino || 50.0000|1.0 groen /pallid(isabel)__F:50.0000|0.1 ino || 50.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /ino"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pallid(isabel)"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 ino"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "INO-14",
+      "post": {
+        "msm[0]": "ino*pd",
+        "msm[1]": "1ino*pd"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /pallid(isabel)__F:100.0000|0.1 pallid(isabel)",
+      "sig2": "M:100.0000|1.0 groen /pallid(isabel)__F:100.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /pallid(isabel)"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "INO-15",
+      "post": {
+        "msm[0]": "ino*pd",
+        "msm[1]": "2ino*pd"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /pallid(isabel)__F:100.0000|0.1 pallid(isabel)",
+      "sig2": "M:100.0000|1.0 groen /pallid(isabel)__F:100.0000|0.1 pallid(isabel)",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /pallid(isabel)"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 pallid(isabel)"
+        }
+      ]
+    },
+    {
+      "id": "MBL-01",
+      "post": {},
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen__F:100.0000|0.1 groen",
+      "sig2": "M:100.0000|1.0 groen__F:100.0000|0.1 groen",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen"
+        }
+      ]
+    },
+    {
+      "id": "MBL-02",
+      "post": {
+        "mrm[1]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen || 50.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:50.0000|1.0 groen || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen || 50.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "MBL-03",
+      "post": {
+        "mrm[1]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        }
+      ]
+    },
+    {
+      "id": "MBL-04",
+      "post": {
+        "mrm[1]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "MBL-05",
+      "post": {
+        "mrm[0]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /(witborst)blauw__F:100.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:100.0000|1.0 groen /(witborst)blauw__F:100.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "MBL-06",
+      "post": {
+        "mrm[0]": "bl",
+        "mrm[1]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /(witborst)blauw__F:100.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:100.0000|1.0 groen /(witborst)blauw__F:100.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "MBL-07",
+      "post": {
+        "mrm[0]": "bl",
+        "mrm[1]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "MBL-08",
+      "post": {
+        "mrm[0]": "bl",
+        "mrm[1]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /(witborst)blauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /(witborst)blauw || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen /(witborst)blauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /(witborst)blauw || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "MBL-09",
+      "post": {
+        "mrm[0]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /pastelblauw__F:100.0000|0.1 groen /pastelblauw",
+      "sig2": "M:100.0000|1.0 groen /pastelblauw__F:100.0000|0.1 groen /pastelblauw",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /pastelblauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /pastelblauw"
+        }
+      ]
+    },
+    {
+      "id": "MBL-10",
+      "post": {
+        "mrm[0]": "bl*tq",
+        "mrm[1]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "MBL-11",
+      "post": {
+        "mrm[0]": "bl*tq",
+        "mrm[1]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /pastelblauw__F:100.0000|0.1 groen /pastelblauw",
+      "sig2": "M:100.0000|1.0 groen /pastelblauw__F:100.0000|0.1 groen /pastelblauw",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /pastelblauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /pastelblauw"
+        }
+      ]
+    },
+    {
+      "id": "MBL-12",
+      "post": {
+        "mrm[0]": "bl*tq",
+        "mrm[1]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "MBL-13",
+      "post": {
+        "mrm[0]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /zeegroen__F:100.0000|0.1 groen /zeegroen",
+      "sig2": "M:100.0000|1.0 groen /zeegroen__F:100.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "MBL-14",
+      "post": {
+        "mrm[0]": "bl*aq",
+        "mrm[1]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /(witborst)blauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /(witborst)blauw || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen /(witborst)blauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /(witborst)blauw || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "MBL-15",
+      "post": {
+        "mrm[0]": "bl*aq",
+        "mrm[1]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "MBL-16",
+      "post": {
+        "mrm[0]": "bl*aq",
+        "mrm[1]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /zeegroen__F:100.0000|0.1 groen /zeegroen",
+      "sig2": "M:100.0000|1.0 groen /zeegroen__F:100.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-01",
+      "post": {},
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen__F:100.0000|0.1 groen",
+      "sig2": "M:100.0000|1.0 groen__F:100.0000|0.1 groen",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-02",
+      "post": {
+        "frm[1]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen || 50.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:50.0000|1.0 groen || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen || 50.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "FBL-03",
+      "post": {
+        "frm[1]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-04",
+      "post": {
+        "frm[1]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-05",
+      "post": {
+        "frm[0]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /(witborst)blauw__F:100.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:100.0000|1.0 groen /(witborst)blauw__F:100.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "FBL-06",
+      "post": {
+        "frm[0]": "bl",
+        "frm[1]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /(witborst)blauw__F:100.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:100.0000|1.0 groen /(witborst)blauw__F:100.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "FBL-07",
+      "post": {
+        "frm[0]": "bl",
+        "frm[1]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "FBL-08",
+      "post": {
+        "frm[0]": "bl",
+        "frm[1]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /(witborst)blauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /(witborst)blauw || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen /(witborst)blauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /(witborst)blauw || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-09",
+      "post": {
+        "frm[0]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /pastelblauw__F:100.0000|0.1 groen /pastelblauw",
+      "sig2": "M:100.0000|1.0 groen /pastelblauw__F:100.0000|0.1 groen /pastelblauw",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /pastelblauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /pastelblauw"
+        }
+      ]
+    },
+    {
+      "id": "FBL-10",
+      "post": {
+        "frm[0]": "bl*tq",
+        "frm[1]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /(witborst)blauw",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /(witborst)blauw__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /(witborst)blauw",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        }
+      ]
+    },
+    {
+      "id": "FBL-11",
+      "post": {
+        "frm[0]": "bl*tq",
+        "frm[1]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /pastelblauw__F:100.0000|0.1 groen /pastelblauw",
+      "sig2": "M:100.0000|1.0 groen /pastelblauw__F:100.0000|0.1 groen /pastelblauw",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /pastelblauw"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /pastelblauw"
+        }
+      ]
+    },
+    {
+      "id": "FBL-12",
+      "post": {
+        "frm[0]": "bl*tq",
+        "frm[1]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-13",
+      "post": {
+        "frm[0]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /zeegroen__F:100.0000|0.1 groen /zeegroen",
+      "sig2": "M:100.0000|1.0 groen /zeegroen__F:100.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-14",
+      "post": {
+        "frm[0]": "bl*aq",
+        "frm[1]": "bl"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /(witborst)blauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /(witborst)blauw || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen /(witborst)blauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /(witborst)blauw || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /(witborst)blauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /(witborst)blauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-15",
+      "post": {
+        "frm[0]": "bl*aq",
+        "frm[1]": "bl*tq"
+      },
+      "stable": true,
+      "sig1": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /zeegroen",
+      "sig2": "M:50.0000|1.0 groen /pastelblauw || 50.0000|1.0 groen /zeegroen__F:50.0000|0.1 groen /pastelblauw || 50.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 50,
+          "label": "1.0 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 50,
+          "label": "0.1 groen /pastelblauw"
+        },
+        {
+          "percentage": 50,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    },
+    {
+      "id": "FBL-16",
+      "post": {
+        "frm[0]": "bl*aq",
+        "frm[1]": "bl*aq"
+      },
+      "stable": true,
+      "sig1": "M:100.0000|1.0 groen /zeegroen__F:100.0000|0.1 groen /zeegroen",
+      "sig2": "M:100.0000|1.0 groen /zeegroen__F:100.0000|0.1 groen /zeegroen",
+      "topMale": [
+        {
+          "percentage": 100,
+          "label": "1.0 groen /zeegroen"
+        }
+      ],
+      "topFemale": [
+        {
+          "percentage": 100,
+          "label": "0.1 groen /zeegroen"
+        }
+      ]
+    }
+  ]
+}

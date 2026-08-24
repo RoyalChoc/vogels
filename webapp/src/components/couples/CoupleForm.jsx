@@ -1,10 +1,4 @@
 import { PrintIcon, PdfIcon } from '../icons'
-import { factorOptions } from '../../data/factorOptions'
-import { gezoomdOptions } from '../../data/gezoomdOptions'
-import { kooienOptions } from '../../data/kooiOptions'
-import { kweekjaarOptions } from '../../data/kweekjaarOptions'
-import { mutatieOptions } from '../../data/mutatieOptions'
-import { splitOptions } from '../../data/splitOptions'
 
 function calculateUitkomdatum(legdatum) {
   if (!legdatum) return ''
@@ -34,6 +28,7 @@ export default function CoupleForm({
   setCoupleForm,
   maleNames,
   femaleNames,
+  optionSets,
   selectedCouple,
   onSave,
   onNew,
@@ -41,6 +36,13 @@ export default function CoupleForm({
   onExportPdf,
   onDelete,
 }) {
+  const factorOptions = optionSets?.factor || []
+  const gezoomdOptions = optionSets?.gezoomd || []
+  const kooienOptions = optionSets?.kooien || []
+  const kweekjaarOptions = optionSets?.jaren || []
+  const mutatieOptions = optionSets?.mutaties || []
+  const splitOptions = optionSets?.split || []
+
   const isEditing = Boolean(selectedCouple)
   const yearSelected = Boolean(String(coupleForm.kweekjaar || '').trim())
   const isEditingCurrent = Boolean(selectedCouple && coupleForm.name.trim() === selectedCouple)

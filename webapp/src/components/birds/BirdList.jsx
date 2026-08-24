@@ -2,6 +2,9 @@ import { useMemo, useState } from 'react'
 import { PrintIcon, PdfIcon } from '../icons'
 import { vogelNaam } from '../../utils/birdUtils'
 
+const FILTER_FIELDS = ['mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam', 'opmerking']
+const SORTABLE_FIELDS = ['mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam']
+
 function splitLabel(bird) {
   const values = [bird.Split1, bird.Split2, bird.Split3, bird.Split4].filter(Boolean)
   if (values.length > 0) return values.join(', ')
@@ -67,11 +70,9 @@ export default function BirdList({
     [filteredBirds],
   )
 
-  const filterFields = ['mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam', 'opmerking']
-
   const filterOptions = useMemo(() => {
     return Object.fromEntries(
-      filterFields.map((field) => {
+      FILTER_FIELDS.map((field) => {
         const uniqueValues = new Set(rowsWithValues.map((row) => row.values[field]))
         const sortedValues = Array.from(uniqueValues).sort((a, b) =>
           a.localeCompare(b, 'nl-BE', { numeric: true, sensitivity: 'base' }),
@@ -81,11 +82,9 @@ export default function BirdList({
     )
   }, [rowsWithValues])
 
-  const sortableFields = ['mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam']
-
   const visibleRows = useMemo(() => {
     const filteredRows = rowsWithValues.filter((row) => {
-      const matchesColumns = filterFields.every((field) => {
+      const matchesColumns = FILTER_FIELDS.every((field) => {
         const selected = columnFilters[field]
         return !selected || row.values[field] === selected
       })
@@ -93,7 +92,7 @@ export default function BirdList({
       return matchesColumns
     })
 
-    const activeSorts = sortableFields.filter((field) => columnSortOrders[field])
+    const activeSorts = SORTABLE_FIELDS.filter((field) => columnSortOrders[field])
     if (activeSorts.length === 0) return filteredRows
 
     return [...filteredRows].sort((a, b) => {
@@ -306,7 +305,7 @@ export default function BirdList({
             </tr>
           </thead>
           <tbody>
-            {visibleRows.map(({ key, bird, values }) => (
+            {visibleRows.map(({ key, values }) => (
               <tr
                 key={key}
                 className={selectedBirdKey === key ? 'selected' : ''}
