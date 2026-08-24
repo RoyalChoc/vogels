@@ -1,0 +1,18 @@
+{
+  "vader": {
+    "visual": [
+      "donkerfactor"
+    ],
+    "split": [
+      "aqua",
+      "opaline"
+    ]
+  },
+  "moeder": {
+    "visual": [
+      "blauw",
+      "opaline"
+    ],
+    "split": []
+  }
+}

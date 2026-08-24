@@ -1,0 +1,1833 @@
+{
+  "generatedAt": "2026-08-24T05:47:06.981Z",
+  "source": "http://www.gencalc.com/gen/dutch_genc.php?sp=1NeofSca",
+  "cases": [
+    {
+      "id": "C01",
+      "title": "wildkleur x wildkleur",
+      "post": {},
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 1,
+          "matchRatio": 1,
+          "weightedDelta": 0
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 1,
+          "matchRatio": 1,
+          "weightedDelta": 0
+        },
+        "averageMatchRatio": 1
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 100,
+                "label": "1.0 groen"
+              }
+            ]
+          },
+          "female": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 100,
+                "label": "0.1 groen"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C02",
+      "title": "violet(ef) man x wildkleur pop",
+      "post": {
+        "md[0]": "V+/V;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "averageMatchRatio": 0.5
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen"
+              },
+              {
+                "percentage": 50,
+                "label": "1.0 groen violet(ef)"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 50,
+                "label": "0.1 groen violet(ef)"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 man violet (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 pop violet (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C03",
+      "title": "violet(ef) x violet(ef)",
+      "post": {
+        "md[0]": "V+/V;",
+        "fd[0]": "V+/V;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 3,
+          "matchRatio": 0.3333,
+          "weightedDelta": 75
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 3,
+          "matchRatio": 0.3333,
+          "weightedDelta": 75
+        },
+        "averageMatchRatio": 0.3333
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen violet(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen violet(df)"
+              }
+            ]
+          },
+          "female": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen violet(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen violet(df)"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 man violet (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man violet (df)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 pop violet (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop violet (df)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C04",
+      "title": "grijs(ef) man x wildkleur pop",
+      "post": {
+        "md[1]": "G+/G;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "averageMatchRatio": 0.5
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 grijs(ef) groen"
+              },
+              {
+                "percentage": 50,
+                "label": "1.0 groen"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 grijs(ef) groen"
+              },
+              {
+                "percentage": 50,
+                "label": "0.1 groen"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 man grijs (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 pop grijs (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C05",
+      "title": "khaki(ef) man x grijs(ef) pop",
+      "post": {
+        "md[2]": "Kh+/Kh;",
+        "fd[1]": "G+/G;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 4,
+          "matchRatio": 0.25,
+          "weightedDelta": 75
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 4,
+          "matchRatio": 0.25,
+          "weightedDelta": 75
+        },
+        "averageMatchRatio": 0.25
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 grijs(ef) groen"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 grijs(ef) groen khaki(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen khaki(ef)"
+              }
+            ]
+          },
+          "female": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 grijs(ef) groen"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 grijs(ef) groen khaki(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen khaki(ef)"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "1.0 man grijs (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man grijs (ef), khaki (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man khaki (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop grijs (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop grijs (ef), khaki (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop khaki (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C06",
+      "title": "cinnamon split man x cinnamon pop",
+      "post": {
+        "ms[0]": "cin/cin+;",
+        "fs[0]": "cin/Y;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 0,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0,
+          "weightedDelta": 100
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "averageMatchRatio": 0.25
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen /cinnamon"
+              },
+              {
+                "percentage": 50,
+                "label": "1.0 groen cinnamon"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 50,
+                "label": "0.1 groen cinnamon"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 37.5,
+                "label": "1.0 man wildkleur"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man cinnamon"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 pop cinnamon"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C07",
+      "title": "cinnamon man x wildkleur pop",
+      "post": {
+        "ms[0]": "cin/cin;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 0,
+          "totalGenCalcRows": 1,
+          "matchRatio": 0,
+          "weightedDelta": 100
+        },
+        "female": {
+          "matchCount": 0,
+          "totalGenCalcRows": 1,
+          "matchRatio": 0,
+          "weightedDelta": 100
+        },
+        "averageMatchRatio": 0
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 100,
+                "label": "1.0 groen /cinnamon"
+              }
+            ]
+          },
+          "female": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 100,
+                "label": "0.1 groen cinnamon"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 pop cinnamon"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C08",
+      "title": "opaline split man x opaline pop",
+      "post": {
+        "ms[1]": "op/op+;",
+        "fs[1]": "op/Y;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 0,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0,
+          "weightedDelta": 100
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "averageMatchRatio": 0.25
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen opaline"
+              },
+              {
+                "percentage": 50,
+                "label": "1.0 groen /opaline"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen opaline"
+              },
+              {
+                "percentage": 50,
+                "label": "0.1 groen"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 man opaline"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 pop opaline"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C09",
+      "title": "dom.Bont(ef) man x wildkleur pop",
+      "post": {
+        "md[3]": "Pi+/Pi;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "averageMatchRatio": 0.5
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen dom.Bont(ef)"
+              },
+              {
+                "percentage": 50,
+                "label": "1.0 groen"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen dom.Bont(ef)"
+              },
+              {
+                "percentage": 50,
+                "label": "0.1 groen"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 man dom.Bont (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 pop dom.Bont (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C10",
+      "title": "rec.Bont split x rec.Bont split",
+      "post": {
+        "mr[0]": "s+/s;",
+        "fr[0]": "s+/s;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 3,
+          "matchRatio": 0.3333,
+          "weightedDelta": 125
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 3,
+          "matchRatio": 0.3333,
+          "weightedDelta": 125
+        },
+        "averageMatchRatio": 0.3333
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen /rec.Bont"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen rec.Bont"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen"
+              }
+            ]
+          },
+          "female": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen /rec.Bont"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen rec.Bont"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 37.5,
+                "label": "1.0 man wildkleur"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man rec.Bont"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 37.5,
+                "label": "0.1 pop wildkleur"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop rec.Bont"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C11",
+      "title": "dun_fallow split x dun_fallow split",
+      "post": {
+        "mr[1]": "df+/df;",
+        "fr[1]": "df+/df;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 3,
+          "matchRatio": 0.3333,
+          "weightedDelta": 125
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 3,
+          "matchRatio": 0.3333,
+          "weightedDelta": 125
+        },
+        "averageMatchRatio": 0.3333
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen /dun_fallow(isabel)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen dun_fallow(isabel)"
+              }
+            ]
+          },
+          "female": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen /dun_fallow(isabel)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen dun_fallow(isabel)"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 37.5,
+                "label": "1.0 man wildkleur"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man dun_fallow(isabel)"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 37.5,
+                "label": "0.1 pop wildkleur"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop dun_fallow(isabel)"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C12",
+      "title": "ashen_fallow split x ashen_fallow split",
+      "post": {
+        "mr[2]": "af+/af;",
+        "fr[2]": "af+/af;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 3,
+          "matchRatio": 0.3333,
+          "weightedDelta": 125
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 3,
+          "matchRatio": 0.3333,
+          "weightedDelta": 125
+        },
+        "averageMatchRatio": 0.3333
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen /ashen_fallow"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen ashen_fallow"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen"
+              }
+            ]
+          },
+          "female": {
+            "count": 3,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen /ashen_fallow"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen ashen_fallow"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 37.5,
+                "label": "1.0 man wildkleur"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man ashen_fallow"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 37.5,
+                "label": "0.1 pop wildkleur"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop ashen_fallow"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C13",
+      "title": "blauw visueel man x blauw visueel pop",
+      "post": {
+        "mrm[0]": "bl",
+        "mrm[1]": "bl",
+        "frm[0]": "bl",
+        "frm[1]": "bl"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 1,
+          "matchRatio": 1,
+          "weightedDelta": 0
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 1,
+          "matchRatio": 1,
+          "weightedDelta": 0
+        },
+        "averageMatchRatio": 1
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 100,
+                "label": "1.0 (witborst)blauw"
+              }
+            ]
+          },
+          "female": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 100,
+                "label": "0.1 (witborst)blauw"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 man (witborst)blauw"
+              }
+            ]
+          },
+          "female": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 pop (witborst)blauw"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C14",
+      "title": "pastelblauw visueel man x wildkleur pop",
+      "post": {
+        "mrm[0]": "bl*tq",
+        "mrm[1]": "bl*tq"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 0,
+          "totalGenCalcRows": 1,
+          "matchRatio": 0,
+          "weightedDelta": 100
+        },
+        "female": {
+          "matchCount": 0,
+          "totalGenCalcRows": 1,
+          "matchRatio": 0,
+          "weightedDelta": 100
+        },
+        "averageMatchRatio": 0
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 100,
+                "label": "1.0 groen /pastelblauw"
+              }
+            ]
+          },
+          "female": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 100,
+                "label": "0.1 groen /pastelblauw"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C15",
+      "title": "gezoomd(ef) man x wildkleur pop",
+      "post": {
+        "md[4]": "Ed+/Ed;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "averageMatchRatio": 0.5
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen gezoomd(ef)"
+              },
+              {
+                "percentage": 50,
+                "label": "1.0 groen"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen gezoomd(ef)"
+              },
+              {
+                "percentage": 50,
+                "label": "0.1 groen"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 man gezoomd (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 pop gezoomd (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C16",
+      "title": "roodbuik(ef) man x wildkleur pop",
+      "post": {
+        "md[5]": "Rs+/Rs;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 2,
+          "matchRatio": 0.5,
+          "weightedDelta": 50
+        },
+        "averageMatchRatio": 0.5
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 groen"
+              },
+              {
+                "percentage": 50,
+                "label": "1.0 groen roodbuik(ef)"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 50,
+                "label": "0.1 groen roodbuik(ef)"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 man roodbuik (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 2,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 pop roodbuik (ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C17",
+      "title": "violet(ef)+gezoomd(ef) man x wildkleur pop",
+      "post": {
+        "md[0]": "V+/V;",
+        "md[4]": "Ed+/Ed;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 4,
+          "matchRatio": 0.25,
+          "weightedDelta": 75
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 4,
+          "matchRatio": 0.25,
+          "weightedDelta": 75
+        },
+        "averageMatchRatio": 0.25
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 groen gezoomd(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen violet(ef) gezoomd(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen violet(ef)"
+              }
+            ]
+          },
+          "female": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 groen gezoomd(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen violet(ef) gezoomd(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen violet(ef)"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "1.0 man gezoomd (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man violet (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man violet (ef), gezoomd (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop gezoomd (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop violet (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop violet (ef), gezoomd (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C18",
+      "title": "grijs(ef)+roodbuik(ef) man x wildkleur pop",
+      "post": {
+        "md[1]": "G+/G;",
+        "md[5]": "Rs+/Rs;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 4,
+          "matchRatio": 0.25,
+          "weightedDelta": 75
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 4,
+          "matchRatio": 0.25,
+          "weightedDelta": 75
+        },
+        "averageMatchRatio": 0.25
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "1.0 grijs(ef) groen"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 grijs(ef) groen roodbuik(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "1.0 groen roodbuik(ef)"
+              }
+            ]
+          },
+          "female": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 25,
+                "label": "0.1 grijs(ef) groen"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 grijs(ef) groen roodbuik(ef)"
+              },
+              {
+                "percentage": 25,
+                "label": "0.1 groen roodbuik(ef)"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "1.0 man grijs (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man grijs (ef), roodbuik (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man roodbuik (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop grijs (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop grijs (ef), roodbuik (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop roodbuik (ef)"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C19",
+      "title": "cinnamon split + opaline split man x wildkleur pop",
+      "post": {
+        "ms[0]": "cin/cin+;",
+        "ms[1]": "op/op+;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 4,
+          "matchRatio": 0.25,
+          "weightedDelta": 133
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 4,
+          "matchRatio": 0.25,
+          "weightedDelta": 75
+        },
+        "averageMatchRatio": 0.25
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 33.5,
+                "label": "1.0 groen /opaline-cinnamon"
+              },
+              {
+                "percentage": 33.5,
+                "label": "1.0 groen"
+              },
+              {
+                "percentage": 16.5,
+                "label": "1.0 groen /opaline"
+              },
+              {
+                "percentage": 16.5,
+                "label": "1.0 groen /cinnamon"
+              }
+            ]
+          },
+          "female": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 33.5,
+                "label": "0.1 groen"
+              },
+              {
+                "percentage": 33.5,
+                "label": "0.1 groen opaline cinnamon"
+              },
+              {
+                "percentage": 16.5,
+                "label": "0.1 groen cinnamon"
+              },
+              {
+                "percentage": 16.5,
+                "label": "0.1 groen opaline"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 1,
+            "top": [
+              {
+                "percentage": 50,
+                "label": "1.0 man wildkleur"
+              }
+            ]
+          },
+          "female": {
+            "count": 4,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop cinnamon"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop cinnamon, opaline"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop opaline"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 pop wildkleur"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C20",
+      "title": "multilocus: violet + rec.Bont split x gezoomd + rec.Bont split",
+      "post": {
+        "md[0]": "V+/V;",
+        "mr[0]": "s+/s;",
+        "fd[4]": "Ed+/Ed;",
+        "fr[0]": "s+/s;"
+      },
+      "error": null,
+      "score": {
+        "male": {
+          "matchCount": 1,
+          "totalGenCalcRows": 12,
+          "matchRatio": 0.0833,
+          "weightedDelta": 106.25
+        },
+        "female": {
+          "matchCount": 1,
+          "totalGenCalcRows": 12,
+          "matchRatio": 0.0833,
+          "weightedDelta": 106.25
+        },
+        "averageMatchRatio": 0.0833
+      },
+      "summary": {
+        "genCalc": {
+          "male": {
+            "count": 12,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "1.0 groen gezoomd(ef) /rec.Bont"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 groen violet(ef) gezoomd(ef) /rec.Bont"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 groen /rec.Bont"
+              },
+              {
+                "percentage": 12.5,
+                "label": "1.0 groen violet(ef) /rec.Bont"
+              },
+              {
+                "percentage": 6.25,
+                "label": "1.0 groen gezoomd(ef) rec.Bont"
+              },
+              {
+                "percentage": 6.25,
+                "label": "1.0 groen gezoomd(ef)"
+              },
+              {
+                "percentage": 6.25,
+                "label": "1.0 groen violet(ef) gezoomd(ef) rec.Bont"
+              },
+              {
+                "percentage": 6.25,
+                "label": "1.0 groen violet(ef) gezoomd(ef)"
+              }
+            ]
+          },
+          "female": {
+            "count": 12,
+            "top": [
+              {
+                "percentage": 12.5,
+                "label": "0.1 groen gezoomd(ef) /rec.Bont"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 groen violet(ef) gezoomd(ef) /rec.Bont"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 groen /rec.Bont"
+              },
+              {
+                "percentage": 12.5,
+                "label": "0.1 groen violet(ef) /rec.Bont"
+              },
+              {
+                "percentage": 6.25,
+                "label": "0.1 groen gezoomd(ef) rec.Bont"
+              },
+              {
+                "percentage": 6.25,
+                "label": "0.1 groen gezoomd(ef)"
+              },
+              {
+                "percentage": 6.25,
+                "label": "0.1 groen violet(ef) gezoomd(ef) rec.Bont"
+              },
+              {
+                "percentage": 6.25,
+                "label": "0.1 groen violet(ef) gezoomd(ef)"
+              }
+            ]
+          }
+        },
+        "local": {
+          "male": {
+            "count": 8,
+            "top": [
+              {
+                "percentage": 9.375,
+                "label": "1.0 man gezoomd (ef)"
+              },
+              {
+                "percentage": 9.375,
+                "label": "1.0 man violet (ef)"
+              },
+              {
+                "percentage": 9.375,
+                "label": "1.0 man violet (ef), gezoomd (ef)"
+              },
+              {
+                "percentage": 9.375,
+                "label": "1.0 man wildkleur"
+              },
+              {
+                "percentage": 3.125,
+                "label": "1.0 man rec.Bont"
+              },
+              {
+                "percentage": 3.125,
+                "label": "1.0 man rec.Bont, gezoomd (ef)"
+              },
+              {
+                "percentage": 3.125,
+                "label": "1.0 man violet (ef), rec.Bont"
+              },
+              {
+                "percentage": 3.125,
+                "label": "1.0 man violet (ef), rec.Bont, gezoomd (ef)"
+              }
+            ]
+          },
+          "female": {
+            "count": 8,
+            "top": [
+              {
+                "percentage": 9.375,
+                "label": "0.1 pop gezoomd (ef)"
+              },
+              {
+                "percentage": 9.375,
+                "label": "0.1 pop violet (ef)"
+              },
+              {
+                "percentage": 9.375,
+                "label": "0.1 pop violet (ef), gezoomd (ef)"
+              },
+              {
+                "percentage": 9.375,
+                "label": "0.1 pop wildkleur"
+              },
+              {
+                "percentage": 3.125,
+                "label": "0.1 pop rec.Bont"
+              },
+              {
+                "percentage": 3.125,
+                "label": "0.1 pop rec.Bont, gezoomd (ef)"
+              },
+              {
+                "percentage": 3.125,
+                "label": "0.1 pop violet (ef), rec.Bont"
+              },
+              {
+                "percentage": 3.125,
+                "label": "0.1 pop violet (ef), rec.Bont, gezoomd (ef)"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "averageMatchRatio": 0.3708,
+    "errorCases": []
+  }
+}

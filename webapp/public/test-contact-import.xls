@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Contacten">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Naam</Data></Cell>
+        <Cell><Data ss:Type="String">Voornaam</Data></Cell>
+        <Cell><Data ss:Type="String">Straat</Data></Cell>
+        <Cell><Data ss:Type="String">Nummer</Data></Cell>
+        <Cell><Data ss:Type="String">Postcode</Data></Cell>
+        <Cell><Data ss:Type="String">Gemeente</Data></Cell>
+        <Cell><Data ss:Type="String">Provincie</Data></Cell>
+        <Cell><Data ss:Type="String">Gsmnummer</Data></Cell>
+        <Cell><Data ss:Type="String">Website</Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Peeters</Data></Cell>
+        <Cell><Data ss:Type="String">Jan</Data></Cell>
+        <Cell><Data ss:Type="String">Marktstraat</Data></Cell>
+        <Cell><Data ss:Type="String">12A</Data></Cell>
+        <Cell><Data ss:Type="String">2000</Data></Cell>
+        <Cell><Data ss:Type="String">Antwerpen</Data></Cell>
+        <Cell><Data ss:Type="String">Antwerpen</Data></Cell>
+        <Cell><Data ss:Type="String">0470123456</Data></Cell>
+        <Cell><Data ss:Type="String">https://nieuwe-site.be</Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Janssens</Data></Cell>
+        <Cell><Data ss:Type="String">An</Data></Cell>
+        <Cell><Data ss:Type="String">Kerkstraat</Data></Cell>
+        <Cell><Data ss:Type="String">7</Data></Cell>
+        <Cell><Data ss:Type="String">9000</Data></Cell>
+        <Cell><Data ss:Type="String">Gent</Data></Cell>
+        <Cell><Data ss:Type="String">Oost-Vlaanderen</Data></Cell>
+        <Cell><Data ss:Type="String">0499123456</Data></Cell>
+        <Cell><Data ss:Type="String">https://janssens-birds.be</Data></Cell>
+      </Row>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,0 +1,40 @@
+{
+  "mutations": {
+    "blauw": {
+      "type": "autosomal_recessive",
+      "name": "Blauw"
+    },
+    "aqua": {
+      "type": "autosomal_recessive",
+      "name": "Aqua (Zeegroen)"
+    },
+    "pastelblauw": {
+      "type": "autosomal_recessive",
+      "name": "Pastelblauw (Turquoise)"
+    },
+    "opaline": {
+      "type": "sex_linked_recessive",
+      "name": "Opaline (Roodbuik)"
+    },
+    "cinnamon": {
+      "type": "sex_linked_recessive",
+      "name": "Cinnamon"
+    },
+    "ino": {
+      "type": "sex_linked_recessive",
+      "name": "Ino (Lutino/Rubino)"
+    },
+    "pallid": {
+      "type": "sex_linked_recessive",
+      "name": "Pallid (Isabel)"
+    },
+    "grijsgroen": {
+      "type": "dominant",
+      "name": "Grijsgroen"
+    },
+    "donkerfactor": {
+      "type": "co_dominant",
+      "name": "Donkerfactor"
+    }
+  }
+}

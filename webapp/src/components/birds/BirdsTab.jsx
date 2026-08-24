@@ -7,6 +7,8 @@ export default function BirdsTab({
   editingBirdKey,
   maleNames,
   femaleNames,
+  optionSets,
+  contactOptions,
   filteredBirds,
   selectedBirdKey,
   search,
@@ -26,6 +28,8 @@ export default function BirdsTab({
         editingBirdKey={editingBirdKey}
         maleNames={maleNames}
         femaleNames={femaleNames}
+        optionSets={optionSets}
+        contactOptions={contactOptions}
         onSave={onFormSave}
         onClear={onFormClear}
         onDelete={onFormDelete}

@@ -1,0 +1,26 @@
+{
+  "name": "splendid-gencalc",
+  "displayName": "Splendid Parkiet GenCalc",
+  "description": "Genetica calculator voor Splendid parkieten met Python backend en React frontend.",
+  "version": "1.0.0",
+  "publisher": "splendid-breeder",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "splendid-gencalc.openCalculator",
+        "title": "Splendid GenCalc: Open Rekenmachine"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0"
+  }
+}

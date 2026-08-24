@@ -1,5 +1,23 @@
+import { useMemo, useState } from 'react'
 import { PrintIcon, PdfIcon } from '../icons'
 import { vogelNaam } from '../../utils/birdUtils'
+
+const FILTER_FIELDS = ['mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam', 'opmerking']
+const SORTABLE_FIELDS = ['mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam']
+
+function splitLabel(bird) {
+  const values = [bird.Split1, bird.Split2, bird.Split3, bird.Split4].filter(Boolean)
+  if (values.length > 0) return values.join(', ')
+  return bird.Split || '-'
+}
+
+function getStatusBadgeClass(status) {
+  const normalized = String(status || '').trim().toLowerCase()
+  if (normalized === 'actief') return 'statusPill active'
+  if (normalized === 'overleden') return 'statusPill deceased'
+  if (normalized === 'verkocht') return 'statusPill sold'
+  return 'statusPill'
+}
 
 export default function BirdList({
   filteredBirds,
@@ -10,6 +28,98 @@ export default function BirdList({
   onPrint,
   onExportPdf,
 }) {
+  const [columnSortOrders, setColumnSortOrders] = useState({
+    mutatie: 'asc',
+    geslacht: '',
+    jaar: '',
+    status: '',
+    gezoomd: '',
+    factor: '',
+    split: '',
+    naam: '',
+  })
+  const [columnFilters, setColumnFilters] = useState({
+    mutatie: '',
+    geslacht: '',
+    jaar: '',
+    status: '',
+    gezoomd: '',
+    factor: '',
+    split: '',
+    naam: '',
+    opmerking: '',
+  })
+
+  const rowsWithValues = useMemo(
+    () =>
+      filteredBirds.map(([key, bird]) => ({
+        key,
+        bird,
+        values: {
+          mutatie: bird.Mutatie || '-',
+          geslacht: bird.Geslacht || '-',
+          jaar: bird.Kweekjaar || '-',
+          status: bird.Status || '-',
+          gezoomd: bird.Gezoomd || '-',
+          factor: bird.Factor || '-',
+          split: splitLabel(bird),
+          naam: vogelNaam(bird),
+          opmerking: bird.Opmerking || '-',
+        },
+      })),
+    [filteredBirds],
+  )
+
+  const filterOptions = useMemo(() => {
+    return Object.fromEntries(
+      FILTER_FIELDS.map((field) => {
+        const uniqueValues = new Set(rowsWithValues.map((row) => row.values[field]))
+        const sortedValues = Array.from(uniqueValues).sort((a, b) =>
+          a.localeCompare(b, 'nl-BE', { numeric: true, sensitivity: 'base' }),
+        )
+        return [field, sortedValues]
+      }),
+    )
+  }, [rowsWithValues])
+
+  const visibleRows = useMemo(() => {
+    const filteredRows = rowsWithValues.filter((row) => {
+      const matchesColumns = FILTER_FIELDS.every((field) => {
+        const selected = columnFilters[field]
+        return !selected || row.values[field] === selected
+      })
+
+      return matchesColumns
+    })
+
+    const activeSorts = SORTABLE_FIELDS.filter((field) => columnSortOrders[field])
+    if (activeSorts.length === 0) return filteredRows
+
+    return [...filteredRows].sort((a, b) => {
+      for (const field of activeSorts) {
+        const direction = columnSortOrders[field] === 'desc' ? -1 : 1
+        const compare = String(a.values[field]).localeCompare(String(b.values[field]), 'nl-BE', {
+          numeric: true,
+          sensitivity: 'base',
+        })
+
+        if (compare !== 0) {
+          return compare * direction
+        }
+      }
+
+      return 0
+    })
+  }, [rowsWithValues, columnFilters, columnSortOrders])
+
+  function setFilter(field, value) {
+    setColumnFilters((prev) => ({ ...prev, [field]: value }))
+  }
+
+  function setSortOrder(field, value) {
+    setColumnSortOrders((prev) => ({ ...prev, [field]: value }))
+  }
+
   return (
     <article className="card">
       <div className="listHead">
@@ -35,25 +145,183 @@ export default function BirdList({
         <table>
           <thead>
             <tr>
-              <th>Naam</th>
-              <th>Geslacht</th>
               <th>Mutatie</th>
-              <th>Kooi</th>
+              <th>Geslacht</th>
               <th>Jaar</th>
+              <th>Status</th>
+              <th>Gezoomd</th>
+              <th>Factor</th>
+              <th>Split</th>
+              <th>Naam</th>
+              <th>Opmerking</th>
+            </tr>
+            <tr className="tableFilters">
+              <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.mutatie} onChange={(e) => setFilter('mutatie', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.mutatie?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.mutatie} onChange={(e) => setSortOrder('mutatie', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.geslacht} onChange={(e) => setFilter('geslacht', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.geslacht?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.geslacht} onChange={(e) => setSortOrder('geslacht', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.jaar} onChange={(e) => setFilter('jaar', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.jaar?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.jaar} onChange={(e) => setSortOrder('jaar', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.status} onChange={(e) => setFilter('status', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.status?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.status} onChange={(e) => setSortOrder('status', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.gezoomd} onChange={(e) => setFilter('gezoomd', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.gezoomd?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.gezoomd} onChange={(e) => setSortOrder('gezoomd', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.factor} onChange={(e) => setFilter('factor', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.factor?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.factor} onChange={(e) => setSortOrder('factor', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.split} onChange={(e) => setFilter('split', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.split?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.split} onChange={(e) => setSortOrder('split', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.naam} onChange={(e) => setFilter('naam', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.naam?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.naam} onChange={(e) => setSortOrder('naam', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                  </select>
+                </div>
+              </th>
+              <th>
+                <select value={columnFilters.opmerking} onChange={(e) => setFilter('opmerking', e.target.value)}>
+                  <option value="">Alle</option>
+                  {filterOptions.opmerking?.map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </th>
             </tr>
           </thead>
           <tbody>
-            {filteredBirds.map(([key, bird]) => (
+            {visibleRows.map(({ key, values }) => (
               <tr
                 key={key}
                 className={selectedBirdKey === key ? 'selected' : ''}
                 onClick={() => onSelectBird(key)}
               >
-                <td>{vogelNaam(bird)}</td>
-                <td>{bird.Geslacht || '-'}</td>
-                <td>{bird.Mutatie || '-'}</td>
-                <td>{bird.Kooi || '-'}</td>
-                <td>{bird.Kweekjaar || '-'}</td>
+                <td>{values.mutatie}</td>
+                <td>{values.geslacht}</td>
+                <td>{values.jaar}</td>
+                <td>
+                  <span className={getStatusBadgeClass(values.status)}>{values.status}</span>
+                </td>
+                <td>{values.gezoomd}</td>
+                <td>{values.factor}</td>
+                <td>{values.split}</td>
+                <td>{values.naam}</td>
+                <td>{values.opmerking}</td>
               </tr>
             ))}
           </tbody>

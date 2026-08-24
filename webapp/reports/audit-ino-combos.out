@@ -1,0 +1,15 @@
+- + - => M: 100% 1.0 groen || F: 100% 0.1 groen
+- + 1ino => M: 50% 1.0 groen /ino | 50% 1.0 groen || F: 50% 0.1 ino | 50% 0.1 groen
+- + 2ino => M: 50% 1.0 groen /ino | 50% 1.0 groen || F: 50% 0.1 ino | 50% 0.1 groen
+- + 1ino*pd => M: 50% 1.0 groen /pallid(isabel) | 50% 1.0 groen || F: 50% 0.1 groen | 50% 0.1 pallid(isabel)
+- + 2ino*pd => M: 50% 1.0 groen /pallid(isabel) | 50% 1.0 groen || F: 50% 0.1 groen | 50% 0.1 pallid(isabel)
+ino + - => M: 100% 1.0 groen /ino || F: 100% 0.1 ino
+ino + 1ino => M: 100% 1.0 groen /ino || F: 100% 0.1 ino
+ino + 2ino => M: 100% 1.0 groen /ino || F: 100% 0.1 ino
+ino + 1ino*pd => M: 50% 1.0 groen /ino | 50% 1.0 groen /pallid(isabel) || F: 50% 0.1 ino | 50% 0.1 pallid(isabel)
+ino + 2ino*pd => M: 50% 1.0 groen /ino | 50% 1.0 groen /pallid(isabel) || F: 50% 0.1 ino | 50% 0.1 pallid(isabel)
+ino*pd + - => M: 100% 1.0 groen /pallid(isabel) || F: 100% 0.1 pallid(isabel)
+ino*pd + 1ino => M: 50% 1.0 groen /ino | 50% 1.0 groen /pallid(isabel) || F: 50% 0.1 ino | 50% 0.1 pallid(isabel)
+ino*pd + 2ino => M: 50% 1.0 groen /ino | 50% 1.0 groen /pallid(isabel) || F: 50% 0.1 ino | 50% 0.1 pallid(isabel)
+ino*pd + 1ino*pd => M: 100% 1.0 groen /pallid(isabel) || F: 100% 0.1 pallid(isabel)
+ino*pd + 2ino*pd => M: 100% 1.0 groen /pallid(isabel) || F: 100% 0.1 pallid(isabel)
