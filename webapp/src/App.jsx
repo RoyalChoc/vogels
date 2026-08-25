@@ -45,7 +45,6 @@ import TreeTab from './components/tree/TreeTab'
 import AdminTab from './components/admin/AdminTab'
 import ContactsTab from './components/contacts/ContactsTab'
 import SplendidCalculatorTab from './components/splendid/SplendidCalculatorTab'
-import CalculatorTab from './components/calculator/CalculatorTab'
 
 const emptyBird = {
   Stamnummer: '',
@@ -1166,8 +1165,6 @@ function App() {
           onImportExcel={handleImportContactsExcel}
         />
       )}
-
-      {tab === 'calculator' && <CalculatorTab />}
 
       {tab === 'splendid-calculator' && <SplendidCalculatorTab />}
 

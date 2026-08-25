@@ -958,3 +958,208 @@ export function exportFullTreePdf(selectedBirdKey, birds, ancestors, descendants
   doc.save(`stamboom-volledig-${fileStamp}.pdf`)
   return 'PDF opgeslagen: volledige stamboom.'
 }
+
+// ─── Splendid calculator exports ─────────────────────────────────────────────
+
+export function exportSplendidResultPdf(maleRows, femaleRows, viewOptions, maleSummary, femaleSummary) {
+  const { visualOnly = false, showSplitDetails = false, showGeneticCode = false } = viewOptions
+  const showCode = showGeneticCode && !visualOnly
+
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+  const generatedAt = new Date().toLocaleString('nl-BE')
+  const fileStamp = new Date().toISOString().slice(0, 10)
+
+  // Title block
+  doc.setFontSize(18)
+  doc.setFont(undefined, 'bold')
+  doc.setTextColor(15, 115, 115)
+  doc.text('Splendidparkiet – Genetica', 12, 14)
+  doc.setFont(undefined, 'italic')
+  doc.setFontSize(10)
+  doc.setTextColor(75, 99, 105)
+  doc.text('Neophema splendida', 12, 20)
+  doc.setFont(undefined, 'normal')
+
+  // Crossing block
+  doc.setFontSize(9.5)
+  doc.setTextColor(28, 43, 47)
+  doc.text('Kruising', 12, 28)
+  doc.setTextColor(75, 99, 105)
+  const maleLines = doc.splitTextToSize(`1.0  ${maleSummary}`, 186)
+  doc.text(maleLines, 12, 33)
+  let y = 33 + maleLines.length * 4.5
+  doc.text('×', 12, y)
+  y += 4
+  const femaleLines = doc.splitTextToSize(`0.1  ${femaleSummary}`, 186)
+  doc.text(femaleLines, 12, y)
+  y += femaleLines.length * 4.5 + 3
+
+  // View options badge
+  const optLabels = []
+  if (visualOnly) optLabels.push('Enkel visueel')
+  if (showSplitDetails && !visualOnly) optLabels.push('Splits tonen')
+  if (showCode) optLabels.push('Genetische code')
+  doc.setFontSize(8)
+  doc.setTextColor(140, 155, 160)
+  doc.text(`Weergave: ${optLabels.length ? optLabels.join(', ') : 'Standaard'}`, 12, y)
+  y += 6
+
+  const cols = showCode ? ['%', 'Uitkomst', 'Code'] : ['%', 'Uitkomst']
+  const colStyles = showCode
+    ? { 0: { cellWidth: 16 }, 1: { cellWidth: 100 }, 2: { fontSize: 6, cellWidth: 'auto' } }
+    : { 0: { cellWidth: 16 } }
+
+  function stripSexPrefix(label) {
+    return String(label || '').replace(/^[01]\.\d\s+/, '')
+  }
+
+  // Male results
+  doc.setFontSize(11)
+  doc.setFont(undefined, 'bold')
+  doc.setTextColor(21, 101, 192)
+  doc.text('1.0 – Mannen', 12, y)
+  doc.setFont(undefined, 'normal')
+  y += 3
+
+  autoTable(doc, {
+    startY: y,
+    head: [cols],
+    body: maleRows.map((r) => {
+      const row = [`${r.percentage.toFixed(2)}%`, stripSexPrefix(r.label)]
+      if (showCode) row.push(r.code || '')
+      return row
+    }),
+    styles: { fontSize: 8.5, cellPadding: 2 },
+    headStyles: { fillColor: [21, 101, 192], textColor: 255, fontStyle: 'bold' },
+    alternateRowStyles: { fillColor: [240, 246, 255] },
+    columnStyles: colStyles,
+    margin: { left: 12, right: 12 },
+  })
+
+  y = doc.lastAutoTable.finalY + 8
+  if (y > 262) { doc.addPage(); y = 14 }
+
+  // Female results
+  doc.setFontSize(11)
+  doc.setFont(undefined, 'bold')
+  doc.setTextColor(136, 14, 79)
+  doc.text('0.1 – Poppen', 12, y)
+  doc.setFont(undefined, 'normal')
+  y += 3
+
+  autoTable(doc, {
+    startY: y,
+    head: [cols],
+    body: femaleRows.map((r) => {
+      const row = [`${r.percentage.toFixed(2)}%`, stripSexPrefix(r.label)]
+      if (showCode) row.push(r.code || '')
+      return row
+    }),
+    styles: { fontSize: 8.5, cellPadding: 2 },
+    headStyles: { fillColor: [136, 14, 79], textColor: 255, fontStyle: 'bold' },
+    alternateRowStyles: { fillColor: [255, 242, 248] },
+    columnStyles: colStyles,
+    margin: { left: 12, right: 12 },
+  })
+
+  // Page footer
+  const totalPages = doc.getNumberOfPages()
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p)
+    doc.setFontSize(7.5)
+    doc.setTextColor(170, 180, 185)
+    doc.text(`Gegenereerd op ${generatedAt}`, 12, 289)
+    doc.text(`${p} / ${totalPages}`, 198, 289, { align: 'right' })
+  }
+
+  doc.save(`splendid-nakomelingen-${fileStamp}.pdf`)
+  return 'PDF opgeslagen.'
+}
+
+export function printSplendidResult(maleRows, femaleRows, viewOptions, maleSummary, femaleSummary) {
+  const { visualOnly = false, showSplitDetails = false, showGeneticCode = false } = viewOptions
+  const showCode = showGeneticCode && !visualOnly
+
+  const optLabels = []
+  if (visualOnly) optLabels.push('Enkel visueel')
+  if (showSplitDetails && !visualOnly) optLabels.push('Splits tonen')
+  if (showCode) optLabels.push('Genetische code')
+
+  function stripSexPrefix(label) {
+    return String(label || '').replace(/^[01]\.\d\s+/, '')
+  }
+
+  const thCode = showCode ? '<th class="code-col">Code</th>' : ''
+
+  function buildRows(rows) {
+    return rows.map((r) => {
+      const codeCell = showCode ? `<td class="code-col">${esc(r.code || '')}</td>` : ''
+      return `<tr><td class="pct">${esc(r.percentage.toFixed(2))}%</td><td>${esc(stripSexPrefix(r.label))}</td>${codeCell}</tr>`
+    }).join('')
+  }
+
+  const w = window.open('', '_blank', 'width=900,height=860')
+  if (!w) throw new Error('Popup geblokkeerd. Sta popups toe om af te drukken.')
+
+  w.document.write(`<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Splendidparkiet – Nakomelingen</title>
+  <style>
+    :root{--line:#d7e5e7;--ink:#1c2b2f;--muted:#4b6369;--male:#1565c0;--female:#880e4f;--accent-deep:#0f7373}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;color:var(--ink);background:#f4f7f9;font-size:13px}
+    .wrap{max-width:820px;margin:0 auto;padding:18px}
+    .head{border:1px solid var(--line);border-left:6px solid var(--accent-deep);background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:12px}
+    .head h1{margin:0 0 3px;font-size:20px;color:var(--accent-deep)}
+    .head em{color:var(--muted);font-size:11px}
+    .panel{border:1px solid var(--line);border-radius:10px;background:#fff;padding:12px 14px;margin-bottom:10px}
+    h2{margin:0 0 6px;font-size:14px;color:var(--ink)}
+    h3{font-size:12px;font-weight:700;margin:10px 0 4px}
+    h3.male{color:var(--male)}
+    h3.female{color:var(--female)}
+    .cross-block p{margin:2px 0;font-size:12.5px}
+    .cross-sep{font-size:18px;font-weight:700;color:var(--muted);margin:1px 0}
+    .view-opts{font-size:10px;color:var(--muted);margin:6px 0 0;border-top:1px dashed var(--line);padding-top:4px}
+    table{width:100%;border-collapse:collapse;font-size:11.5px}
+    th,td{border-bottom:1px solid var(--line);text-align:left;padding:5px 7px}
+    thead{background:#f5f8fb}
+    td.pct{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap;width:48px}
+    td.code-col,th.code-col{font-family:monospace;font-size:9px;color:var(--muted);word-break:break-all;max-width:200px}
+    @media print{
+      body{background:#fff}
+      .wrap{max-width:none;padding:8mm}
+      .panel,.head{border-radius:0;break-inside:avoid;page-break-inside:avoid}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <h1>Splendidparkiet – Nakomelingen</h1>
+      <em>Neophema splendida &nbsp;·&nbsp; ${esc(new Date().toLocaleString('nl-BE'))}</em>
+    </div>
+    <div class="panel">
+      <h2>Kruising</h2>
+      <div class="cross-block">
+        <p><strong>1.0</strong> ${esc(maleSummary)}</p>
+        <p class="cross-sep">×</p>
+        <p><strong>0.1</strong> ${esc(femaleSummary)}</p>
+      </div>
+      <p class="view-opts">Weergave: ${esc(optLabels.length ? optLabels.join(', ') : 'Standaard')}</p>
+      <h3 class="male">1.0 – Mannen</h3>
+      <table><thead><tr><th>%</th><th>Uitkomst</th>${thCode}</tr></thead>
+        <tbody>${buildRows(maleRows)}</tbody></table>
+      <h3 class="female">0.1 – Poppen</h3>
+      <table><thead><tr><th>%</th><th>Uitkomst</th>${thCode}</tr></thead>
+        <tbody>${buildRows(femaleRows)}</tbody></table>
+    </div>
+  </div>
+</body>
+</html>`)
+  w.document.close()
+  w.focus()
+  w.print()
+}

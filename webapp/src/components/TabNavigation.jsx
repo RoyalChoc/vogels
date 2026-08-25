@@ -23,13 +23,6 @@ export default function TabNavigation({ activeTab, onTabChange }) {
       </button>
       <button
         type="button"
-        className={activeTab === 'calculator' ? 'active' : ''}
-        onClick={() => onTabChange('calculator')}
-      >
-        Calculator
-      </button>
-      <button
-        type="button"
         className={activeTab === 'splendid-calculator' ? 'active' : ''}
         onClick={() => onTabChange('splendid-calculator')}
       >

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { splendidFieldGroups, splendidKnownFieldValues } from '../../data/splendidGencalcConfig'
-import { calculateLocalSplendid } from '../../utils/splendidLocalEngine'
+import { calculateSplendid } from '../../utils/splendidGeneticsEngine'
+import { exportSplendidResultPdf, printSplendidResult } from '../../utils/print'
 
 const QUICK_PRESETS = [
   { id: 'wildkleur', label: 'kies', male: {}, female: {} },
@@ -35,486 +36,499 @@ const QUICK_PRESETS = [
   { id: 'roodbuik-ef', label: 'roodbuik(ef)', male: { 'md[5]': 'Rs+/Rs;' }, female: { 'fd[5]': 'Rs+/Rs;' } },
 ]
 
-function RadioGroup({ legend, name, value, onChange, options, disabledValues = [] }) {
-  const disabledSet = new Set(disabledValues)
+// ─── Accessible radio pill group ─────────────────────────────────────────────
 
+function RadioPills({ fieldName, value, onChange, options, disabledValues = [] }) {
+  const disabledSet = new Set(disabledValues)
   return (
-    <fieldset className="splendidRadioGroup">
-      <legend>{legend}</legend>
-      <div className="splendidRadioList">
-        {options.map((option, index) => {
-          const optionId = `${name}-${index}`
-          const isDisabled = disabledSet.has(option.value)
-          return (
-            <label key={optionId} htmlFor={optionId} className={`splendidRadioItem${isDisabled ? ' disabled' : ''}`}>
-              <input
-                id={optionId}
-                type="radio"
-                name={name}
-                value={option.value}
-                checked={(value || '') === option.value}
-                disabled={isDisabled}
-                onChange={(event) => onChange(event.target.value)}
-              />
-              <span>{option.label}</span>
-            </label>
-          )
-        })}
-      </div>
-    </fieldset>
+    <div className="splendidRadioPills" role="radiogroup">
+      {options.map((opt, i) => {
+        const id = `${fieldName}-${i}`
+        const isDisabled = disabledSet.has(opt.value)
+        const isSelected = (value || '') === opt.value
+        return (
+          <label
+            key={id}
+            htmlFor={id}
+            className={`splendidRadioPill${isSelected ? ' is-selected' : ''}${isDisabled ? ' is-disabled' : ''}`}
+          >
+            <input
+              id={id}
+              type="radio"
+              name={fieldName}
+              value={opt.value}
+              checked={isSelected}
+              disabled={isDisabled}
+              onChange={(e) => onChange(e.target.value)}
+            />
+            {opt.label === 'kies' ? '—' : opt.label}
+          </label>
+        )
+      })}
+    </div>
   )
 }
+
+// ─── Dependency helpers ───────────────────────────────────────────────────────
 
 function disabledInoSecondaryValues(primaryValue, options) {
   if (!primaryValue) return []
   const primaryIndex = ['ino', 'ino*pd'].indexOf(primaryValue)
   if (primaryIndex < 0) return []
   const threshold = primaryIndex * 2
-  return options.filter((option, index) => index >= threshold).map((option) => option.value)
+  return options.filter((_, index) => index >= threshold).map((o) => o.value)
 }
 
 function disabledBlueSecondaryValues(primaryValue, options) {
   if (!primaryValue) return []
   const primaryIndex = ['bl', 'bl*tq', 'bl*aq'].indexOf(primaryValue)
   if (primaryIndex < 0) return []
-  return options.filter((option, index) => index >= primaryIndex).map((option) => option.value)
+  return options.filter((_, index) => index >= primaryIndex).map((o) => o.value)
 }
 
-function inoDependencyHint(primaryValue) {
-  if (primaryValue === 'ino') return 'X1 = ino: X2 wordt uitgeschakeld (GenCalc-regel).'
-  if (primaryValue === 'ino*pd') return 'X1 = pallid(isabel): op X2 blijft alleen ino mogelijk.'
-  return 'Kies eerst X1; dan worden onmogelijke X2-keuzes automatisch uitgeschakeld.'
+// ─── Parent label builder ─────────────────────────────────────────────────────
+
+function buildParentSummary(fields, sex) {
+  const isMale = sex === 'male'
+  const parts = []
+
+  splendidFieldGroups.forEach((group) => {
+    group.rows.forEach((row) => {
+      if (row.options) {
+        const key = isMale ? row.maleField : row.femaleField
+        const val = fields[key] || ''
+        if (val) {
+          const opt = row.options.find((o) => o.value === val)
+          if (opt && opt.label !== 'kies') parts.push(opt.label)
+        }
+        return
+      }
+      if (row.maleOptions) {
+        const key = isMale ? row.maleField : row.femaleField
+        const opts = isMale ? row.maleOptions : row.femaleOptions
+        const val = fields[key] || ''
+        if (val) {
+          const opt = opts.find((o) => o.value === val)
+          if (opt && opt.label !== 'kies') parts.push(opt.label)
+        }
+        return
+      }
+      if (row.seriesOptions) {
+        const [fA, fB] = isMale
+          ? [row.maleFieldPrimary, row.maleFieldSecondary]
+          : [row.femaleFieldPrimary, row.femaleFieldSecondary]
+        const alleles = [fields[fA] || '', fields[fB] || ''].filter(Boolean)
+        if (alleles.length > 0) {
+          const names = alleles.map((v) => {
+            const opt = row.seriesOptions.find((o) => o.value === v)
+            return opt ? opt.label.replace(' allel', '') : v
+          })
+          parts.push(names.join('/'))
+        }
+        return
+      }
+      // ino/pallid special
+      if (isMale) {
+        const primVal = fields[row.maleFieldPrimary] || ''
+        const secVal = fields[row.maleFieldSecondary] || ''
+        if (primVal) {
+          const opt = (row.malePrimaryOptions || []).find((o) => o.value === primVal)
+          if (opt && opt.label !== 'kies') parts.push(opt.label)
+        }
+        if (secVal) {
+          const opt = (row.maleSecondaryOptions || []).find((o) => o.value === secVal)
+          if (opt && opt.label !== 'kies') parts.push(opt.label)
+        }
+      } else {
+        const val = fields[row.femaleField] || ''
+        if (val) {
+          const opt = (row.femaleOptions || []).find((o) => o.value === val)
+          if (opt && opt.label !== 'kies') parts.push(opt.label)
+        }
+      }
+    })
+  })
+
+  return parts.length > 0 ? parts.join(' · ') : 'Wildkleur'
 }
 
-function blueDependencyHint(primaryValue, sexLabel) {
-  if (!primaryValue) return `${sexLabel}: kies eerst allel 1; daarna worden onmogelijke allel 2-keuzes uitgeschakeld.`
-  if (primaryValue === 'bl') return `${sexLabel}: bij allel 1 = bl is allel 2 volledig uitgeschakeld.`
-  if (primaryValue === 'bl*tq') return `${sexLabel}: bij allel 1 = bl*tq blijft alleen bl als allel 2 mogelijk.`
-  if (primaryValue === 'bl*aq') return `${sexLabel}: bij allel 1 = bl*aq blijven bl en bl*tq als allel 2 mogelijk.`
-  return ''
-}
+// ─── Main component ───────────────────────────────────────────────────────────
 
 export default function SplendidCalculatorTab() {
   const [fields, setFields] = useState({})
   const [visualOnly, setVisualOnly] = useState(false)
-  const [showGeneticCode, setShowGeneticCode] = useState(true)
-  const [showSplitDetails, setShowSplitDetails] = useState(true)
+  const [showSplitDetails, setShowSplitDetails] = useState(false)
+  const [showGeneticCode, setShowGeneticCode] = useState(false)
   const [malePreset, setMalePreset] = useState('wildkleur')
   const [femalePreset, setFemalePreset] = useState('wildkleur')
-
-  const fieldCount = useMemo(() => Object.keys(splendidKnownFieldValues).length, [])
+  const [calcFields, setCalcFields] = useState(null)
+  const [showResults, setShowResults] = useState(false)
+  const [exportError, setExportError] = useState('')
 
   function setFieldValue(name, value) {
-    setFields((current) => ({
-      ...current,
-      [name]: value,
-    }))
+    setFields((current) => ({ ...current, [name]: value }))
   }
 
   function resetAll() {
     setFields({})
     setVisualOnly(false)
-    setShowGeneticCode(true)
-    setShowSplitDetails(true)
+    setShowSplitDetails(false)
+    setShowGeneticCode(false)
     setMalePreset('wildkleur')
     setFemalePreset('wildkleur')
+    setCalcFields(null)
+    setShowResults(false)
+    setExportError('')
   }
 
   function applyQuickPreset(sex, presetId) {
     const preset = QUICK_PRESETS.find((item) => item.id === presetId)
     if (!preset) return
-
     const values = sex === 'male' ? preset.male : preset.female
     const keyPrefix = sex === 'male' ? 'm' : 'f'
-
     setFields((current) => {
       const next = { ...current }
       Object.keys(splendidKnownFieldValues).forEach((key) => {
         if (key.startsWith(keyPrefix)) next[key] = ''
       })
-      Object.entries(values).forEach(([key, value]) => {
-        next[key] = value
-      })
+      Object.entries(values).forEach(([key, value]) => { next[key] = value })
       return next
     })
   }
 
+  // Ino X2 auto-clear when X1 changes
   useEffect(() => {
     const primary = fields['msm[0]'] || ''
     const secondary = fields['msm[1]'] || ''
     const disabled = disabledInoSecondaryValues(primary, splendidFieldGroups[1].rows[1].maleSecondaryOptions)
-    if (secondary && disabled.includes(secondary)) {
-      setFieldValue('msm[1]', '')
-    }
+    if (secondary && disabled.includes(secondary)) setFieldValue('msm[1]', '')
   }, [fields])
 
+  // Blue-series allel 2 auto-clear when allel 1 changes
   useEffect(() => {
-    const mPrimary = fields['mrm[0]'] || ''
-    const mSecondary = fields['mrm[1]'] || ''
-    const fPrimary = fields['frm[0]'] || ''
-    const fSecondary = fields['frm[1]'] || ''
-    const blueOptions = splendidFieldGroups[2].rows[4].seriesOptions.filter((option) => option.value !== '')
-
-    const disabledM = disabledBlueSecondaryValues(mPrimary, blueOptions)
-    const disabledF = disabledBlueSecondaryValues(fPrimary, blueOptions)
-
-    if (mSecondary && disabledM.includes(mSecondary)) {
-      setFieldValue('mrm[1]', '')
-    }
-
-    if (fSecondary && disabledF.includes(fSecondary)) {
-      setFieldValue('frm[1]', '')
-    }
+    const blueOpts = splendidFieldGroups[2].rows[4].seriesOptions.filter((o) => o.value !== '')
+    const pairs = [['mrm[0]', 'mrm[1]'], ['frm[0]', 'frm[1]']]
+    pairs.forEach(([primary, secondary]) => {
+      const pVal = fields[primary] || ''
+      const sVal = fields[secondary] || ''
+      if (sVal && disabledBlueSecondaryValues(pVal, blueOpts).includes(sVal)) {
+        setFieldValue(secondary, '')
+      }
+    })
   }, [fields])
 
+  // Snapshot fields on Calculate; display toggles recalculate live within the modal.
   const result = useMemo(
-    () => calculateLocalSplendid(fields, { visualOnly, showGeneticCode, showSplitDetails }),
-    [fields, visualOnly, showGeneticCode, showSplitDetails],
+    () => (calcFields ? calculateSplendid(calcFields, { visualOnly, showGeneticCode, showSplitDetails }) : null),
+    [calcFields, visualOnly, showGeneticCode, showSplitDetails],
   )
 
-  const diagnostics = useMemo(() => {
-    const entries = []
+  const maleSummary = useMemo(() => (calcFields ? buildParentSummary(calcFields, 'male') : ''), [calcFields])
+  const femaleSummary = useMemo(() => (calcFields ? buildParentSummary(calcFields, 'female') : ''), [calcFields])
 
-    const inoRow = splendidFieldGroups[1].rows[1]
-    const inoPrimary = fields['msm[0]'] || ''
-    const inoDisabled = disabledInoSecondaryValues(
-      inoPrimary,
-      inoRow.maleSecondaryOptions.filter((option) => option.value !== ''),
+  function handleCalculate() {
+    setCalcFields({ ...fields })
+    setShowResults(true)
+    setExportError('')
+  }
+
+  function handleExportPdf() {
+    if (!result) return
+    try {
+      exportSplendidResultPdf(
+        result.maleRows, result.femaleRows,
+        { visualOnly, showSplitDetails, showGeneticCode },
+        maleSummary, femaleSummary,
+      )
+      setExportError('')
+    } catch (err) {
+      setExportError(err.message || 'PDF kon niet worden opgeslagen.')
+    }
+  }
+
+  function handlePrint() {
+    if (!result) return
+    try {
+      printSplendidResult(
+        result.maleRows, result.femaleRows,
+        { visualOnly, showSplitDetails, showGeneticCode },
+        maleSummary, femaleSummary,
+      )
+      setExportError('')
+    } catch (err) {
+      setExportError(err.message || 'Afdrukken mislukt.')
+    }
+  }
+
+  function renderMutationRow(group, row) {
+    if (row.options) {
+      return (
+        <div key={`${group.id}-${row.symbol}`} className="splendidCompactRow">
+          <span className="splendidCompactLabel">
+            <strong>{row.symbol}</strong>
+            <span>{row.mutation}</span>
+          </span>
+          <RadioPills
+            fieldName={`${row.maleField}-m`}
+            value={fields[row.maleField]}
+            onChange={(v) => setFieldValue(row.maleField, v)}
+            options={row.options}
+          />
+          <RadioPills
+            fieldName={`${row.femaleField}-f`}
+            value={fields[row.femaleField]}
+            onChange={(v) => setFieldValue(row.femaleField, v)}
+            options={row.options}
+          />
+        </div>
+      )
+    }
+
+    if (row.maleOptions) {
+      return (
+        <div key={`${group.id}-${row.symbol}`} className="splendidCompactRow">
+          <span className="splendidCompactLabel">
+            <strong>{row.symbol}</strong>
+            <span>{row.mutation}</span>
+          </span>
+          <RadioPills
+            fieldName={`${row.maleField}-m`}
+            value={fields[row.maleField]}
+            onChange={(v) => setFieldValue(row.maleField, v)}
+            options={row.maleOptions}
+          />
+          <RadioPills
+            fieldName={`${row.femaleField}-f`}
+            value={fields[row.femaleField]}
+            onChange={(v) => setFieldValue(row.femaleField, v)}
+            options={row.femaleOptions}
+          />
+        </div>
+      )
+    }
+
+    if (row.seriesOptions) {
+      const malePrimary = fields[row.maleFieldPrimary] || ''
+      const maleSecondary = fields[row.maleFieldSecondary] || ''
+      const femalePrimary = fields[row.femaleFieldPrimary] || ''
+      const femaleSecondary = fields[row.femaleFieldSecondary] || ''
+      const optNoEmpty = row.seriesOptions.filter((o) => o.value !== '')
+      return (
+        <div key={`${group.id}-${row.symbol}`} className="splendidCompactRow">
+          <span className="splendidCompactLabel">
+            <strong>{row.symbol}</strong>
+            <span>{row.mutation}</span>
+          </span>
+          <div className="splendidCompactDouble">
+            <RadioPills fieldName={`${row.maleFieldPrimary}-m1`} value={malePrimary} onChange={(v) => setFieldValue(row.maleFieldPrimary, v)} options={row.seriesOptions} />
+            <RadioPills fieldName={`${row.maleFieldSecondary}-m2`} value={maleSecondary} onChange={(v) => setFieldValue(row.maleFieldSecondary, v)} options={row.seriesOptions} disabledValues={disabledBlueSecondaryValues(malePrimary, optNoEmpty)} />
+          </div>
+          <div className="splendidCompactDouble">
+            <RadioPills fieldName={`${row.femaleFieldPrimary}-f1`} value={femalePrimary} onChange={(v) => setFieldValue(row.femaleFieldPrimary, v)} options={row.seriesOptions} />
+            <RadioPills fieldName={`${row.femaleFieldSecondary}-f2`} value={femaleSecondary} onChange={(v) => setFieldValue(row.femaleFieldSecondary, v)} options={row.seriesOptions} disabledValues={disabledBlueSecondaryValues(femalePrimary, optNoEmpty)} />
+          </div>
+        </div>
+      )
+    }
+
+    // ino/pallid: X1 + X2 for male, single for female
+    const malePrimary = fields[row.maleFieldPrimary] || ''
+    const maleSecondary = fields[row.maleFieldSecondary] || ''
+    const disabledSecondary = disabledInoSecondaryValues(
+      malePrimary,
+      (row.maleSecondaryOptions || []).filter((o) => o.value !== ''),
     )
-    if (inoDisabled.length > 0) {
-      const labels = inoRow.maleSecondaryOptions
-        .filter((option) => inoDisabled.includes(option.value))
-        .map((option) => option.label)
-      entries.push({
-        key: 'ino-man-x2',
-        title: 'Ino/Pallid - Man X2',
-        reason: inoDependencyHint(inoPrimary),
-        blockedLabels: labels,
-      })
-    }
+    return (
+      <div key={`${group.id}-${row.symbol}`} className="splendidCompactRow">
+        <span className="splendidCompactLabel">
+          <strong>{row.symbol}</strong>
+          <span>{row.mutation}</span>
+        </span>
+        <div className="splendidCompactDouble">
+          <RadioPills fieldName={`${row.maleFieldPrimary}-m-x1`} value={malePrimary} onChange={(v) => setFieldValue(row.maleFieldPrimary, v)} options={row.malePrimaryOptions} />
+          <RadioPills fieldName={`${row.maleFieldSecondary}-m-x2`} value={maleSecondary} onChange={(v) => setFieldValue(row.maleFieldSecondary, v)} options={row.maleSecondaryOptions} disabledValues={disabledSecondary} />
+        </div>
+        <RadioPills
+          fieldName={`${row.femaleField}-f`}
+          value={fields[row.femaleField]}
+          onChange={(v) => setFieldValue(row.femaleField, v)}
+          options={row.femaleOptions}
+        />
+      </div>
+    )
+  }
 
-    const blueRow = splendidFieldGroups[2].rows[4]
-    const blueOptions = blueRow.seriesOptions.filter((option) => option.value !== '')
-
-    const mBluePrimary = fields['mrm[0]'] || ''
-    const mBlueDisabled = disabledBlueSecondaryValues(mBluePrimary, blueOptions)
-    if (mBlueDisabled.length > 0) {
-      const labels = blueRow.seriesOptions
-        .filter((option) => mBlueDisabled.includes(option.value))
-        .map((option) => option.label)
-      entries.push({
-        key: 'blue-man-2',
-        title: 'Blue-serie - Man allel 2',
-        reason: blueDependencyHint(mBluePrimary, 'Man'),
-        blockedLabels: labels,
-      })
-    }
-
-    const fBluePrimary = fields['frm[0]'] || ''
-    const fBlueDisabled = disabledBlueSecondaryValues(fBluePrimary, blueOptions)
-    if (fBlueDisabled.length > 0) {
-      const labels = blueRow.seriesOptions
-        .filter((option) => fBlueDisabled.includes(option.value))
-        .map((option) => option.label)
-      entries.push({
-        key: 'blue-pop-2',
-        title: 'Blue-serie - Pop allel 2',
-        reason: blueDependencyHint(fBluePrimary, 'Pop'),
-        blockedLabels: labels,
-      })
-    }
-
-    return entries
-  }, [fields])
+  const showCode = showGeneticCode && !visualOnly
 
   return (
     <section className="panel splendidPanel">
       <article className="card">
-        <h2>Splendid Calculator (autonoom)</h2>
-        <p className="splendidIntro">
-          Deze versie gebruikt lokaal exact dezelfde invoervelden als GenCalc voor{' '}
-          <strong>Neophema splendida</strong>, maar rekent volledig autonoom in de app.
-        </p>
-        <p className="splendidIntro">Data integrity: {fieldCount} veldgroepen/flags gematcht met GenCalc.</p>
-
-        <div className="splendidActionsRow">
-          <button type="button" className="ghost" onClick={resetAll}>
-            Standaardwaarden herstellen
+        {/* Header */}
+        <div className="splendidCompactHeader">
+          <div>
+            <h2>Splendid Calculator</h2>
+            <p className="splendidCompactSubtitle">Neophema splendida</p>
+          </div>
+          <button type="button" className="splendidResetBtn" onClick={resetAll}>
+            ↺ Reset
           </button>
         </div>
 
-        <div className="splendidToggleGrid">
-          <label className="splendidField">
-            <span>Snelle keuze man 1.0</span>
-            <select
-              value={malePreset}
-              onChange={(event) => {
-                const next = event.target.value
-                setMalePreset(next)
-                applyQuickPreset('male', next)
-              }}
-            >
-              {QUICK_PRESETS.map((preset) => (
-                <option key={`male-preset-${preset.id}`} value={preset.id}>
-                  {preset.label}
-                </option>
-              ))}
+        {/* Quick presets */}
+        <div className="splendidCompactPresets">
+          <label className="splendidCompactPresetField">
+            <span>Snelle keuze 1.0</span>
+            <select value={malePreset} onChange={(e) => { setMalePreset(e.target.value); applyQuickPreset('male', e.target.value) }}>
+              {QUICK_PRESETS.map((p) => <option key={`mp-${p.id}`} value={p.id}>{p.label}</option>)}
             </select>
           </label>
-          <label className="splendidField">
-            <span>Snelle keuze pop 0.1</span>
-            <select
-              value={femalePreset}
-              onChange={(event) => {
-                const next = event.target.value
-                setFemalePreset(next)
-                applyQuickPreset('female', next)
-              }}
-            >
-              {QUICK_PRESETS.map((preset) => (
-                <option key={`female-preset-${preset.id}`} value={preset.id}>
-                  {preset.label}
-                </option>
-              ))}
+          <label className="splendidCompactPresetField">
+            <span>Snelle keuze 0.1</span>
+            <select value={femalePreset} onChange={(e) => { setFemalePreset(e.target.value); applyQuickPreset('female', e.target.value) }}>
+              {QUICK_PRESETS.map((p) => <option key={`fp-${p.id}`} value={p.id}>{p.label}</option>)}
             </select>
           </label>
         </div>
 
-        <div className="splendidToggleGrid">
-          <label>
-            <input type="checkbox" checked={visualOnly} onChange={(event) => setVisualOnly(event.target.checked)} />
-            Enkel visueel (split=0)
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={showGeneticCode}
-              onChange={(event) => setShowGeneticCode(event.target.checked)}
-            />
-            Geef genetische code weer (scode=1)
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={showSplitDetails}
-              onChange={(event) => setShowSplitDetails(event.target.checked)}
-            />
-            Toon split-details in uitkomst
-          </label>
+        {/* Compact mutation table with radio pills */}
+        <div className="splendidCompactTable">
+          <div className="splendidCompactTableHead">
+            <span>Mutatie</span>
+            <span>Man 1.0</span>
+            <span>Pop 0.1</span>
+          </div>
+          {splendidFieldGroups.map((group) => (
+            <div key={group.id}>
+              <div className="splendidCompactGroupHeader">{group.title}</div>
+              {group.rows.map((row) => renderMutationRow(group, row))}
+            </div>
+          ))}
         </div>
 
-        {diagnostics.length > 0 && (
-          <div className="splendidDiagnostics" role="status" aria-live="polite">
-            <h4>Diagnose geblokkeerde keuzes</h4>
-            {diagnostics.map((entry) => (
-              <div key={entry.key} className="splendidDiagnosticsItem">
-                <strong>{entry.title}</strong>
-                <p>{entry.reason}</p>
-                <p>Geblokkeerd: {entry.blockedLabels.join(', ')}</p>
+        <div className="splendidCompactActions">
+          <button type="button" className="primary" onClick={handleCalculate}>
+            Bereken nakomelingen
+          </button>
+        </div>
+      </article>
+
+      {/* Results modal */}
+      {showResults && result && (
+        <div className="pinGateBackdrop" role="dialog" aria-modal="true" aria-label="Nakomelingen Splendidparkiet">
+          <article className="card splendidResultModal">
+
+            {/* Sticky header */}
+            <div className="splendidModalTop">
+              <div>
+                <h2>Nakomelingen</h2>
+                <p className="splendidCompactSubtitle">Neophema splendida</p>
               </div>
-            ))}
-          </div>
-        )}
-      </article>
+              <button type="button" className="ghost splendidModalClose" onClick={() => setShowResults(false)} aria-label="Sluiten">
+                ✕
+              </button>
+            </div>
 
-      {splendidFieldGroups.map((group) => (
-        <article key={group.id} className="card splendidResultCard">
-          <h3>{group.title}</h3>
-          <div className="splendidFormGrid">
-            {group.rows.map((row) => {
-              if (row.options) {
-                return (
-                  <div key={`${group.id}-${row.symbol}`} className="splendidRowBlock">
-                    <h4>
-                      {row.symbol} - {row.mutation}
-                    </h4>
-                    <div className="splendidParentGrid">
-                      <RadioGroup
-                        legend="Man 1.0"
-                        name={`${row.maleField}-male`}
-                        value={fields[row.maleField] || ''}
-                        onChange={(next) => setFieldValue(row.maleField, next)}
-                        options={row.options}
-                      />
-                      <RadioGroup
-                        legend="Pop 0.1"
-                        name={`${row.femaleField}-female`}
-                        value={fields[row.femaleField] || ''}
-                        onChange={(next) => setFieldValue(row.femaleField, next)}
-                        options={row.options}
-                      />
-                    </div>
-                  </div>
-                )
-              }
-
-              if (row.maleOptions) {
-                return (
-                  <div key={`${group.id}-${row.symbol}`} className="splendidRowBlock">
-                    <h4>
-                      {row.symbol} - {row.mutation}
-                    </h4>
-                    <div className="splendidParentGrid">
-                      <RadioGroup
-                        legend="Man 1.0"
-                        name={`${row.maleField}-male`}
-                        value={fields[row.maleField] || ''}
-                        onChange={(next) => setFieldValue(row.maleField, next)}
-                        options={row.maleOptions}
-                      />
-                      <RadioGroup
-                        legend="Pop 0.1"
-                        name={`${row.femaleField}-female`}
-                        value={fields[row.femaleField] || ''}
-                        onChange={(next) => setFieldValue(row.femaleField, next)}
-                        options={row.femaleOptions}
-                      />
-                    </div>
-                  </div>
-                )
-              }
-
-              if (row.seriesOptions) {
-                const malePrimary = fields[row.maleFieldPrimary] || ''
-                const maleSecondary = fields[row.maleFieldSecondary] || ''
-                const femalePrimary = fields[row.femaleFieldPrimary] || ''
-                const femaleSecondary = fields[row.femaleFieldSecondary] || ''
-                const optionsNoEmpty = row.seriesOptions.filter((option) => option.value !== '')
-
-                const disabledMale = disabledBlueSecondaryValues(malePrimary, optionsNoEmpty)
-                const disabledFemale = disabledBlueSecondaryValues(femalePrimary, optionsNoEmpty)
-
-                return (
-                  <div key={`${group.id}-${row.symbol}`} className="splendidRowBlock">
-                    <h4>
-                      {row.symbol} - {row.mutation}
-                    </h4>
-                    <div className="splendidBlueSeriesGrid">
-                      <RadioGroup
-                        legend="Man allel 1"
-                        name={`${row.maleFieldPrimary}-male-primary`}
-                        value={malePrimary}
-                        onChange={(next) => setFieldValue(row.maleFieldPrimary, next)}
-                        options={row.seriesOptions}
-                      />
-                      <RadioGroup
-                        legend="Man allel 2"
-                        name={`${row.maleFieldSecondary}-male-secondary`}
-                        value={maleSecondary}
-                        onChange={(next) => setFieldValue(row.maleFieldSecondary, next)}
-                        options={row.seriesOptions}
-                        disabledValues={disabledMale}
-                      />
-                      <RadioGroup
-                        legend="Pop allel 1"
-                        name={`${row.femaleFieldPrimary}-female-primary`}
-                        value={femalePrimary}
-                        onChange={(next) => setFieldValue(row.femaleFieldPrimary, next)}
-                        options={row.seriesOptions}
-                      />
-                      <RadioGroup
-                        legend="Pop allel 2"
-                        name={`${row.femaleFieldSecondary}-female-secondary`}
-                        value={femaleSecondary}
-                        onChange={(next) => setFieldValue(row.femaleFieldSecondary, next)}
-                        options={row.seriesOptions}
-                        disabledValues={disabledFemale}
-                      />
-                    </div>
-                    <p className="splendidHint">{blueDependencyHint(malePrimary, 'Man')}</p>
-                    <p className="splendidHint">{blueDependencyHint(femalePrimary, 'Pop')}</p>
-                  </div>
-                )
-              }
-
-              const malePrimary = fields[row.maleFieldPrimary] || ''
-              const maleSecondary = fields[row.maleFieldSecondary] || ''
-              const disabledSecondary = disabledInoSecondaryValues(malePrimary, row.maleSecondaryOptions.filter((option) => option.value !== ''))
-
-              return (
-                <div key={`${group.id}-${row.symbol}`} className="splendidRowBlock">
-                  <h4>
-                    {row.symbol} - {row.mutation}
-                  </h4>
-                  <div className="splendidBlueSeriesGrid">
-                    <RadioGroup
-                      legend="Man X1"
-                      name={`${row.maleFieldPrimary}-male-primary`}
-                      value={malePrimary}
-                      onChange={(next) => setFieldValue(row.maleFieldPrimary, next)}
-                      options={row.malePrimaryOptions}
-                    />
-                    <RadioGroup
-                      legend="Man X2"
-                      name={`${row.maleFieldSecondary}-male-secondary`}
-                      value={maleSecondary}
-                      onChange={(next) => setFieldValue(row.maleFieldSecondary, next)}
-                      options={row.maleSecondaryOptions}
-                      disabledValues={disabledSecondary}
-                    />
-                    <RadioGroup
-                      legend="Pop visueel"
-                      name={`${row.femaleField}-female`}
-                      value={fields[row.femaleField] || ''}
-                      onChange={(next) => setFieldValue(row.femaleField, next)}
-                      options={row.femaleOptions}
-                    />
-                  </div>
-                  <p className="splendidHint">{inoDependencyHint(malePrimary)}</p>
+            {/* Scrollable body */}
+            <div className="splendidModalBody">
+              {/* Crossing summary */}
+              <div className="splendidCrossing">
+                <div className="splendidCrossingRow">
+                  <span className="splendidCrossingBadge splendidCrossingBadge--male">1.0</span>
+                  <span>{maleSummary}</span>
                 </div>
-              )
-            })}
-          </div>
-        </article>
-      ))}
+                <div className="splendidCrossingSep">×</div>
+                <div className="splendidCrossingRow">
+                  <span className="splendidCrossingBadge splendidCrossingBadge--female">0.1</span>
+                  <span>{femaleSummary}</span>
+                </div>
+              </div>
 
-      <article className="card splendidResultCard">
-        <h3>Resultaten 1.0 (man)</h3>
-        <div className="tableWrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Kans</th>
-                <th>Uitkomst</th>
-                {showGeneticCode && <th>Genetische code</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {result.maleRows.map((row, index) => (
-                <tr key={`male-${index}-${row.label}`}>
-                  <td>{row.percentage.toFixed(4)}%</td>
-                  <td>{row.label}</td>
-                  {showGeneticCode && <td>{row.code}</td>}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </article>
+              {/* Display toggles */}
+              <div className="splendidModalToggles">
+                <label>
+                  <input type="checkbox" checked={visualOnly} onChange={(e) => setVisualOnly(e.target.checked)} />
+                  Enkel visueel
+                </label>
+                <label className={visualOnly ? 'is-muted' : ''}>
+                  <input type="checkbox" checked={showSplitDetails} disabled={visualOnly} onChange={(e) => setShowSplitDetails(e.target.checked)} />
+                  Splits tonen
+                </label>
+                <label>
+                  <input type="checkbox" checked={showGeneticCode} onChange={(e) => setShowGeneticCode(e.target.checked)} />
+                  Genetische code
+                </label>
+              </div>
 
-      <article className="card splendidResultCard">
-        <h3>Resultaten 0.1 (pop)</h3>
-        <div className="tableWrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Kans</th>
-                <th>Uitkomst</th>
-                {showGeneticCode && <th>Genetische code</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {result.femaleRows.map((row, index) => (
-                <tr key={`female-${index}-${row.label}`}>
-                  <td>{row.percentage.toFixed(4)}%</td>
-                  <td>{row.label}</td>
-                  {showGeneticCode && <td>{row.code}</td>}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              {/* Results grids */}
+              <div className="splendidModalResults">
+                <div className="splendidModalSection">
+                  <h3 className="calcMale">1.0 – Mannen</h3>
+                  <div className="tableWrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>%</th>
+                          <th>Uitkomst</th>
+                          {showCode && <th>Code</th>}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.maleRows.map((row, i) => (
+                          <tr key={`m-${i}`}>
+                            <td className="splendidPctCell">{row.percentage.toFixed(2)}%</td>
+                            <td>{row.label}</td>
+                            {showCode && <td className="splendidCodeCell">{row.code}</td>}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="splendidModalSection">
+                  <h3 className="calcFemale">0.1 – Poppen</h3>
+                  <div className="tableWrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>%</th>
+                          <th>Uitkomst</th>
+                          {showCode && <th>Code</th>}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.femaleRows.map((row, i) => (
+                          <tr key={`f-${i}`}>
+                            <td className="splendidPctCell">{row.percentage.toFixed(2)}%</td>
+                            <td>{row.label}</td>
+                            {showCode && <td className="splendidCodeCell">{row.code}</td>}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              {exportError && <p className="splendidExportError">{exportError}</p>}
+            </div>
+
+            {/* Sticky footer */}
+            <div className="splendidModalFooter">
+              <button type="button" className="primary" onClick={handleExportPdf}>
+                Export PDF
+              </button>
+              <button type="button" className="ghost" onClick={handlePrint}>
+                Afdrukken
+              </button>
+              <button type="button" className="ghost" onClick={() => setShowResults(false)}>
+                Sluiten
+              </button>
+            </div>
+
+          </article>
         </div>
-      </article>
+      )}
     </section>
   )
 }

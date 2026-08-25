@@ -221,3 +221,27 @@ export const splendidKnownFieldValues = {
   split: ['0'],
   scode: ['1'],
 }
+
+// Genetic loci definitions — source of truth for the genetics engine.
+// type: autosomal-in (incomplete dominant), autosomal-do (dominant), autosomal-re (recessive),
+//       sex-linked (Z-linked recessive), sex-linked-ino (Z-linked allelicGroup ino/pallid),
+//       blue-series (autosomal multiple-allele series)
+export const SPLENDID_LOCI = [
+  { key: 'V',   type: 'autosomal-in',    label: 'violet',             maleField: 'md[0]',   femaleField: 'fd[0]',   mut: 'V'   },
+  { key: 'G',   type: 'autosomal-do',    label: 'grijs',              maleField: 'md[1]',   femaleField: 'fd[1]',   mut: 'G'   },
+  { key: 'Kh',  type: 'autosomal-do',    label: 'khaki',              maleField: 'md[2]',   femaleField: 'fd[2]',   mut: 'Kh'  },
+  { key: 'cin', type: 'sex-linked',      label: 'cinnamon',           maleField: 'ms[0]',   femaleField: 'fs[0]',   mut: 'cin' },
+  { key: 'ino', type: 'sex-linked-ino',  label: 'ino',                maleFieldA: 'msm[0]', maleFieldB: 'msm[1]',   femaleField: 'fsm[0]' },
+  { key: 'op',  type: 'sex-linked',      label: 'opaline',            maleField: 'ms[1]',   femaleField: 'fs[1]',   mut: 'op'  },
+  { key: 'Pi',  type: 'autosomal-in',    label: 'dom.Bont',           maleField: 'md[3]',   femaleField: 'fd[3]',   mut: 'Pi'  },
+  { key: 's',   type: 'autosomal-re',    label: 'rec.Bont',           maleField: 'mr[0]',   femaleField: 'fr[0]',   mut: 's'   },
+  { key: 'df',  type: 'autosomal-re',    label: 'dun_fallow(isabel)', maleField: 'mr[1]',   femaleField: 'fr[1]',   mut: 'df'  },
+  { key: 'af',  type: 'autosomal-re',    label: 'ashen_fallow',       maleField: 'mr[2]',   femaleField: 'fr[2]',   mut: 'af'  },
+  {
+    key: 'bl',  type: 'blue-series',     label: 'blauw-serie',
+    maleFieldA: 'mrm[0]', maleFieldB: 'mrm[1]',
+    femaleFieldA: 'frm[0]', femaleFieldB: 'frm[1]',
+  },
+  { key: 'Ed',  type: 'autosomal-in',    label: 'gezoomd',            maleField: 'md[4]',   femaleField: 'fd[4]',   mut: 'Ed'  },
+  { key: 'Rs',  type: 'autosomal-in',    label: 'roodbuik',           maleField: 'md[5]',   femaleField: 'fd[5]',   mut: 'Rs'  },
+]

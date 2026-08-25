@@ -1,4 +1,4 @@
-import { calculateLocalSplendid } from '../src/utils/splendidLocalEngine.js'
+import { calculateSplendid } from '../src/utils/splendidGeneticsEngine.js'
 
 const URL = 'http://www.gencalc.com/gen/dutch_genc.php?sp=1NeofSca'
 const post = {
@@ -38,7 +38,7 @@ const response = await fetch(URL, {
 const html = await response.text()
 const remote = parse(html)
 
-const local = calculateLocalSplendid(post, {
+const local = calculateSplendid(post, {
   visualOnly: false,
   showGeneticCode: false,
   showSplitDetails: true,

@@ -1,4 +1,4 @@
-import { calculateLocalSplendid } from '../src/utils/splendidLocalEngine.js'
+import { calculateSplendid } from '../src/utils/splendidGeneticsEngine.js'
 
 const URL = 'http://www.gencalc.com/gen/dutch_genc.php?sp=1NeofSca'
 
@@ -93,7 +93,7 @@ async function runCase(caseItem) {
   const html = await response.text()
   const gen = parseGenCalcResults(html)
 
-  const localResult = calculateLocalSplendid(caseItem.post, {
+  const localResult = calculateSplendid(caseItem.post, {
     visualOnly: false,
     showGeneticCode: false,
     showSplitDetails: true,
