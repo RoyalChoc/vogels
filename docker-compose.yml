@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: vogels-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: vogels
+      POSTGRES_USER: vogels
+      POSTGRES_PASSWORD: vogels_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - vogels_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  vogels_postgres_data:
