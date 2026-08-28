@@ -7,7 +7,7 @@ services:
     container_name: vogels-webapp
     restart: unless-stopped
     ports:
-      - "6000:5173"
+      - "7000:5173"
     environment:
       PORT: 5173
       DATA_DIR: /data
