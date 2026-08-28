@@ -1,0 +1,19 @@
+services:
+  vogels:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vogels-webapp:latest
+    container_name: vogels-webapp
+    restart: unless-stopped
+    ports:
+      - "6000:5173"
+    environment:
+      PORT: 5173
+      DATA_DIR: /data
+      SEED_DIR: /seed
+    volumes:
+      - vogels-data:/data
+
+volumes:
+  vogels-data:
