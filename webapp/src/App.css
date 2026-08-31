@@ -258,6 +258,12 @@
   grid-template-columns: 1.25fr 0.95fr;
 }
 
+.stickyFormWrap {
+  position: sticky;
+  top: 0.85rem;
+  z-index: 5;
+}
+
 .card {
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -298,6 +304,26 @@
 
 .formGrid .fullWidth {
   grid-column: 1 / -1;
+}
+
+.checkboxList {
+  list-style: none;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.checkboxList label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.45rem 0.6rem;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .rowActions {
@@ -434,6 +460,7 @@ button.danger {
 .tableWrap {
   margin-top: 0.7rem;
   overflow: auto;
+  max-height: 70vh;
   border: 1px solid var(--line);
   border-radius: 14px;
 }
@@ -448,6 +475,13 @@ thead {
   background: #f7fbfc;
 }
 
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f7fbfc;
+}
+
 th,
 td {
   padding: 0.62rem 0.65rem;
@@ -457,6 +491,9 @@ td {
 }
 
 .tableFilters th {
+  position: sticky;
+  top: 2.65rem;
+  z-index: 2;
   padding-top: 0.42rem;
   padding-bottom: 0.52rem;
   background: #f2f8f9;

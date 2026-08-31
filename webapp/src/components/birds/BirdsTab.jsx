@@ -22,18 +22,20 @@ export default function BirdsTab({
 }) {
   return (
     <section className="panel">
-      <BirdForm
-        birdForm={birdForm}
-        setBirdForm={setBirdForm}
-        editingBirdKey={editingBirdKey}
-        maleNames={maleNames}
-        femaleNames={femaleNames}
-        optionSets={optionSets}
-        contactOptions={contactOptions}
-        onSave={onFormSave}
-        onClear={onFormClear}
-        onDelete={onFormDelete}
-      />
+      <div className="stickyFormWrap">
+        <BirdForm
+          birdForm={birdForm}
+          setBirdForm={setBirdForm}
+          editingBirdKey={editingBirdKey}
+          maleNames={maleNames}
+          femaleNames={femaleNames}
+          optionSets={optionSets}
+          contactOptions={contactOptions}
+          onSave={onFormSave}
+          onClear={onFormClear}
+          onDelete={onFormDelete}
+        />
+      </div>
 
       <BirdList
         filteredBirds={filteredBirds}

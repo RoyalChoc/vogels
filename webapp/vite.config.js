@@ -18,6 +18,8 @@ const OPTION_FILES = {
   split: path.resolve(__dirname, '../split.json'),
   status: path.resolve(__dirname, '../status.json'),
   contactvelden: path.resolve(__dirname, '../contactvelden.json'),
+  vogelsoorten: path.resolve(__dirname, '../vogelsoorten.json'),
+  monstertypes: path.resolve(__dirname, '../monstertypes.json'),
 }
 
 async function readJsonFile(filePath, fallback) {

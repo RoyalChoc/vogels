@@ -30,6 +30,13 @@ export default function TabNavigation({ activeTab, onTabChange }) {
       </button>
       <button
         type="button"
+        className={activeTab === 'geslachtsbepaling' ? 'active' : ''}
+        onClick={() => onTabChange('geslachtsbepaling')}
+      >
+        Geslachtsbepaling
+      </button>
+      <button
+        type="button"
         className={activeTab === 'beheer' ? 'active' : ''}
         onClick={() => onTabChange('beheer')}
       >

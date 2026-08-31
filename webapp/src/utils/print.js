@@ -199,6 +199,7 @@ export function printBirdOverview(filteredBirds) {
     .map(
       ([, bird]) => `<tr>
     <td>${esc(vogelNaam(bird))}</td>
+    <td>${esc(bird.Vogelsoort || '-')}</td>
     <td>${esc(bird.Ringmaat || '-')}</td>
     <td>${esc(bird.Geslacht || '-')}</td>
     <td>${esc(bird.Mutatie || '-')}</td>
@@ -218,7 +219,7 @@ export function printBirdOverview(filteredBirds) {
   const html = `<table>
     <thead>
       <tr>
-        <th>Naam</th><th>Ringmaat</th><th>Geslacht</th><th>Mutatie</th><th>Factor</th><th>Split</th><th>Status</th>
+        <th>Naam</th><th>Vogelsoort</th><th>Ringmaat</th><th>Geslacht</th><th>Mutatie</th><th>Factor</th><th>Split</th><th>Status</th>
         <th>Herkomst</th><th>Kooi</th><th>Jaar</th><th>Vader</th><th>Moeder</th><th>Opmerking</th>
       </tr>
     </thead>
@@ -241,9 +242,10 @@ export function exportBirdOverviewPdf(filteredBirds) {
 
   autoTable(doc, {
     startY: 21,
-    head: [['Naam', 'Ringmaat', 'Geslacht', 'Mutatie', 'Factor', 'Split', 'Status', 'Herkomst', 'Kooi', 'Jaar', 'Vader', 'Moeder', 'Opmerking']],
+    head: [['Naam', 'Vogelsoort', 'Ringmaat', 'Geslacht', 'Mutatie', 'Factor', 'Split', 'Status', 'Herkomst', 'Kooi', 'Jaar', 'Vader', 'Moeder', 'Opmerking']],
     body: filteredBirds.map(([, bird]) => [
       vogelNaam(bird),
+      bird.Vogelsoort || '-',
       bird.Ringmaat || '-',
       bird.Geslacht || '-',
       bird.Mutatie || '-',
@@ -827,6 +829,174 @@ export function printBreedingCards(selectedCouples, couples, birds, mutatieOptio
       window.addEventListener('afterprint', afterPrint)
     })()
   </script>
+</body>
+</html>`)
+
+  w.document.close()
+  w.focus()
+}
+
+export function printGeslachtsbepalingCards(selectedBirdKeys, birds, contacts) {
+  const targetKeys = (selectedBirdKeys || []).filter((key) => birds[key])
+  if (targetKeys.length === 0) {
+    throw new Error('Selecteer minstens een vogel voor geslachtsbepaling-kaartjes.')
+  }
+
+  const w = window.open('', '_blank', 'width=1280,height=900')
+  if (!w) {
+    throw new Error('Popup geblokkeerd. Sta popups toe om kaartjes te maken.')
+  }
+
+  function fieldRow(label, value) {
+    return `<tr><th>${esc(label)}</th><td>${esc(value || '-')}</td></tr>`
+  }
+
+  function kleurMutatieLine(bird) {
+    const values = [bird.Mutatie, bird.Factor, splitLabel(bird)].filter((value) => value && value !== '-')
+    return values.length > 0 ? values.join(', ') : '-'
+  }
+
+  function ringLine(bird) {
+    const values = [bird.Stamnummer, bird.Ringnummer].filter(Boolean)
+    return values.length > 0 ? values.join(' ') : '-'
+  }
+
+  function eigenaarLine(bird) {
+    const contact = contacts?.[bird.EigenaarContactId]
+    if (!contact) return '-'
+    const voornaam = String(contact.Voornaam || '').trim()
+    const naam = String(contact.Naam || '').trim()
+    const gemeente = String(contact.Gemeente || '').trim()
+    const fullName = `${voornaam} ${naam}`.trim()
+    return fullName || gemeente || '-'
+  }
+
+  const cardsPerPage = 4
+  const pagesHtml = []
+  for (let i = 0; i < targetKeys.length; i += cardsPerPage) {
+    const pageCards = targetKeys
+      .slice(i, i + cardsPerPage)
+      .map((key, index) => {
+        const bird = birds[key]
+        const cardNr = i + index + 1
+        return `
+          <article class="sexCard">
+            <span class="cardNr">#${cardNr}</span>
+            <p class="line1"><strong>Vogelsoort:</strong> ${esc(bird.Vogelsoort || '-')}</p>
+            <p class="line2"><strong>Wetenschappelijke naam:</strong> ${esc(bird.WetenschappelijkeNaam || '-')}</p>
+            <p class="line3"><strong>Kleur, mutatie:</strong> ${esc(kleurMutatieLine(bird))}</p>
+            <p class="line4"><strong>Ring:</strong> ${esc(ringLine(bird))}</p>
+            <p class="line5"><strong>Monstertype:</strong> ${esc(bird.Monstertype || '-')}</p>
+            <p class="line6"><strong>Eigenaar:</strong> ${esc(eigenaarLine(bird))}</p>
+          </article>
+        `
+      })
+      .join('')
+    pagesHtml.push(`<section class="sheetPage">${pageCards}</section>`)
+  }
+
+  w.document.write(`<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Geslachtsbepaling-kaartjes</title>
+  <style>
+    :root {
+      --line: #27343e;
+      --ink: #14212a;
+      --muted: #566472;
+      --bg: #f5f8fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      padding: 10mm;
+    }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #d0dae2;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 8px 10px;
+    }
+    .toolbar p { margin: 0; font-size: 13px; color: var(--muted); }
+    .toolbar button {
+      border: 1px solid #b9c8d4;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 7px 10px;
+      font: inherit;
+      cursor: pointer;
+    }
+    .sheet { display: flex; flex-direction: column; gap: 6mm; }
+    .sheetPage {
+      width: 100%;
+      min-height: calc(297mm - 16mm);
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 5mm;
+      padding-top: 2mm;
+      padding-bottom: 2mm;
+    }
+    .sexCard {
+      width: 9cm;
+      height: 6cm;
+      border: 2px dashed var(--line);
+      background: #ffffff;
+      padding: 4mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2.2mm;
+      position: relative;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .sexCard .cardNr {
+      position: absolute;
+      top: 2.5mm;
+      right: 3mm;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .sexCard p { margin: 0; font-size: 12px; line-height: 1.3; }
+    .sexCard .line1 { font-size: 16px; font-weight: 700; }
+    @media print {
+      @page { size: A4 portrait; margin: 8mm; }
+      body { padding: 0; background: #ffffff; }
+      .toolbar { display: none; }
+      .sheet { gap: 0; }
+      .sheetPage {
+        min-height: auto;
+        height: calc(297mm - 16mm);
+        page-break-after: always;
+        break-after: page;
+      }
+      .sheetPage:last-child { page-break-after: auto; break-after: auto; }
+      .sexCard { border-style: solid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <p>Controleer de gegevens en druk daarna af. Kaarten zijn 9cm x 6cm.</p>
+    <div>
+      <button type="button" onclick="window.print()">Afdrukken</button>
+      <button type="button" onclick="window.close()">Sluiten</button>
+    </div>
+  </div>
+  <section class="sheet">${pagesHtml.join('')}</section>
 </body>
 </html>`)
 

@@ -1,7 +1,7 @@
 {
   "27_Koppel_01": {
-    "man": "PSNL02492 - 33",
-    "pop": "DB 153 - 2",
+    "man": "PSNL08 198 - 040",
+    "pop": "WTCAR50 - 226",
     "kooi": "Kooi 01",
     "kweekjaar": "2026",
     "jongen": [
@@ -10,52 +10,7 @@
     "rondes": [
       {
         "number": 1,
-        "eitjes": [
-          {
-            "legdatum": "2026-08-07",
-            "uitkomdatum": "",
-            "mutatie": "Blauw",
-            "gezoomd": "",
-            "factor": "",
-            "split1": "/Cin",
-            "split2": "/BL",
-            "split3": "/Pal",
-            "split4": ""
-          },
-          {
-            "legdatum": "2026-08-12",
-            "uitkomdatum": "",
-            "mutatie": "Blauw",
-            "gezoomd": "",
-            "factor": "",
-            "split1": "",
-            "split2": "",
-            "split3": "",
-            "split4": ""
-          },
-          {
-            "legdatum": "2026-08-04",
-            "uitkomdatum": "2026-09-03"
-          },
-          {
-            "legdatum": "2026-08-13",
-            "uitkomdatum": "2026-09-03"
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "eitjes": [
-          {
-            "legdatum": "2026-08-07",
-            "uitkomdatum": "2026-08-28",
-            "mutatie": "Aqua",
-            "split1": "",
-            "split2": "",
-            "split3": "",
-            "split4": ""
-          }
-        ]
+        "eitjes": []
       }
     ],
     "aantalJongUit": "",
@@ -75,6 +30,16 @@
     "man": "BOFBJ777 - 022",
     "pop": "BOFBJ777 - 031",
     "kooi": "Kooi 03",
+    "kweekjaar": "2027",
+    "jongen": [],
+    "rondes": [],
+    "aantalJongUit": "",
+    "opmerkingKweek": ""
+  },
+  "27_Koppel_05": {
+    "man": "BVPLD073 - 6",
+    "pop": "VT - 356",
+    "kooi": "Kooi 05",
     "kweekjaar": "2027",
     "jongen": [],
     "rondes": [],

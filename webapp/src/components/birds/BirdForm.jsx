@@ -1,3 +1,5 @@
+import { formatVogelsoortOption, parseVogelsoortOption } from '../../utils/birdUtils'
+
 export default function BirdForm({
   birdForm,
   setBirdForm,
@@ -20,6 +22,8 @@ export default function BirdForm({
   const ringmaatOptions = optionSets?.ringmaten || []
   const statusOptions = optionSets?.status || []
   const splitOptions = optionSets?.split || []
+  const vogelsoortOptions = optionSets?.vogelsoorten || []
+  const monstertypeOptions = optionSets?.monstertypes || []
 
   const splitFields = ['Split1', 'Split2', 'Split3', 'Split4']
 
@@ -40,6 +44,23 @@ export default function BirdForm({
     <article className="card">
       <h2>Vogel formulier</h2>
       <div className="formGrid">
+        <select
+          value={formatVogelsoortOption(birdForm.Vogelsoort, birdForm.WetenschappelijkeNaam)}
+          onChange={(e) => {
+            const { naam, wetenschappelijkeNaam } = parseVogelsoortOption(e.target.value)
+            setBirdForm({ ...birdForm, Vogelsoort: naam, WetenschappelijkeNaam: wetenschappelijkeNaam })
+          }}
+        >
+          <option value="">Vogelsoort</option>
+          {vogelsoortOptions.map((item) => (
+            <option key={item} value={item}>
+              {parseVogelsoortOption(item).naam}
+            </option>
+          ))}
+        </select>
+
+        <input placeholder="Wetenschappelijke naam" value={birdForm.WetenschappelijkeNaam || ''} readOnly />
+
         <input
           placeholder="Stamnummer *"
           value={birdForm.Stamnummer}
@@ -134,6 +155,30 @@ export default function BirdForm({
           onChange={(e) => setBirdForm({ ...birdForm, AankoopContactId: e.target.value })}
         >
           <option value="">Aangekocht bij (contact)</option>
+          {contactOptions.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={birdForm.Monstertype || ''}
+          onChange={(e) => setBirdForm({ ...birdForm, Monstertype: e.target.value })}
+        >
+          <option value="">Monstertype</option>
+          {monstertypeOptions.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={birdForm.EigenaarContactId || ''}
+          onChange={(e) => setBirdForm({ ...birdForm, EigenaarContactId: e.target.value })}
+        >
+          <option value="">Eigenaar (contact)</option>
           {contactOptions.map((item) => (
             <option key={item.id} value={item.id}>
               {item.label}
