@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import UserWidget from './auth/UserWidget'
 
 const YEARS_PER_PAGE = 2
 const PAGE_WINDOW = 5
@@ -8,6 +9,7 @@ export default function Header({
   totalCouples,
   totalChildren,
   childrenPerBirthYear,
+  onOpenProfile,
 }) {
   const [page, setPage] = useState(1)
 
@@ -34,8 +36,13 @@ export default function Header({
   return (
     <header className="heroBar">
       <div>
-        <h1>Vogelbestand</h1>
-        <p className="subline">App voor vogels</p>
+        <div className="heroBarTop">
+          <div>
+            <h1>Vogelbestand</h1>
+            <p className="subline">App voor vogels</p>
+          </div>
+          <UserWidget onOpenProfile={onOpenProfile} />
+        </div>
 
         <section className="yearOverview">
           <div className="yearOverviewHead">

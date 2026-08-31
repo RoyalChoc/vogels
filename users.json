@@ -1,0 +1,20 @@
+{
+  "0a056333-5492-44a4-b202-9a125d8af938": {
+    "id": "0a056333-5492-44a4-b202-9a125d8af938",
+    "voornaam": "Davy",
+    "naam": "Aerts",
+    "email": "davy@royalchocolates.be",
+    "passwordHash": "9a4e18636a47a312f5ece19fda504fe7:142b6ea004dc9f0597f055fe448060541baed2387ccdfb92e62a7c51904dd1cd286bcaaad34541ce54ebe4bf49a2925c424ec0f230bfcd04e5cfbb206fe04eb6",
+    "rol": "admin",
+    "aangemaaktOp": "2026-08-31T15:27:53.049Z"
+  },
+  "a6ce02d1-3f36-4208-97f7-c0960bfaf14b": {
+    "id": "a6ce02d1-3f36-4208-97f7-c0960bfaf14b",
+    "voornaam": "Süleyman",
+    "naam": "Yavas",
+    "email": "suleymanyavas90@gmail.com",
+    "passwordHash": "9adc566b710cf2c80a62c8ab0656d554:58b699f36ae9c58446e2393dfe3124466f09451a57b671b2807088357dae61c7ec0519533efa95c9ab73e733f1531ff79f3933678a5c1e301c9dc735e0cd3f9f",
+    "rol": "user",
+    "aangemaaktOp": "2026-08-31T17:03:41.361Z"
+  }
+}

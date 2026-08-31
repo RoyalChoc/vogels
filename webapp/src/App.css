@@ -1662,3 +1662,646 @@ tbody tr.selected {
   font-size: 0.85rem;
   font-style: italic;
 }
+
+
+/* ── Auth Loading ─────────────────────────────────────────────────────────── */
+
+.authLoadingScreen {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.authLoadingSpinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent-deep);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Login Page ──────────────────────────────────────────────────────────── */
+
+.loginBackdrop {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: rise 0.4s ease;
+}
+
+.loginCard {
+  width: min(420px, 100%);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-soft), 0 32px 64px rgba(19, 69, 74, 0.12);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.loginBrand {
+  background: linear-gradient(140deg, rgba(255, 252, 238, 0.96), rgba(232, 250, 246, 0.93));
+  border-bottom: 1px solid var(--line);
+  padding: 2rem 2rem 1.6rem;
+  text-align: center;
+}
+
+.loginBrandIcon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+
+.loginBrand h1 {
+  margin: 0 0 0.3rem;
+  font-size: 1.7rem;
+  color: var(--accent-deep);
+}
+
+.loginBrand p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.loginForm {
+  padding: 1.8rem 2rem 2rem;
+  display: grid;
+  gap: 1.1rem;
+}
+
+.loginForm h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.loginError {
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: #b91c1c;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+}
+
+.loginField {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.loginField label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.loginField input {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.loginField input:focus {
+  outline: none;
+  border-color: var(--accent-deep);
+  box-shadow: 0 0 0 3px rgba(15, 115, 115, 0.12);
+}
+
+.loginField input:disabled {
+  opacity: 0.6;
+}
+
+.loginPasswordWrap {
+  position: relative;
+}
+
+.loginPasswordWrap input {
+  padding-right: 2.8rem;
+}
+
+.loginPasswordToggle {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+
+.loginPasswordToggle:hover {
+  color: var(--accent-deep);
+}
+
+.loginBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent-2));
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem 1.4rem;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  letter-spacing: 0.03em;
+}
+
+.loginBtn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.loginBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loginSpinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Hero Bar Top Row (with UserWidget) ───────────────────────────────────── */
+
+.heroBarTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ── User Widget ──────────────────────────────────────────────────────────── */
+
+.userWidget {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.userWidgetTrigger {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 0.35rem 0.7rem 0.35rem 0.35rem;
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.userWidgetTrigger:hover {
+  border-color: var(--accent-deep);
+  box-shadow: 0 2px 8px rgba(15, 115, 115, 0.1);
+}
+
+.userWidgetAvatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent-2));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+}
+
+.userWidgetName {
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.userWidgetRoleBadge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.userWidgetRoleBadge.admin {
+  background: rgba(15, 115, 115, 0.12);
+  color: var(--accent-deep);
+}
+
+.userWidgetRoleBadge.user {
+  background: rgba(255, 151, 95, 0.15);
+  color: #c15a1a;
+}
+
+.userWidgetChevron {
+  transition: transform 0.2s ease;
+  color: var(--ink-soft);
+}
+
+.userWidgetChevron.open {
+  transform: rotate(180deg);
+}
+
+.userWidgetMenu {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  min-width: 220px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 8px 28px rgba(19, 69, 74, 0.14);
+  padding: 0.5rem;
+  z-index: 200;
+  animation: menuIn 0.15s ease;
+  backdrop-filter: blur(8px);
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.userWidgetMenuHeader {
+  padding: 0.6rem 0.75rem 0.5rem;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.userWidgetMenuHeader strong {
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.userWidgetMenuHeader span {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.userWidgetDivider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0.35rem 0;
+}
+
+.userWidgetMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.userWidgetMenuItem:hover:not(:disabled) {
+  background: rgba(15, 115, 115, 0.07);
+}
+
+.userWidgetMenuItem.logout {
+  color: #b91c1c;
+}
+
+.userWidgetMenuItem.logout:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.07);
+}
+
+.userWidgetMenuItem:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Profile Page ─────────────────────────────────────────────────────────── */
+
+.profilePage {
+  display: grid;
+  gap: 1.2rem;
+  animation: rise 0.35s ease;
+}
+
+.profilePageHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.profilePageTitle {
+  margin: 0 0 0.2rem;
+  font-size: 1.3rem;
+}
+
+.profilePageSub {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.87rem;
+}
+
+.profileBackBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.profilePageGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.profileCard {
+  display: grid;
+  gap: 1rem;
+}
+
+.profileCardHead {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.profileCardHead h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.profileCardIcon {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(15, 115, 115, 0.1), rgba(0, 167, 139, 0.12));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-deep);
+  flex-shrink: 0;
+}
+
+.profileForm {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.profileFieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.profileField {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.profileField label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.profileField input {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+
+.profileField input:focus {
+  outline: none;
+  border-color: var(--accent-deep);
+  box-shadow: 0 0 0 3px rgba(15, 115, 115, 0.1);
+}
+
+.profileRoleDisplay {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profileRoleNote {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.profileSuccess {
+  background: rgba(0, 167, 139, 0.1);
+  border: 1px solid rgba(0, 167, 139, 0.3);
+  color: #0d6b57;
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+.profileError {
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: #b91c1c;
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+.profilePwdWrap {
+  position: relative;
+}
+
+.profilePwdWrap input {
+  padding-right: 2.8rem;
+  width: 100%;
+}
+
+.profilePwdToggle {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+
+.profilePwdToggle:hover {
+  color: var(--accent-deep);
+}
+
+.roleBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+.roleBadge.admin {
+  background: rgba(15, 115, 115, 0.12);
+  color: var(--accent-deep);
+}
+
+.roleBadge.user {
+  background: rgba(255, 151, 95, 0.15);
+  color: #c15a1a;
+}
+
+@media (max-width: 860px) {
+  .profilePageGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* -- User Roles Panel (Beheer > Gebruikersbeheer) ------------------------- */
+
+.userRolesList {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.userRolesRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.65rem 0.85rem;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.userRolesInfo {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.userRolesInfo strong {
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+.userRolesInfo span {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.userRolesActions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.userRolesActions select {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  padding: 0.4rem 0.55rem;
+  font: inherit;
+  font-size: 0.84rem;
+}
+
+.userRolesActions select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.userRolesSelfNote {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  font-style: italic;
+}
+
+
+/* -- User Create Form (Beheer > Gebruikersbeheer > Nieuwe gebruiker) ------ */
+
+.userCreateForm {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.85rem 0.9rem;
+  background: rgba(255, 255, 255, 0.7);
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.userCreateForm h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.userCreateGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.userCreateGrid .profilePwdWrap {
+  position: relative;
+}
+
+@media (max-width: 860px) {
+  .userCreateGrid {
+    grid-template-columns: 1fr;
+  }
+}

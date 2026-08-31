@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import LoginPage from './components/auth/LoginPage'
+import ProfilePage from './components/auth/ProfilePage'
 import { loadState, saveState } from './utils/storage'
 import { loadOptions, saveOptions } from './utils/optionsStorage'
 import { loadContacts, saveContacts } from './utils/contactStorage'
@@ -219,7 +222,10 @@ function readFileAsText(file) {
   })
 }
 
-function App() {
+function AppContent() {
+  const { isAdmin, isAuthenticated, authLoading, currentUser, token } = useAuth()
+  const [showProfile, setShowProfile] = useState(false)
+
   const [birds, setBirds] = useState(() => normalizeBirdsMap(EMPTY_BIRDS))
   const [couples, setCouples] = useState(EMPTY_COUPLES)
   const [contacts, setContacts] = useState(() => normalizeContactsMap(EMPTY_CONTACTS))
@@ -243,6 +249,8 @@ function App() {
   const [status, setStatus] = useState('Klaar voor beheer.')
   const [isAdminUnlocked, setIsAdminUnlocked] = useState(false)
   const [showAdminPinPrompt, setShowAdminPinPrompt] = useState(false)
+
+  const isReadOnly = !isAdmin
   const [adminPinInput, setAdminPinInput] = useState('')
   const [pendingContactsImport, setPendingContactsImport] = useState(null)
 
@@ -278,7 +286,15 @@ function App() {
     setSelectedSexDeterminationKeys((current) => current.filter((key) => Boolean(birds[key])))
   }, [birds])
 
+  useEffect(() => {
+    if (isAdmin) setIsAdminUnlocked(true)
+  }, [isAdmin])
+
   function persist(nextBirds, nextCouples) {
+    if (isReadOnly) {
+      setStatus('Geen schrijfrechten. Alleen beheerders kunnen gegevens aanpassen.')
+      return
+    }
     setBirds(nextBirds)
     setCouples(nextCouples)
 
@@ -842,6 +858,10 @@ function App() {
   }
 
   async function saveContact() {
+    if (isReadOnly) {
+      setStatus('Geen schrijfrechten. Alleen beheerders kunnen gegevens aanpassen.')
+      return
+    }
     const naam = String(contactForm.Naam || '').trim()
     const voornaam = String(contactForm.Voornaam || '').trim()
     if (!naam && !voornaam) {
@@ -884,6 +904,10 @@ function App() {
   }
 
   async function deleteContact() {
+    if (isReadOnly) {
+      setStatus('Geen schrijfrechten. Alleen beheerders kunnen gegevens aanpassen.')
+      return
+    }
     if (!selectedContactId) {
       setStatus('Selecteer eerst een contact.')
       return
@@ -1045,6 +1069,10 @@ function App() {
   }
 
   async function handleSaveOptions(nextOptions) {
+    if (isReadOnly) {
+      setStatus('Geen schrijfrechten. Alleen beheerders kunnen gegevens aanpassen.')
+      return
+    }
     await saveOptions(nextOptions)
     setOptionSets(nextOptions)
   }
@@ -1052,6 +1080,11 @@ function App() {
   function handleTabChange(nextTab) {
     if (nextTab !== 'beheer') {
       setTab(nextTab)
+      return
+    }
+
+    if (!isAdmin) {
+      setStatus('Geen toegang. Alleen beheerders kunnen de beheerpagina openen.')
       return
     }
 
@@ -1101,6 +1134,26 @@ function App() {
     }
   }
 
+  if (authLoading) {
+    return (
+      <div className="authLoadingScreen" aria-label="Laden">
+        <div className="authLoadingSpinner" aria-hidden="true" />
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return <LoginPage />
+  }
+
+  if (showProfile) {
+    return (
+      <main className="appShell">
+        <ProfilePage onBack={() => setShowProfile(false)} />
+      </main>
+    )
+  }
+
   return (
     <main className="appShell">
       <Header
@@ -1108,6 +1161,7 @@ function App() {
         totalCouples={Object.keys(couples).length}
         totalChildren={totalChildren}
         childrenPerBirthYear={childrenPerBirthYear}
+        onOpenProfile={() => setShowProfile(true)}
       />
 
       <StatusBar message={status} />
@@ -1297,9 +1351,19 @@ function App() {
           optionsMap={optionSets}
           onSave={handleSaveOptions}
           onStatus={setStatus}
+          token={token}
+          currentUserId={currentUser?.id}
         />
       )}
     </main>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
