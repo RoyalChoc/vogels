@@ -70,6 +70,7 @@ const emptyBird = {
   Kooi: '',
   Kweekjaar: String(new Date().getFullYear()),
   AankoopContactId: '',
+  AankoopDatum: '',
   Vader: '',
   Moeder: '',
   Opmerking: '',
@@ -108,6 +109,17 @@ const EXCLUDED_BIRD_STATUSES = new Set(['verkocht', 'overleden'])
 const EMPTY_BIRDS = {}
 const EMPTY_COUPLES = {}
 const EMPTY_CONTACTS = {}
+const STANDARD_CONTACT_FIELD_NAMES = new Set([
+  'Naam',
+  'Voornaam',
+  'Straat',
+  'Nummer',
+  'Postcode',
+  'Gemeente',
+  'Provincie',
+  'Gsmnummer',
+  'Website',
+])
 const ADMIN_DEFAULT_PIN = '0000'
 const OPTION_DEFINITIONS = [
   { key: 'factor', label: 'Factor', fileName: 'factor.json' },
@@ -159,6 +171,7 @@ function normalizeBirdSplits(bird) {
     Split3: bird?.Split3 ?? '',
     Split4: bird?.Split4 ?? '',
     AankoopContactId: bird?.AankoopContactId ?? '',
+    AankoopDatum: bird?.AankoopDatum ?? '',
     Opmerking: bird?.Opmerking ?? '',
     Vogelsoort: bird?.Vogelsoort ?? '',
     WetenschappelijkeNaam: bird?.WetenschappelijkeNaam ?? '',
@@ -376,7 +389,10 @@ function AppContent() {
   const customContactFieldNames = useMemo(
     () =>
       Array.isArray(optionSets.contactvelden)
-        ? optionSets.contactvelden.filter((value) => String(value || '').trim())
+        ? optionSets.contactvelden.filter((value) => {
+            const fieldName = String(value || '').trim()
+            return fieldName && !STANDARD_CONTACT_FIELD_NAMES.has(fieldName)
+          })
         : [],
     [optionSets.contactvelden],
   )
@@ -1349,7 +1365,13 @@ function AppContent() {
         <AdminTab
           optionDefinitions={OPTION_DEFINITIONS}
           optionsMap={optionSets}
+          contacts={contacts}
+          customContactFieldNames={customContactFieldNames}
           onSave={handleSaveOptions}
+          onSaveContacts={async (nextContacts) => {
+            await saveContacts(nextContacts)
+            setContacts(sortContactsMap(nextContacts))
+          }}
           onStatus={setStatus}
           token={token}
           currentUserId={currentUser?.id}

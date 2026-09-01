@@ -1,3 +1,5 @@
+import { getStoredToken } from './auth'
+
 const CONTACTS_API_URL = '/api/contacts'
 
 function safeContacts(value, fallback) {
@@ -17,10 +19,12 @@ export async function loadContacts(seedContacts) {
 }
 
 export async function saveContacts(contacts) {
+  const token = getStoredToken()
   const response = await fetch(CONTACTS_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify({ contacts }),
   })

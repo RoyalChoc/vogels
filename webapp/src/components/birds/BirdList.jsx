@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react'
 import { PrintIcon, PdfIcon } from '../icons'
 import { vogelNaam } from '../../utils/birdUtils'
 
-const FILTER_FIELDS = ['vogelsoort', 'mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam', 'opmerking']
-const SORTABLE_FIELDS = ['vogelsoort', 'mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam']
+const FILTER_FIELDS = ['vogelsoort', 'mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam', 'aankoopDatum', 'opmerking']
+const SORTABLE_FIELDS = ['vogelsoort', 'mutatie', 'geslacht', 'jaar', 'status', 'gezoomd', 'factor', 'split', 'naam', 'aankoopDatum']
 
 function splitLabel(bird) {
   const values = [bird.Split1, bird.Split2, bird.Split3, bird.Split4].filter(Boolean)
@@ -38,6 +38,7 @@ export default function BirdList({
     factor: '',
     split: '',
     naam: '',
+    aankoopDatum: '',
   })
   const [columnFilters, setColumnFilters] = useState({
     vogelsoort: '',
@@ -49,6 +50,7 @@ export default function BirdList({
     factor: '',
     split: '',
     naam: '',
+    aankoopDatum: '',
     opmerking: '',
   })
 
@@ -67,6 +69,7 @@ export default function BirdList({
           factor: bird.Factor || '-',
           split: splitLabel(bird),
           naam: vogelNaam(bird),
+          aankoopDatum: bird.AankoopDatum || '-',
           opmerking: bird.Opmerking || '-',
         },
       })),
@@ -157,6 +160,7 @@ export default function BirdList({
               <th>Factor</th>
               <th>Split</th>
               <th>Naam</th>
+              <th>Aankoop datum</th>
               <th>Opmerking</th>
             </tr>
             <tr className="tableFilters">
@@ -314,6 +318,23 @@ export default function BirdList({
                 </div>
               </th>
               <th>
+                <div className="cellFilterStack">
+                  <select value={columnFilters.aankoopDatum} onChange={(e) => setFilter('aankoopDatum', e.target.value)}>
+                    <option value="">Alle</option>
+                    {filterOptions.aankoopDatum?.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <select value={columnSortOrders.aankoopDatum} onChange={(e) => setSortOrder('aankoopDatum', e.target.value)}>
+                    <option value="">Sortering</option>
+                    <option value="asc">Oud → Nieuw</option>
+                    <option value="desc">Nieuw → Oud</option>
+                  </select>
+                </div>
+              </th>
+              <th>
                 <select value={columnFilters.opmerking} onChange={(e) => setFilter('opmerking', e.target.value)}>
                   <option value="">Alle</option>
                   {filterOptions.opmerking?.map((value) => (
@@ -343,6 +364,7 @@ export default function BirdList({
                 <td>{values.factor}</td>
                 <td>{values.split}</td>
                 <td>{values.naam}</td>
+                <td>{values.aankoopDatum}</td>
                 <td>{values.opmerking}</td>
               </tr>
             ))}

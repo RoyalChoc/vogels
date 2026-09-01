@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import ContactDataPanel from './ContactDataPanel'
 import UserRolesPanel from './UserRolesPanel'
 
 function cloneOptionsMap(optionsMap) {
@@ -194,7 +195,17 @@ function readFileAsText(file) {
   })
 }
 
-export default function AdminTab({ optionDefinitions, optionsMap, onSave, onStatus, token, currentUserId }) {
+export default function AdminTab({
+  optionDefinitions,
+  optionsMap,
+  contacts,
+  customContactFieldNames,
+  onSave,
+  onSaveContacts,
+  onStatus,
+  token,
+  currentUserId,
+}) {
   const [activeKey, setActiveKey] = useState(optionDefinitions[0]?.key || '')
   const [draftOptions, setDraftOptions] = useState(() => cloneOptionsMap(optionsMap))
   const [isSaving, setIsSaving] = useState(false)
@@ -492,6 +503,12 @@ export default function AdminTab({ optionDefinitions, optionsMap, onSave, onStat
         </div>
       </article>
 
+      <ContactDataPanel
+        contacts={contacts}
+        customFieldNames={customContactFieldNames}
+        onSaveContacts={onSaveContacts}
+        onStatus={onStatus}
+      />
       <UserRolesPanel token={token} currentUserId={currentUserId} onStatus={onStatus} />
     </section>
   )

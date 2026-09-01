@@ -490,4 +490,29 @@ export default defineConfig({
       allow: ['..'],
     },
   },
+  build: {
+    target: 'es2022',
+    chunkSizeWarningLimit: 900,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined
+
+          if (id.includes('jspdf') || id.includes('html2canvas') || id.includes('canvg')) {
+            return 'pdf-vendor'
+          }
+
+          if (id.includes('react') || id.includes('scheduler')) {
+            return 'react-vendor'
+          }
+
+          if (id.includes('node_modules')) {
+            return 'vendor'
+          }
+
+          return undefined
+        },
+      },
+    },
+  },
 })

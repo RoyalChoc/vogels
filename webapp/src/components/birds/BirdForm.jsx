@@ -45,6 +45,7 @@ export default function BirdForm({
       <h2>Vogel formulier</h2>
       <div className="formGrid">
         <select
+          className="priorityField"
           value={formatVogelsoortOption(birdForm.Vogelsoort, birdForm.WetenschappelijkeNaam)}
           onChange={(e) => {
             const { naam, wetenschappelijkeNaam } = parseVogelsoortOption(e.target.value)
@@ -59,20 +60,39 @@ export default function BirdForm({
           ))}
         </select>
 
-        <input placeholder="Wetenschappelijke naam" value={birdForm.WetenschappelijkeNaam || ''} readOnly />
-
         <input
+          className="priorityField"
           placeholder="Stamnummer *"
           value={birdForm.Stamnummer}
           onChange={(e) => setBirdForm({ ...birdForm, Stamnummer: e.target.value })}
         />
         <input
+          className="priorityField"
           placeholder="Ringnummer"
           value={birdForm.Ringnummer}
           onChange={(e) => setBirdForm({ ...birdForm, Ringnummer: e.target.value })}
         />
 
-        <select value={birdForm.Ringmaat} onChange={(e) => setBirdForm({ ...birdForm, Ringmaat: e.target.value })}>
+        <select
+          className="priorityField"
+          value={birdForm.Geslacht}
+          onChange={(e) => setBirdForm({ ...birdForm, Geslacht: e.target.value })}
+        >
+          <option value="">Geslacht</option>
+          {geslachtOptions.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+
+        <input placeholder="Wetenschappelijke naam" value={birdForm.WetenschappelijkeNaam || ''} readOnly />
+
+        <select
+          className="priorityField"
+          value={birdForm.Ringmaat}
+          onChange={(e) => setBirdForm({ ...birdForm, Ringmaat: e.target.value })}
+        >
           <option value="">Ringmaat</option>
           {ringmaatOptions.map((item) => (
             <option key={item} value={item}>
@@ -81,11 +101,28 @@ export default function BirdForm({
           ))}
         </select>
 
-        <select value={birdForm.Geslacht} onChange={(e) => setBirdForm({ ...birdForm, Geslacht: e.target.value })}>
-          <option value="">Geslacht</option>
-          {geslachtOptions.map((item) => (
+        <select
+          className="priorityField"
+          value={birdForm.Kweekjaar}
+          onChange={(e) => setBirdForm({ ...birdForm, Kweekjaar: e.target.value })}
+        >
+          <option value="">Kweekjaar</option>
+          {kweekjaarOptions.map((item) => (
             <option key={item} value={item}>
               {item}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="priorityField"
+          value={birdForm.EigenaarContactId || ''}
+          onChange={(e) => setBirdForm({ ...birdForm, EigenaarContactId: e.target.value })}
+        >
+          <option value="">Eigenaar (contact)</option>
+          {contactOptions.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.label}
             </option>
           ))}
         </select>
@@ -162,6 +199,23 @@ export default function BirdForm({
           ))}
         </select>
 
+        <input
+          type={birdForm.AankoopDatum ? 'date' : 'text'}
+          placeholder="aankoopdatum"
+          value={birdForm.AankoopDatum || ''}
+          onChange={(e) => setBirdForm({ ...birdForm, AankoopDatum: e.target.value })}
+          onFocus={(e) => {
+            if (!birdForm.AankoopDatum) {
+              e.target.type = 'date'
+            }
+          }}
+          onBlur={(e) => {
+            if (!birdForm.AankoopDatum) {
+              e.target.type = 'text'
+            }
+          }}
+        />
+
         <select
           value={birdForm.Monstertype || ''}
           onChange={(e) => setBirdForm({ ...birdForm, Monstertype: e.target.value })}
@@ -174,30 +228,9 @@ export default function BirdForm({
           ))}
         </select>
 
-        <select
-          value={birdForm.EigenaarContactId || ''}
-          onChange={(e) => setBirdForm({ ...birdForm, EigenaarContactId: e.target.value })}
-        >
-          <option value="">Eigenaar (contact)</option>
-          {contactOptions.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.label}
-            </option>
-          ))}
-        </select>
-
         <select value={birdForm.Kooi} onChange={(e) => setBirdForm({ ...birdForm, Kooi: e.target.value })}>
           <option value="">Kooi</option>
           {kooienOptions.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-
-        <select value={birdForm.Kweekjaar} onChange={(e) => setBirdForm({ ...birdForm, Kweekjaar: e.target.value })}>
-          <option value="">Kweekjaar</option>
-          {kweekjaarOptions.map((item) => (
             <option key={item} value={item}>
               {item}
             </option>

@@ -47,6 +47,18 @@
     "Website": "",
     "Extra": {}
   },
+  "contact-1788286214634": {
+    "Naam": "Huysmans",
+    "Voornaam": "Handel",
+    "Straat": "Turnhoutsebaan",
+    "Nummer": "195",
+    "Postcode": "2480",
+    "Gemeente": "Dessel",
+    "Provincie": "Antwerpen",
+    "Gsmnummer": "003214378140",
+    "Website": "https://shop-huysmans-boonen.be/nl/",
+    "Extra": {}
+  },
   "contact-1787547420824": {
     "Naam": "Jo",
     "Voornaam": "",
@@ -82,6 +94,34 @@
     "Gsmnummer": "0032471909475",
     "Website": "",
     "Extra": {}
+  },
+  "contact-1788290297780": {
+    "Naam": "Fieni",
+    "Voornaam": "Schoten",
+    "Straat": "Lindenkei",
+    "Nummer": "115",
+    "Postcode": "2900",
+    "Gemeente": "Schoten",
+    "Provincie": "Antwerpen",
+    "Gsmnummer": "0032485887061",
+    "Website": "",
+    "Extra": {
+      "email adres": ""
+    }
+  },
+  "contact-1788291530052": {
+    "Naam": "Indy",
+    "Voornaam": "Secreve",
+    "Straat": "Eemsteyn",
+    "Nummer": "20",
+    "Postcode": "4251HN",
+    "Gemeente": "Altena",
+    "Provincie": "Noord Brabant",
+    "Gsmnummer": "0031621481836",
+    "Website": "",
+    "Extra": {
+      "email adres": ""
+    }
   },
   "contact-1787547527451": {
     "Naam": "Willy",

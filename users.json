@@ -16,5 +16,23 @@
     "passwordHash": "9adc566b710cf2c80a62c8ab0656d554:58b699f36ae9c58446e2393dfe3124466f09451a57b671b2807088357dae61c7ec0519533efa95c9ab73e733f1531ff79f3933678a5c1e301c9dc735e0cd3f9f",
     "rol": "user",
     "aangemaaktOp": "2026-08-31T17:03:41.361Z"
+  },
+  "50fa4d3b-e997-47bc-9220-15a2b7ebe55a": {
+    "id": "50fa4d3b-e997-47bc-9220-15a2b7ebe55a",
+    "voornaam": "Demo",
+    "naam": "Demo",
+    "email": "demo@demo.com",
+    "passwordHash": "f629b8b9c726ca45ea482df90058633b:d54d36ed1725a8817a23f6ef292d0d72a65a65246e957c8c3ff4b2beff5454fc2ba8acee91f3ead70b220460af2de228048956935a15ab210e5e4dd22eb0abef",
+    "rol": "user",
+    "aangemaaktOp": "2026-09-01T18:16:52.253Z"
+  },
+  "00c53d8e-f501-4f9c-80ec-59e82e5c2e7e": {
+    "id": "00c53d8e-f501-4f9c-80ec-59e82e5c2e7e",
+    "voornaam": "Test",
+    "naam": "Test",
+    "email": "aertsdavy@gmail.com",
+    "passwordHash": "9b83ac93c34f9c1aa51712df47c46e9e:e02ada74c6775d5bbb7e5d2297a6606a8e30f9da056b2a4e67239147d616d0e0a1f756ff59cb0ef937b964e03c35cfe721a3adc69756ae87ed1d444c722df714",
+    "rol": "user",
+    "aangemaaktOp": "2026-09-01T18:17:42.434Z"
   }
 }

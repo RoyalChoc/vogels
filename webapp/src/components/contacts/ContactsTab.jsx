@@ -154,6 +154,14 @@ export default function ContactsTab({
               <small>
                 {[contact.Postcode, contact.Gemeente, contact.Provincie].filter(Boolean).join(' ') || 'Geen adres'}
               </small>
+              {customFieldNames
+                .map((fieldName) => [fieldName, contact.Extra?.[fieldName]])
+                .filter(([, value]) => String(value || '').trim())
+                .map(([fieldName, value]) => (
+                  <small key={fieldName} className="contactExtraValue">
+                    {fieldName}: {value}
+                  </small>
+                ))}
             </button>
           ))}
         </div>

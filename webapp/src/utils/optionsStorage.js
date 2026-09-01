@@ -1,3 +1,5 @@
+import { getStoredToken } from './auth'
+
 const OPTIONS_API_URL = '/api/options'
 
 function sortOptionValues(values) {
@@ -31,10 +33,12 @@ export async function loadOptions(fallbackMap) {
 }
 
 export async function saveOptions(optionsMap) {
+  const token = getStoredToken()
   const response = await fetch(OPTIONS_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify({ options: optionsMap }),
   })
