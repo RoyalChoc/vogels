@@ -52,6 +52,8 @@ import AdminTab from './components/admin/AdminTab'
 import ContactsTab from './components/contacts/ContactsTab'
 import SplendidCalculatorTab from './components/splendid/SplendidCalculatorTab'
 import GeslachtsbepalingTab from './components/geslachtsbepaling/GeslachtsbepalingTab'
+import BirdMediaDialog from './components/birds/BirdMediaDialog'
+import { archiveBirdMedia, loadBirdMedia, renameBirdMedia } from './utils/media'
 
 const emptyBird = {
   Stamnummer: '',
@@ -258,6 +260,8 @@ function AppContent() {
   const [newChild, setNewChild] = useState('')
   const [selectedBreedingCouples, setSelectedBreedingCouples] = useState([])
   const [selectedSexDeterminationKeys, setSelectedSexDeterminationKeys] = useState([])
+  const [mediaByBird, setMediaByBird] = useState({})
+  const [mediaDialog, setMediaDialog] = useState(null)
 
   const [status, setStatus] = useState('Klaar voor beheer.')
   const [isAdminUnlocked, setIsAdminUnlocked] = useState(false)
@@ -290,6 +294,28 @@ function AppContent() {
       cancelled = true
     }
   }, [])
+
+  useEffect(() => {
+    if (!token) return
+    let cancelled = false
+
+    async function loadMedia() {
+      const entries = await Promise.all(
+        Object.keys(birds).map(async (birdKey) => {
+          try {
+            const result = await loadBirdMedia(birdKey, token)
+            return [birdKey, result.media]
+          } catch {
+            return [birdKey, { certificate: null, photos: [] }]
+          }
+        }),
+      )
+      if (!cancelled) setMediaByBird(Object.fromEntries(entries))
+    }
+
+    void loadMedia()
+    return () => { cancelled = true }
+  }, [birds, token])
 
   useEffect(() => {
     setSelectedBreedingCouples((current) => current.filter((name) => Boolean(couples[name])))
@@ -541,6 +567,7 @@ function AppContent() {
           jongen: (info.jongen || []).map((child) => (child === oldName ? newName : child)),
         }
       })
+      void renameBirdMedia(editingBirdKey, key, token)
     }
 
     persist(nextBirds, nextCouples)
@@ -570,6 +597,7 @@ function AppContent() {
 
     const nextBirds = { ...birds }
     delete nextBirds[selectedBirdKey]
+    void archiveBirdMedia(selectedBirdKey, target, token)
     persist(nextBirds, couples)
     setSelectedBirdKey('')
     clearBirdForm()
@@ -1279,6 +1307,21 @@ function AppContent() {
           onSelectBird={selectBird}
           onPrintBirds={handlePrintBirds}
           onExportBirdsPdf={handleExportBirdsPdf}
+          mediaByBird={mediaByBird}
+          onOpenCertificate={(birdKey) => setMediaDialog({ birdKey, mode: 'certificate' })}
+          onOpenPhotos={(birdKey) => setMediaDialog({ birdKey, mode: 'photo' })}
+        />
+      )}
+
+      {mediaDialog && birds[mediaDialog.birdKey] && (
+        <BirdMediaDialog
+          birdKey={mediaDialog.birdKey}
+          birdName={vogelNaam(birds[mediaDialog.birdKey])}
+          mode={mediaDialog.mode}
+          isAdmin={isAdmin}
+          token={token}
+          onClose={() => setMediaDialog(null)}
+          onMediaChanged={(birdKey, media) => setMediaByBird((current) => ({ ...current, [birdKey]: media }))}
         />
       )}
 

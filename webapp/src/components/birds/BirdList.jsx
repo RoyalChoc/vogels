@@ -27,6 +27,9 @@ export default function BirdList({
   onSelectBird,
   onPrint,
   onExportPdf,
+  mediaByBird,
+  onOpenCertificate,
+  onOpenPhotos,
 }) {
   const [columnSortOrders, setColumnSortOrders] = useState({
     vogelsoort: '',
@@ -162,6 +165,8 @@ export default function BirdList({
               <th>Naam</th>
               <th>Aankoop datum</th>
               <th>Opmerking</th>
+              <th>Certificaat</th>
+              <th>Foto</th>
             </tr>
             <tr className="tableFilters">
               <th>
@@ -344,10 +349,16 @@ export default function BirdList({
                   ))}
                 </select>
               </th>
+              <th />
+              <th />
             </tr>
           </thead>
           <tbody>
-            {visibleRows.map(({ key, values }) => (
+            {visibleRows.map(({ key, values }) => {
+              const media = mediaByBird[key]
+              const photoCount = media?.photos?.length || 0
+
+              return (
               <tr
                 key={key}
                 className={selectedBirdKey === key ? 'selected' : ''}
@@ -366,8 +377,33 @@ export default function BirdList({
                 <td>{values.naam}</td>
                 <td>{values.aankoopDatum}</td>
                 <td>{values.opmerking}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="mediaTableButton"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      onOpenCertificate(key)
+                    }}
+                  >
+                    {media?.certificate ? 'Certificaat' : 'Toevoegen'}
+                  </button>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    className="mediaTableButton"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      onOpenPhotos(key)
+                    }}
+                  >
+                    Foto&apos;s ({photoCount}/10)
+                  </button>
+                </td>
               </tr>
-            ))}
+              )
+            })}
           </tbody>
         </table>
       </div>

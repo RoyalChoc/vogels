@@ -1,0 +1,27 @@
+{
+  "birds": {
+    "BOFBN712-002": {
+      "certificate": null,
+      "photos": []
+    }
+  },
+  "archive": [],
+  "audit": [
+    {
+      "id": "4f2772c9-2253-4783-ad33-9eb634046580",
+      "at": "2026-09-02T07:10:32.816Z",
+      "userId": "0a056333-5492-44a4-b202-9a125d8af938",
+      "action": "certificate-deleted",
+      "birdKey": "BOFBN712-002",
+      "fileName": "BOF AV416 2024 063.pdf"
+    },
+    {
+      "id": "94d4a288-919e-4128-ad20-3efb557f34e2",
+      "at": "2026-09-02T07:09:55.437Z",
+      "userId": "0a056333-5492-44a4-b202-9a125d8af938",
+      "action": "certificate-uploaded",
+      "birdKey": "BOFBN712-002",
+      "fileName": "BOF AV416 2024 063.pdf"
+    }
+  ]
+}

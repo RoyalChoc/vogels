@@ -9,6 +9,10 @@ const USERS_FILE = path.resolve(__dirname, '../users.json')
 const SESSIONS_FILE = path.resolve(__dirname, '../sessions.json')
 const COUPLES_FILE = path.resolve(__dirname, '../koppels.json')
 const CONTACTS_FILE = path.resolve(__dirname, '../contacts.json')
+const MEDIA_FILE = path.resolve(__dirname, '../media.json')
+const MEDIA_DIRECTORY = path.resolve(__dirname, '../uploads')
+const MAX_CERTIFICATE_SIZE = 20 * 1024 * 1024
+const MAX_PHOTO_SIZE = 10 * 1024 * 1024
 const OPTION_FILES = {
   factor: path.resolve(__dirname, '../factor.json'),
   geslacht: path.resolve(__dirname, '../geslacht.json'),
@@ -61,6 +65,78 @@ function getRequestBody(req) {
     req.on('end', () => resolve(body))
     req.on('error', () => resolve(''))
   })
+}
+
+function getRequestBuffer(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = []
+    req.on('data', (chunk) => chunks.push(chunk))
+    req.on('end', () => resolve(Buffer.concat(chunks)))
+    req.on('error', reject)
+  })
+}
+
+function emptyMediaStore() {
+  return { birds: {}, archive: [], audit: [] }
+}
+
+async function readMediaStore() {
+  const store = await readJsonFile(MEDIA_FILE, emptyMediaStore())
+  return {
+    birds: store?.birds && typeof store.birds === 'object' ? store.birds : {},
+    archive: Array.isArray(store?.archive) ? store.archive : [],
+    audit: Array.isArray(store?.audit) ? store.audit : [],
+  }
+}
+
+function mediaForBird(store, birdKey) {
+  const media = store.birds[birdKey]
+  return {
+    certificate: media?.certificate || null,
+    photos: Array.isArray(media?.photos) ? media.photos : [],
+  }
+}
+
+function addMediaAudit(store, user, action, birdKey, fileName = '') {
+  store.audit.unshift({ id: crypto.randomUUID(), at: new Date().toISOString(), userId: user.id, action, birdKey, fileName })
+  store.audit = store.audit.slice(0, 5000)
+}
+
+function decodeHeader(value) {
+  try {
+    return decodeURIComponent(String(value || ''))
+  } catch {
+    return ''
+  }
+}
+
+function safeFileName(name) {
+  return path.basename(String(name || 'bestand')).replace(/[^a-zA-Z0-9._ -]/g, '_').slice(0, 140) || 'bestand'
+}
+
+function mediaExtension(fileName) {
+  return path.extname(safeFileName(fileName)).toLowerCase()
+}
+
+function acceptedMedia(kind, fileName, contentType) {
+  const extension = mediaExtension(fileName)
+  if (kind === 'certificate') return extension === '.pdf' && contentType === 'application/pdf'
+  return ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'].includes(extension)
+    && /^image\/(jpeg|png|webp|heic|heif)$/i.test(contentType)
+}
+
+function findMediaFile(store, fileId) {
+  for (const media of Object.values(store.birds)) {
+    if (media?.certificate?.id === fileId) return media.certificate
+    const photo = (media?.photos || []).find((item) => item.id === fileId)
+    if (photo) return photo
+  }
+  for (const archive of store.archive) {
+    if (archive.media?.certificate?.id === fileId) return archive.media.certificate
+    const photo = (archive.media?.photos || []).find((item) => item.id === fileId)
+    if (photo) return photo
+  }
+  return null
 }
 
 function extractBearerToken(req) {
@@ -228,6 +304,169 @@ function stateApiPlugin() {
         res.statusCode = 405
         res.setHeader('Content-Type', 'application/json; charset=utf-8')
         res.end(JSON.stringify({ ok: false, error: 'Method not allowed' }))
+      })
+    },
+  }
+}
+
+function mediaApiPlugin() {
+  return {
+    name: 'media-api-plugin',
+    configureServer(server) {
+      server.middlewares.use('/api/media', async (req, res) => {
+        const requestUrl = new URL(req.url || '/', 'http://localhost')
+        const pathname = requestUrl.pathname
+        const user = await getSessionUser(req)
+        if (!user) {
+          sendJson(res, 401, { ok: false, error: 'Niet aangemeld.' })
+          return
+        }
+
+        if (req.method === 'GET' && pathname === '/') {
+          const birdKey = requestUrl.searchParams.get('birdKey') || ''
+          const store = await readMediaStore()
+          sendJson(res, 200, { ok: true, media: mediaForBird(store, birdKey) })
+          return
+        }
+
+        if (req.method === 'GET' && pathname === '/file') {
+          const store = await readMediaStore()
+          const file = findMediaFile(store, requestUrl.searchParams.get('id'))
+          if (!file || file.url) {
+            sendJson(res, 404, { ok: false, error: 'Bestand niet gevonden.' })
+            return
+          }
+          try {
+            const content = await fs.readFile(path.join(MEDIA_DIRECTORY, file.id))
+            res.statusCode = 200
+            res.setHeader('Content-Type', file.contentType)
+            res.setHeader('Content-Disposition', `inline; filename="${safeFileName(file.name)}"`)
+            res.end(content)
+          } catch {
+            sendJson(res, 404, { ok: false, error: 'Bestand niet gevonden.' })
+          }
+          return
+        }
+
+        if (['POST', 'DELETE'].includes(req.method || '') && user.rol !== 'admin') {
+          sendJson(res, 403, { ok: false, error: 'Alleen beheerders kunnen media beheren.' })
+          return
+        }
+
+        if (req.method === 'POST' && ['/certificate', '/photo'].includes(pathname)) {
+          const kind = pathname === '/certificate' ? 'certificate' : 'photo'
+          const birdKey = decodeHeader(req.headers['x-bird-key'])
+          const fileName = safeFileName(decodeHeader(req.headers['x-file-name']))
+          const contentType = String(req.headers['content-type'] || '').split(';')[0].toLowerCase()
+          const content = await getRequestBuffer(req)
+          const maxSize = kind === 'certificate' ? MAX_CERTIFICATE_SIZE : MAX_PHOTO_SIZE
+          if (!birdKey || !acceptedMedia(kind, fileName, contentType) || content.length === 0 || content.length > maxSize) {
+            sendJson(res, 400, { ok: false, error: kind === 'certificate' ? 'Kies een PDF tot 20 MB.' : 'Kies een geldige foto tot 10 MB.' })
+            return
+          }
+          if (kind === 'certificate' && !content.subarray(0, 4).equals(Buffer.from('%PDF'))) {
+            sendJson(res, 400, { ok: false, error: 'Het certificaat is geen geldige PDF.' })
+            return
+          }
+          const store = await readMediaStore()
+          const media = mediaForBird(store, birdKey)
+          if (kind === 'photo' && media.photos.length >= 10) {
+            sendJson(res, 400, { ok: false, error: 'Deze vogel heeft al 10 foto\'s.' })
+            return
+          }
+          const fileId = `${crypto.randomUUID()}${mediaExtension(fileName)}`
+          await fs.mkdir(MEDIA_DIRECTORY, { recursive: true })
+          await fs.writeFile(path.join(MEDIA_DIRECTORY, fileId), content)
+          const record = { id: fileId, name: fileName, contentType, size: content.length, uploadedAt: new Date().toISOString() }
+          if (kind === 'certificate') media.certificate = record
+          else media.photos.push(record)
+          store.birds[birdKey] = media
+          addMediaAudit(store, user, kind === 'certificate' ? 'certificate-uploaded' : 'photo-uploaded', birdKey, fileName)
+          await writeJsonFile(MEDIA_FILE, store)
+          sendJson(res, 201, { ok: true, media })
+          return
+        }
+
+        if (req.method === 'POST' && pathname === '/certificate-link') {
+          try {
+            const { birdKey, url } = JSON.parse(await getRequestBody(req))
+            const parsedUrl = new URL(String(url || ''))
+            if (!birdKey || !['https:', 'http:'].includes(parsedUrl.protocol)) throw new Error('invalid')
+            const store = await readMediaStore()
+            const media = mediaForBird(store, birdKey)
+            media.certificate = { id: crypto.randomUUID(), name: parsedUrl.hostname, url: parsedUrl.toString(), uploadedAt: new Date().toISOString() }
+            store.birds[birdKey] = media
+            addMediaAudit(store, user, 'certificate-linked', birdKey, parsedUrl.hostname)
+            await writeJsonFile(MEDIA_FILE, store)
+            sendJson(res, 200, { ok: true, media })
+          } catch {
+            sendJson(res, 400, { ok: false, error: 'Gebruik een geldige http(s)-link.' })
+          }
+          return
+        }
+
+        if (req.method === 'POST' && pathname === '/rename') {
+          try {
+            const { fromBirdKey, toBirdKey } = JSON.parse(await getRequestBody(req))
+            const store = await readMediaStore()
+            if (fromBirdKey && toBirdKey && store.birds[fromBirdKey]) {
+              store.birds[toBirdKey] = store.birds[fromBirdKey]
+              delete store.birds[fromBirdKey]
+              addMediaAudit(store, user, 'bird-renamed', toBirdKey)
+              await writeJsonFile(MEDIA_FILE, store)
+            }
+            sendJson(res, 200, { ok: true })
+          } catch {
+            sendJson(res, 400, { ok: false, error: 'Ongeldige hernoeming.' })
+          }
+          return
+        }
+
+        if (req.method === 'POST' && pathname === '/archive-bird') {
+          try {
+            const { birdKey, bird } = JSON.parse(await getRequestBody(req))
+            const store = await readMediaStore()
+            const media = mediaForBird(store, birdKey)
+            if (birdKey && (media.certificate || media.photos.length > 0)) {
+              store.archive.unshift({ id: crypto.randomUUID(), birdKey, bird, media, archivedAt: new Date().toISOString() })
+              delete store.birds[birdKey]
+              addMediaAudit(store, user, 'bird-archived', birdKey)
+              await writeJsonFile(MEDIA_FILE, store)
+            }
+            sendJson(res, 200, { ok: true })
+          } catch {
+            sendJson(res, 400, { ok: false, error: 'Archiveren is mislukt.' })
+          }
+          return
+        }
+
+        if (req.method === 'DELETE' && pathname === '/file') {
+          try {
+            const { birdKey, kind, fileId } = JSON.parse(await getRequestBody(req))
+            const store = await readMediaStore()
+            const media = mediaForBird(store, birdKey)
+            let removed = null
+            if (kind === 'certificate' && media.certificate?.id === fileId) {
+              removed = media.certificate
+              media.certificate = null
+            }
+            if (kind === 'photo') {
+              const index = media.photos.findIndex((photo) => photo.id === fileId)
+              if (index >= 0) removed = media.photos.splice(index, 1)[0]
+            }
+            if (!removed) throw new Error('missing')
+            if (!removed.url) await fs.rm(path.join(MEDIA_DIRECTORY, removed.id), { force: true })
+            store.birds[birdKey] = media
+            addMediaAudit(store, user, `${kind}-deleted`, birdKey, removed.name)
+            await writeJsonFile(MEDIA_FILE, store)
+            sendJson(res, 200, { ok: true, media })
+          } catch {
+            sendJson(res, 404, { ok: false, error: 'Bestand niet gevonden.' })
+          }
+          return
+        }
+
+        sendJson(res, 405, { ok: false, error: 'Method not allowed' })
       })
     },
   }
@@ -484,7 +723,7 @@ function authApiPlugin() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), authApiPlugin(), stateApiPlugin()],
+  plugins: [react(), authApiPlugin(), stateApiPlugin(), mediaApiPlugin()],
   server: {
     fs: {
       allow: ['..'],

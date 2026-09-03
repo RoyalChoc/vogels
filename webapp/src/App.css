@@ -496,6 +496,269 @@ td {
   font-size: 0.92rem;
 }
 
+.mediaTableButton {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--accent-deep);
+  padding: 0.35rem 0.5rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mediaTableButton:hover {
+  border-color: var(--accent);
+  background: #edf8f7;
+}
+
+.mediaBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(8, 20, 24, 0.55);
+}
+
+.mediaDialog {
+  width: min(900px, 100%);
+  max-height: min(760px, 92vh);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+  padding: 1rem;
+}
+
+.certificateDialog {
+  width: min(620px, 100%);
+}
+
+.mediaDialogHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.7rem;
+}
+
+.mediaDialogHead h2,
+.mediaDialogHead p {
+  margin: 0;
+}
+
+.mediaDialogHead p,
+.mediaEmpty,
+.mediaUpload p,
+.mediaCount {
+  color: var(--ink-soft);
+}
+
+.closeButton {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.mediaError {
+  margin: 0.8rem 0;
+  border: 1px solid #f2b3af;
+  border-radius: 8px;
+  background: #feeceb;
+  color: #9f2d24;
+  padding: 0.55rem 0.65rem;
+}
+
+.certificateContent,
+.photoGrid {
+  margin-top: 0.9rem;
+}
+
+.certificateFile {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.7rem;
+}
+
+.certificateFile strong,
+.certificateFile small {
+  display: block;
+}
+
+.certificateFile small {
+  margin-top: 0.2rem;
+  color: var(--ink-soft);
+}
+
+.mediaActions {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.mediaOpenButton {
+  border: 0;
+  background: transparent;
+  color: var(--accent-deep);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mediaOpenButton:disabled {
+  color: var(--ink-soft);
+  cursor: wait;
+}
+
+.mediaUpload {
+  margin-top: 1rem;
+  border: 1px dashed var(--accent);
+  border-radius: 8px;
+  padding: 0.8rem;
+}
+
+.mediaUpload p {
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+}
+
+.certificateLink {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.certificateLink input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  font: inherit;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 0.65rem;
+}
+
+.photoTile {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.photoPreviewButton {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  cursor: zoom-in;
+  aspect-ratio: 1 / 1;
+  background: #edf8f7;
+}
+
+.photoTile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoLightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(8, 20, 24, 0.86);
+}
+
+.photoLightboxContent {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(1100px, 100%);
+  max-height: 92vh;
+  outline: none;
+}
+
+.photoLightboxContent img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(92vh - 2.8rem);
+  object-fit: contain;
+}
+
+.photoLightboxContent p {
+  margin: 0.55rem 0 0;
+  color: #ffffff;
+  font-size: 0.82rem;
+}
+
+.photoLightboxClose,
+.photoLightboxNav {
+  position: absolute;
+  z-index: 1;
+  border: 0;
+  background: rgba(255, 255, 255, 0.92);
+  color: #122a2c;
+  cursor: pointer;
+}
+
+.photoLightboxClose {
+  top: 0.45rem;
+  right: 0.45rem;
+}
+
+.photoLightboxNav {
+  top: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  transform: translateY(-50%);
+}
+
+.photoLightboxNav.previous {
+  left: 0.45rem;
+}
+
+.photoLightboxNav.next {
+  right: 0.45rem;
+}
+
+.photoTile figcaption {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.45rem;
+}
+
+.photoTile figcaption span {
+  overflow: hidden;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .tableFilters th {
   position: sticky;
   top: 2.65rem;

@@ -19,6 +19,9 @@ export default function BirdsTab({
   onSelectBird,
   onPrintBirds,
   onExportBirdsPdf,
+  mediaByBird,
+  onOpenCertificate,
+  onOpenPhotos,
 }) {
   return (
     <section className="panel">
@@ -45,6 +48,9 @@ export default function BirdsTab({
         onSelectBird={onSelectBird}
         onPrint={onPrintBirds}
         onExportPdf={onExportBirdsPdf}
+        mediaByBird={mediaByBird}
+        onOpenCertificate={onOpenCertificate}
+        onOpenPhotos={onOpenPhotos}
       />
     </section>
   )
