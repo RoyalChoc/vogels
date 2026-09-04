@@ -6,17 +6,24 @@
     },
     "Geel Blauw-2023109": {
       "certificate": {
-        "id": "a656e3d9-fd8d-4a2c-90f7-c9c271d39dca.pdf",
-        "name": "Nachtegalen.pdf",
-        "contentType": "application/pdf",
-        "size": 84341,
-        "uploadedAt": "2026-09-04T09:55:33.642Z"
+        "id": "b64ff1fa-5c64-4311-b2b0-4afb32f35f7f",
+        "name": "drive.google.com",
+        "url": "https://drive.google.com/open?id=1dcgvVVcYq99r7rEuCuaJ0i_z1bJBzsSI&usp=drive_fs",
+        "uploadedAt": "2026-09-04T10:02:46.337Z"
       },
       "photos": []
     }
   },
   "archive": [],
   "audit": [
+    {
+      "id": "17e68042-8104-4e15-a1dd-1a60dc36a4c6",
+      "at": "2026-09-04T10:02:46.337Z",
+      "userId": "0a056333-5492-44a4-b202-9a125d8af938",
+      "action": "certificate-linked",
+      "birdKey": "Geel Blauw-2023109",
+      "fileName": "drive.google.com"
+    },
     {
       "id": "2a46ff38-59d9-4cfa-b307-6dbfd26760b3",
       "at": "2026-09-04T09:55:33.642Z",

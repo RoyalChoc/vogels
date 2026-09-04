@@ -29,7 +29,7 @@ export default function LoginPage() {
     <div className="loginBackdrop">
       <div className="loginCard">
         <div className="loginBrand">
-          <div className="loginBrandIcon" aria-hidden="true">🐦</div>
+          <div className="loginBrandIcon" aria-hidden="true"></div>
           <h1>Vogelbestand</h1>
           <p>Beheer van je vogels</p>
         </div>

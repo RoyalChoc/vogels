@@ -32,7 +32,7 @@
     "naam": "Test",
     "email": "aertsdavy@gmail.com",
     "passwordHash": "9b83ac93c34f9c1aa51712df47c46e9e:e02ada74c6775d5bbb7e5d2297a6606a8e30f9da056b2a4e67239147d616d0e0a1f756ff59cb0ef937b964e03c35cfe721a3adc69756ae87ed1d444c722df714",
-    "rol": "user",
+    "rol": "admin",
     "aangemaaktOp": "2026-09-01T18:17:42.434Z"
   }
 }
