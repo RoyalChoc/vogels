@@ -1,11 +1,126 @@
-import { PrintIcon, PdfIcon } from '../icons'
-import TreeNode from '../TreeNode'
 import { vogelNaam } from '../../utils/birdUtils'
+import { getPedigreeColorClass, PEDIGREE_LEGEND } from '../../utils/pedigree'
 
 function splitLabel(bird) {
   const values = [bird.Split1, bird.Split2, bird.Split3, bird.Split4].filter(Boolean)
   if (values.length > 0) return values.join(', ')
   return bird.Split || '-'
+}
+
+function PedigreeLegend() {
+  return (
+    <div className="pedigreeLegend">
+      {PEDIGREE_LEGEND.map((item) => (
+        <span key={item.className} className={`pedigreeLegendItem ${item.className}`}>{item.label}</span>
+      ))}
+    </div>
+  )
+}
+
+function PersonBox({ person }) {
+  if (!person) return null
+  const colorClass = person.unknown ? 'unknown' : (person.colorClass || 'unsexed')
+  return (
+    <article className={`pedigreeBird ${colorClass}`}>
+      <strong>{person.name || 'Onbekend'}</strong>
+      {!person.unknown && (
+        <div className="pedigreeBirdData">
+          <div><span>Geslacht</span><b>{person.Geslacht || '-'}</b></div>
+          {(person.details || []).map(({ label, value }) => (
+            <div key={label}><span>{label}</span><b>{value || '-'}</b></div>
+          ))}
+        </div>
+      )}
+    </article>
+  )
+}
+
+// ─── Nakomelingen: koppel bovenaan, kinderen (elk met hun eigen partner) eronder ───
+function DescendantNode({ node }) {
+  if (!node) return null
+  return (
+    <li className="pedigreeTreeLi">
+      <div className="pedigreeCouple">
+        <PersonBox person={node.subject} />
+        {node.partner && <span className="pedigreeMate">×</span>}
+        {node.partner && <PersonBox person={node.partner} />}
+      </div>
+      {node.children?.length > 0 && (
+        <>
+          <div className="pedigreeStem" />
+          <ul className="pedigreeTreeUl">
+            {node.children.map((child, index) => (
+              <DescendantNode key={index} node={child} />
+            ))}
+          </ul>
+        </>
+      )}
+    </li>
+  )
+}
+
+// ─── Voorouders: oudste koppel bovenaan, lijnen zakken naar het kind eronder ───
+function AncestorBox({ bird }) {
+  if (!bird) return null
+  const colorClass = getPedigreeColorClass(bird)
+  const split = [bird.Split1, bird.Split2, bird.Split3, bird.Split4].filter(Boolean).join(', ') || bird.Split || '-'
+  const values = [
+    ['Jaar', bird.Kweekjaar],
+    ['Stamnummer', bird.Stamnummer],
+    ['Ringnummer', bird.Ringnummer],
+    ['Mutatie', bird.Mutatie],
+    ['Split', split],
+    ['Factor', bird.Factor],
+    ['Status', bird.Status],
+  ]
+  return (
+    <article className={`pedigreeBird ${colorClass}`}>
+      <strong>{bird.label || vogelNaam(bird) || 'Onbekend'}</strong>
+      <div className="pedigreeBirdData">
+        <div><span>Geslacht</span><b>{bird.Geslacht || '-'}</b></div>
+        {values.map(([label, value]) => <div key={label}><span>{label}</span><b>{value || '-'}</b></div>)}
+      </div>
+    </article>
+  )
+}
+
+function AncestorNode({ node }) {
+  if (!node) return null
+  const [a, b] = node.children || []
+  const hasParents = Boolean(a || b)
+  return (
+    <li className="pedigreeTreeLi pedigreeTreeLi--up">
+      {hasParents && (
+        <ul className="pedigreeTreeUl pedigreeTreeUl--up">
+          {a && <AncestorNode node={a} />}
+          {a && b && <li className="pedigreeMateLi" aria-hidden="true"><span className="pedigreeMate">×</span></li>}
+          {b && <AncestorNode node={b} />}
+        </ul>
+      )}
+      {hasParents && <div className="pedigreeStem" />}
+      <div className="pedigreeCouple">
+        <AncestorBox bird={node} />
+      </div>
+    </li>
+  )
+}
+
+function DescendantTree({ tree }) {
+  if (!tree) return <p>Geen nakomelingen gevonden.</p>
+  return (
+    <ul className="pedigreeTree">
+      <DescendantNode node={tree} />
+    </ul>
+  )
+}
+
+function AncestorTree({ tree }) {
+  if (!tree || !(tree.Vader || tree.Moeder)) return <p>Geen voorouders gevonden.</p>
+  return (
+    <ul className="pedigreeTree pedigreeTree--up">
+      <AncestorNode node={tree} />
+    </ul>
+  )
 }
 
 export default function TreeViewer({
@@ -18,15 +133,6 @@ export default function TreeViewer({
   onPrint,
   onExportPdf,
 }) {
-  function renderBranch(tree, emptyText) {
-    const branch = tree?.children || []
-    if (branch.length === 0) {
-      return <li><article className="treeNode"><h4>{emptyText}</h4></article></li>
-    }
-
-    return branch.map((child) => <TreeNode key={`${child.label}-${child.meta}`} node={child} />)
-  }
-
   return (
     <article className="card">
       <div className="listHead">
@@ -45,11 +151,9 @@ export default function TreeViewer({
             ))}
           </select>
           <button type="button" className="iconAction print" onClick={onPrint}>
-            <PrintIcon />
             <span>Afdrukken</span>
           </button>
           <button type="button" className="iconAction pdf" onClick={onExportPdf}>
-            <PdfIcon />
             <span>Opslaan als PDF</span>
           </button>
         </div>
@@ -78,24 +182,21 @@ export default function TreeViewer({
             {activeTreeBird.Opmerking ? <p>Opmerking: {activeTreeBird.Opmerking}</p> : null}
           </div>
 
-          <div className="treeGrid">
-            <div>
-              <h3>Voorouders</h3>
-              <div className="treeWrap">
-                <ul className="treeRoot">
-                  {renderBranch(ancestors, 'Geen voorouders gevonden')}
-                </ul>
-              </div>
+          <section className="pedigreeSchema">
+            <h3>Voorouders</h3>
+            <PedigreeLegend />
+            <div className="pedigreeRows">
+              <AncestorTree tree={ancestors} />
             </div>
-            <div>
-              <h3>Nakomelingen</h3>
-              <div className="treeWrap">
-                <ul className="treeRoot">
-                  {renderBranch(descendants, 'Geen nakomelingen gevonden')}
-                </ul>
-              </div>
+          </section>
+
+          <section className="pedigreeSchema">
+            <h3>Nakomelingen</h3>
+            <PedigreeLegend />
+            <div className="pedigreeRows">
+              <DescendantTree tree={descendants} />
             </div>
-          </div>
+          </section>
         </>
       )}
     </article>

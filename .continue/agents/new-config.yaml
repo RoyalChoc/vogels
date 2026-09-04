@@ -1,0 +1,9 @@
+{
+  "models": [
+    {
+      "title": "Mijn Lokale Agent (LM Studio)",
+      "provider": "lmstudio",
+      "model": "local"
+    }
+  ]
+}

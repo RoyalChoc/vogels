@@ -2,6 +2,8 @@
  * Storage and state persistence utilities
  */
 
+import { getStoredToken } from './auth'
+
 const LEGACY_STORAGE_KEY = 'voliare-modern-webapp-v1'
 const STATE_API_URL = '/api/state'
 
@@ -18,10 +20,12 @@ function clearLegacyLocalState() {
 }
 
 async function saveStateToFile(birds, couples) {
+  const token = getStoredToken()
   const response = await fetch(STATE_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify({ birds, couples }),
   })

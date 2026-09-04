@@ -48,9 +48,18 @@ export function buildAncestorsTree(birds, bird, maxGen = 4, gen = 1, seen = new 
   }
 
   const node = {
+    ...bird,
     label: vogelNaam(bird),
     meta: `${bird.Mutatie || '-'} | ${bird.Kweekjaar || '-'}`,
     children: [],
+    siblings: gen === 1
+      ? Object.values(birds).filter((candidate) => {
+          if (candidate === bird || vogelKey(candidate) === key) return false
+          const sharesFather = bird.Vader && candidate.Vader === bird.Vader
+          const sharesMother = bird.Moeder && candidate.Moeder === bird.Moeder
+          return sharesFather || sharesMother
+        })
+      : [],
   }
 
   if (gen >= maxGen) return node
@@ -67,29 +76,3 @@ export function buildAncestorsTree(birds, bird, maxGen = 4, gen = 1, seen = new 
   return node
 }
 
-export function buildDescendantsTree(birds, bird, maxGen = 4, gen = 1, seen = new Set()) {
-  if (!bird) return { label: 'Onbekend', meta: `Generatie ${gen}`, children: [] }
-
-  const key = vogelKey(bird)
-  if (seen.has(key)) {
-    return { label: `${vogelNaam(bird)} (cyclus)`, meta: `Generatie ${gen}`, children: [] }
-  }
-
-  const node = {
-    label: vogelNaam(bird),
-    meta: `${bird.Mutatie || '-'} | ${bird.Kweekjaar || '-'}`,
-    children: [],
-  }
-
-  if (gen >= maxGen) return node
-
-  const nextSeen = new Set(seen)
-  nextSeen.add(key)
-
-  const children = Object.values(birds).filter(
-    (candidate) => candidate.Vader === vogelNaam(bird) || candidate.Moeder === vogelNaam(bird),
-  )
-
-  node.children = children.map((child) => buildDescendantsTree(birds, child, maxGen, gen + 1, nextSeen))
-  return node
-}

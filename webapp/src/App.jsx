@@ -29,9 +29,9 @@ import {
   vogelNaam, 
   vogelKey, 
   findBirdByName, 
-  buildAncestorsTree, 
-  buildDescendantsTree 
+  buildAncestorsTree 
 } from './utils/birdUtils'
+import { buildDescendantsCoupleTree } from './utils/pedigree'
 import {
   printBirdOverview,
   exportBirdOverviewPdf,
@@ -337,7 +337,9 @@ function AppContent() {
     setBirds(nextBirds)
     setCouples(nextCouples)
 
-    void saveState(nextBirds, nextCouples)
+    void saveState(nextBirds, nextCouples).then((saved) => {
+      if (!saved) setStatus('Opslaan mislukt. Controleer de verbinding en probeer opnieuw.')
+    })
   }
 
   const birdEntries = useMemo(
@@ -517,7 +519,7 @@ function AppContent() {
 
   const activeTreeBird = selectedBirdKey ? birds[selectedBirdKey] : null
   const ancestors = activeTreeBird ? buildAncestorsTree(birds, activeTreeBird) : null
-  const descendants = activeTreeBird ? buildDescendantsTree(birds, activeTreeBird) : null
+  const descendants = activeTreeBird ? buildDescendantsCoupleTree(birds, activeTreeBird) : null
 
   // BIRD HANDLERS
   function clearBirdForm() {

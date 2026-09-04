@@ -22,7 +22,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": "contact-1787546990844"
+    "EigenaarContactId": "contact-1787546990844",
+    "AankoopDatum": ""
   },
   "BVPAP045-003": {
     "Stamnummer": "BVPAP045",
@@ -47,7 +48,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PSNL02492-009": {
     "Stamnummer": "PSNL02492",
@@ -72,7 +74,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PSNL02492-039": {
     "Stamnummer": "PSNL02492",
@@ -97,7 +100,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "WK-54": {
     "Stamnummer": "WK",
@@ -122,7 +126,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "BOFBJ777-022": {
     "Stamnummer": "BOFBJ777",
@@ -132,8 +137,8 @@
     "Mutatie": "Wildkleur",
     "Gezoomd": "",
     "Factor": "",
-    "Split1": "/Cin",
-    "Split2": "/Ino",
+    "Split1": "/CIN",
+    "Split2": "/INO",
     "Split3": "",
     "Split4": "",
     "Status": "Actief",
@@ -147,7 +152,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "BOFBJ777-031": {
     "Stamnummer": "BOFBJ777",
@@ -172,7 +178,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "BOFBN712-007": {
     "Stamnummer": "BOFBN712",
@@ -197,7 +204,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "DB 153-2": {
     "Stamnummer": "DB 153",
@@ -222,7 +230,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": "contact-1787546990844"
+    "EigenaarContactId": "contact-1787546990844",
+    "AankoopDatum": ""
   },
   "Geen-1823": {
     "Stamnummer": "Geen",
@@ -247,7 +256,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "Niet geringd-Licht Blauwe ring": {
     "Stamnummer": "Niet geringd",
@@ -272,7 +282,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PSNL02492-33": {
     "Stamnummer": "PSNL02492",
@@ -297,7 +308,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PSNL87133-012": {
     "Stamnummer": "PSNL87133",
@@ -322,7 +334,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PSNL87133-015": {
     "Stamnummer": "PSNL87133",
@@ -347,7 +360,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PEP2025-34": {
     "Stamnummer": "PEP2025",
@@ -357,10 +371,10 @@
     "Mutatie": "Aqua",
     "Gezoomd": "",
     "Factor": "",
-    "Split1": "/Cin",
+    "Split1": "/CIN",
     "Split2": "/BL",
-    "Split3": "/Pal",
-    "Split4": "/Ino",
+    "Split3": "/PAL",
+    "Split4": "/INO",
     "Status": "Actief",
     "Herkomst": "Aangekocht",
     "Kooi": "",
@@ -372,7 +386,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PEP2025-41": {
     "Stamnummer": "PEP2025",
@@ -397,7 +412,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PSNL08 198-030": {
     "Stamnummer": "PSNL08 198",
@@ -422,7 +438,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "PSNL08 198-040": {
     "Stamnummer": "PSNL08 198",
@@ -447,7 +464,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "WTCAR50-226": {
     "Stamnummer": "WTCAR50",
@@ -472,7 +490,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "VT-346": {
     "Stamnummer": "VT",
@@ -497,7 +516,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "VT-560": {
     "Stamnummer": "VT",
@@ -522,7 +542,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "VT-356": {
     "Stamnummer": "VT",
@@ -547,7 +568,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "BVPLD073-6": {
     "Stamnummer": "BVPLD073",
@@ -572,7 +594,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "BOFBN712-002": {
     "Stamnummer": "BOFBN712",
@@ -597,7 +620,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "AAA111-002": {
     "Stamnummer": "AAA111",
@@ -608,9 +632,9 @@
     "Gezoomd": "",
     "Factor": "Violet DF",
     "Split1": "/BL",
-    "Split2": "/Cin",
-    "Split3": "/Ino",
-    "Split4": "/Pal",
+    "Split2": "/CIN",
+    "Split3": "/INO",
+    "Split4": "/PAL",
     "Status": "Actief",
     "Herkomst": "",
     "Kooi": "",
@@ -622,7 +646,8 @@
     "Vogelsoort": "Splendidparkiet",
     "WetenschappelijkeNaam": "Neophema splendida",
     "Monstertype": "Veren",
-    "EigenaarContactId": "contact-1787546990844"
+    "EigenaarContactId": "contact-1787546990844",
+    "AankoopDatum": ""
   },
   "2023 Zwart Wit-Geen": {
     "Stamnummer": "2023 Zwart Wit",
@@ -647,7 +672,8 @@
     "Vogelsoort": "Nachtegaal",
     "WetenschappelijkeNaam": "Leiothrix lutea",
     "Monstertype": "",
-    "EigenaarContactId": ""
+    "EigenaarContactId": "",
+    "AankoopDatum": ""
   },
   "2023 Zwart Orange--": {
     "Stamnummer": "2023 Zwart Orange",
@@ -672,7 +698,8 @@
     "Vogelsoort": "Nachtegaal",
     "WetenschappelijkeNaam": "Leiothrix lutea",
     "Monstertype": "Veren",
-    "EigenaarContactId": "contact-1787546990844"
+    "EigenaarContactId": "contact-1787546990844",
+    "AankoopDatum": ""
   },
   "Geel Blauw-2023109": {
     "Stamnummer": "Geel Blauw",
@@ -697,7 +724,8 @@
     "Vogelsoort": "Nachtegaal",
     "WetenschappelijkeNaam": "Leiothrix lutea",
     "Monstertype": "",
-    "EigenaarContactId": "contact-1787546990844"
+    "EigenaarContactId": "contact-1787546990844",
+    "AankoopDatum": ""
   },
   "2023 Blauwe ring-534": {
     "Stamnummer": "2023 Blauwe ring",
@@ -722,6 +750,345 @@
     "Vogelsoort": "Nachtegaal",
     "WetenschappelijkeNaam": "Leiothrix lutea",
     "Monstertype": "",
-    "EigenaarContactId": "contact-1787546990844"
+    "EigenaarContactId": "contact-1787546990844",
+    "AankoopDatum": ""
+  },
+  "A-2": {
+    "Stamnummer": "A",
+    "Ringnummer": "2",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Pop",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2024",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "",
+    "Moeder": "",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-3": {
+    "Stamnummer": "A",
+    "Ringnummer": "3",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Man",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2025",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 1",
+    "Moeder": "A - 2",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-4": {
+    "Stamnummer": "A",
+    "Ringnummer": "4",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Pop",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "Overleden",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2025",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 1",
+    "Moeder": "A - 2",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "Veren",
+    "EigenaarContactId": ""
+  },
+  "A-5": {
+    "Stamnummer": "A",
+    "Ringnummer": "5",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Man",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2025",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 1",
+    "Moeder": "A - 2",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-6": {
+    "Stamnummer": "A",
+    "Ringnummer": "6",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Pop",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2025",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 1",
+    "Moeder": "A - 2",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-7": {
+    "Stamnummer": "A",
+    "Ringnummer": "7",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Man",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2026",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 3",
+    "Moeder": "A - 4",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-8": {
+    "Stamnummer": "A",
+    "Ringnummer": "8",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Pop",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2026",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 3",
+    "Moeder": "A - 4",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-9": {
+    "Stamnummer": "A",
+    "Ringnummer": "9",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Man",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2026",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 5",
+    "Moeder": "A - 6",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-10": {
+    "Stamnummer": "A",
+    "Ringnummer": "10",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Pop",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2026",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 5",
+    "Moeder": "A - 6",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-1": {
+    "Stamnummer": "A",
+    "Ringnummer": "1",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Man",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2024",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "",
+    "Moeder": "",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-11": {
+    "Stamnummer": "A",
+    "Ringnummer": "11",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Man",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2027",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 7",
+    "Moeder": "A - 10",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-12": {
+    "Stamnummer": "A",
+    "Ringnummer": "12",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Pop",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2027",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 9",
+    "Moeder": "A - 8",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
+  },
+  "A-13": {
+    "Stamnummer": "A",
+    "Ringnummer": "13",
+    "Ringmaat": "3,9 mm",
+    "Geslacht": "Onbekend",
+    "Mutatie": "",
+    "Gezoomd": "",
+    "Factor": "",
+    "Split1": "",
+    "Split2": "",
+    "Split3": "",
+    "Split4": "",
+    "Status": "",
+    "Herkomst": "",
+    "Kooi": "",
+    "Kweekjaar": "2028",
+    "AankoopContactId": "",
+    "AankoopDatum": "",
+    "Vader": "A - 11",
+    "Moeder": "A - 12",
+    "Opmerking": "",
+    "Vogelsoort": "Groenvink",
+    "WetenschappelijkeNaam": "chloris chloris",
+    "Monstertype": "",
+    "EigenaarContactId": ""
   }
 }

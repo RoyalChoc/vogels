@@ -901,6 +901,161 @@ tbody tr.selected {
   overflow: auto;
 }
 
+.pedigreeSchema {
+  min-width: 0;
+}
+
+.pedigreeSchema h3 {
+  margin: 0 0 0.55rem;
+}
+
+.pedigreeSchema:not(:last-child) {
+  margin-bottom: 1.2rem;
+}
+
+.pedigreeRows {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 1.1rem 0.7rem;
+}
+
+/* ─── Parenteel-boom: koppel bovenaan, lijnen naar kinderen eronder ─── */
+.pedigreeTree,
+.pedigreeTreeUl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.4rem;
+}
+
+.pedigreeTreeUl {
+  padding-top: 0.5rem;
+  border-top: 2px solid var(--line);
+}
+
+.pedigreeTreeLi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+}
+
+.pedigreeStem {
+  width: 1px;
+  height: 0.9rem;
+  background: var(--line);
+}
+
+.pedigreeCouple {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pedigreeMate {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  padding: 0 0.1rem;
+}
+
+.pedigreeMateLi {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+/* Voorouders: oudste generatie bovenaan, koppel-rij zakt onder de eigen voorouders */
+.pedigreeTree--up .pedigreeTreeLi--up {
+  justify-content: flex-end;
+}
+
+.pedigreeTree--up .pedigreeTreeUl--up {
+  padding-top: 0;
+  padding-bottom: 0.5rem;
+  border-top: none;
+  border-bottom: 2px solid var(--line);
+  align-items: flex-end;
+}
+
+.pedigreeBird {
+  position: relative;
+  z-index: 1;
+  min-width: 8.5rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  text-align: left;
+  font-size: 0.72rem;
+}
+
+.pedigreeBird.unknown {
+  min-width: 6rem;
+  display: grid;
+  place-items: center;
+  padding: 0.6rem;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.pedigreeBird.male > strong { background: #1ea9d8; }
+.pedigreeBird.female > strong { background: #f55ea6; }
+.pedigreeBird.status-overleden > strong { background: #9aa5ad; }
+.pedigreeBird.status-verkocht > strong { background: #4caf7d; }
+.pedigreeBird.unsexed > strong { background: #f4d35e; }
+
+.pedigreeBird > strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.32rem 0.35rem;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+  color: #1d2730;
+}
+
+.pedigreeLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.2rem 0 0.7rem;
+}
+
+.pedigreeLegendItem {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #1d2730;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+.pedigreeLegendItem.male { background: #1ea9d8; }
+.pedigreeLegendItem.female { background: #f55ea6; }
+.pedigreeLegendItem.status-overleden { background: #9aa5ad; }
+.pedigreeLegendItem.status-verkocht { background: #4caf7d; }
+.pedigreeLegendItem.unsexed { background: #f4d35e; }
+
+.pedigreeBirdData {
+  border-top: 1px solid var(--line);
+  text-align: left;
+}
+
+.pedigreeBirdData div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.2rem;
+  padding: 0.16rem 0.3rem;
+  border-bottom: 1px solid #d7dee2;
+  line-height: 1.15;
+}
+
+.pedigreeBirdData span { color: var(--ink-soft); }
+.pedigreeBirdData b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+
+
 .treeRoot,
 .treeRoot ul {
   list-style: none;

@@ -4,8 +4,12 @@
 
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import { esc, flattenTreeRows } from './helpers'
+import { esc } from './helpers'
 import { vogelNaam, findBirdByName } from './birdUtils'
+import {
+  buildPedigreeNodeData,
+  PEDIGREE_LEGEND,
+} from './pedigree'
 
 function splitLabel(bird = {}) {
   const values = [bird.Split1, bird.Split2, bird.Split3, bird.Split4].filter(Boolean)
@@ -44,44 +48,6 @@ function breedingCardPartnerTraitsLabel(bird) {
   return traits.join(' | ')
 }
 
-function selectedBirdDetailsHtml(bird) {
-  if (!bird) return '<p><strong>Gekozen vogel:</strong> Onbekend</p>'
-
-  return `
-    <p><strong>Gekozen vogel:</strong> ${esc(vogelNaam(bird))}</p>
-    <p><strong>Ringmaat/Geslacht/Mutatie:</strong> ${esc(bird.Ringmaat || '-')} / ${esc(bird.Geslacht || '-')} / ${esc(bird.Mutatie || '-')}</p>
-    <p><strong>Factor/Split/Jaar:</strong> ${esc(bird.Factor || '-')} / ${esc(splitLabel(bird))} / ${esc(bird.Kweekjaar || '-')}</p>
-    <p><strong>Status/Herkomst/Kooi:</strong> ${esc(bird.Status || '-')} / ${esc(bird.Herkomst || '-')} / ${esc(bird.Kooi || '-')}</p>
-    <p><strong>Vader/Moeder:</strong> ${esc(bird.Vader || '-')} / ${esc(bird.Moeder || '-')}</p>
-    <p><strong>Opmerking:</strong> ${esc(bird.Opmerking || '-')}</p>
-  `
-}
-
-function addSelectedBirdDetailsToPdf(doc, bird, startY = 26) {
-  const lines = bird
-    ? [
-        `Gekozen vogel: ${vogelNaam(bird)}`,
-        `Ringmaat/Geslacht/Mutatie: ${bird.Ringmaat || '-'} / ${bird.Geslacht || '-'} / ${bird.Mutatie || '-'}`,
-        `Factor/Split/Jaar: ${bird.Factor || '-'} / ${splitLabel(bird)} / ${bird.Kweekjaar || '-'}`,
-        `Status/Herkomst/Kooi: ${bird.Status || '-'} / ${bird.Herkomst || '-'} / ${bird.Kooi || '-'}`,
-        `Vader/Moeder: ${bird.Vader || '-'} / ${bird.Moeder || '-'}`,
-        `Opmerking: ${bird.Opmerking || '-'}`,
-      ]
-    : ['Gekozen vogel: Onbekend']
-
-  doc.setTextColor(84, 102, 114)
-  doc.setFontSize(10)
-
-  let y = startY
-  lines.forEach((line) => {
-    const wrapped = doc.splitTextToSize(line, 186)
-    doc.text(wrapped, 12, y)
-    y += wrapped.length * 4.5
-  })
-
-  return y
-}
-
 export function openPrintDocument(title, bodyHtml) {
   const w = window.open('', '_blank', 'width=1200,height=860')
   if (!w) {
@@ -96,54 +62,216 @@ export function openPrintDocument(title, bodyHtml) {
   <title>${esc(title)}</title>
   <style>
     :root {
-      --line: #d9e1e6;
-      --ink: #14212a;
-      --muted: #51606f;
-      --accent: #1b9c8a;
+      --line: #2d3940;
+      --ink: #1d2730;
+      --muted: #5b6873;
+      --male: #1ea9d8;
+      --female: #f55ea6;
+      --paper: #f5f8fa;
+      --card: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.04);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
       color: var(--ink);
-      background: #f4f7f9;
+      background: var(--paper);
     }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 18px; }
     .head {
-      border: 1px solid var(--line);
-      border-left: 6px solid var(--accent);
-      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+      padding: 12px 18px;
+      border: 1px solid #dfe7ec;
+      background: rgba(255,255,255,0.75);
       border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
     }
-    .head h1 { margin: 0 0 6px; font-size: 24px; }
-    .head p { margin: 0; color: var(--muted); font-size: 13px; }
+    .head h1 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    .head p {
+      margin: 0; color: var(--muted); font-size: 12px;
+    }
     .panel {
-      border: 1px solid var(--line);
+      border: 1px solid #dfe7ec;
       border-radius: 12px;
-      background: #ffffff;
+      background: rgba(255,255,255,0.85);
       padding: 12px;
+      overflow: auto;
     }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 8px; }
-    thead { background: #f5f8fb; }
-    .muted { color: var(--muted); }
-    .tree, .tree ul { list-style: none; margin: 0; padding-left: 18px; }
-    .tree > li { padding-left: 0; }
-    .node {
-      border: 1px solid var(--line);
-      border-left: 4px solid var(--accent);
-      border-radius: 8px;
-      padding: 8px 10px;
-      margin: 8px 0;
+    .pedigree-print-sheet {
+      width: 100%;
+      min-width: 980px;
       background: #fff;
+      padding: 10px 12px 18px;
+      break-after: page;
+      page-break-after: always;
     }
-    .node strong { display: block; margin-bottom: 2px; }
+    .pedigree-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 4px 0 2px;
+      color: var(--ink);
+    }
+    .pedigree-title {
+      font-size: 44px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .pedigree-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 4px 0 14px;
+    }
+    .pedigree-legend-item {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1d2730;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .pedigree-print-sheet > .pedigree-body {
+      display: grid;
+      gap: 12px;
+      padding-top: 4px;
+    }
+    .pedigree-tree,
+    .pedigree-tree-ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+    }
+    .pedigree-tree {
+      padding: 8px 0 20px;
+    }
+    .pedigree-tree-ul {
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+    .pedigree-tree-li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      list-style: none;
+    }
+    .pedigree-stem {
+      width: 1px;
+      height: 16px;
+      background: var(--line);
+    }
+    .pedigree-couple {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .pedigree-mate {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--ink);
+      padding-bottom: 18px;
+    }
+    .pedigree-mate-li {
+      display: flex;
+      align-items: flex-end;
+      list-style: none;
+      padding-bottom: 18px;
+    }
+    .pedigree-tree--up .pedigree-tree-li--up {
+      justify-content: flex-end;
+    }
+    .pedigree-tree--up .pedigree-tree-ul--up {
+      padding-top: 0;
+      padding-bottom: 10px;
+      border-top: none;
+      border-bottom: 1px solid var(--line);
+      align-items: flex-end;
+    }
+    .pedigree-node {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 0 4px 4px;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      box-shadow: none;
+      width: min(150px, 100%);
+      min-width: 96px;
+      max-width: 150px;
+      z-index: 1;
+    }
+    .pedigree-node .pedigree-name {
+      width: 100%;
+      padding: 3px 4px;
+      margin: -1px -1px 2px;
+      width: calc(100% + 2px);
+    }
+    .pedigree-node.male .pedigree-name { background: #1ea9d8; }
+    .pedigree-node.female .pedigree-name { background: #f55ea6; }
+    .pedigree-node.status-overleden .pedigree-name { background: #9aa5ad; }
+    .pedigree-node.status-verkocht .pedigree-name { background: #4caf7d; }
+    .pedigree-node.unsexed .pedigree-name { background: #f4d35e; }
+    .pedigree-node .pedigree-body {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+      align-items: center;
+    }
+    .pedigree-name {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1d2730;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pedigree-meta,
+    .pedigree-extra {
+      font-size: 8px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pedigree-extra {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: center;
+      font-size: 8px;
+    }
+    .pedigree-fields { width: 100%; text-align: center; }
+    .pedigree-field { font-size: 7px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pedigree-field span { color: var(--muted); }
+    .pedigree-print-sheet:last-child { break-after: auto; page-break-after: auto; }
     @media print {
       body { background: #fff; }
-      .wrap { max-width: none; padding: 8mm; }
-      .node, .panel, .head { break-inside: avoid; page-break-inside: avoid; }
+      .wrap { max-width: none; padding: 6mm; }
+      .head { display: none; }
+      .panel { border: 0; padding: 0; }
+      .pedigree-print-sheet { min-width: 0; padding: 0; }
+      .pedigree-node, .pedigree-tree-li { break-inside: avoid; page-break-inside: avoid; }
     }
   </style>
 </head>
@@ -160,38 +288,6 @@ export function openPrintDocument(title, bodyHtml) {
   w.document.close()
   w.focus()
   w.print()
-}
-
-export function treeToHtml(node) {
-  if (!node) return '<li><div class="node"><strong>Onbekend</strong></div></li>'
-
-  const children = (node.children || []).map((child) => treeToHtml(child)).join('')
-  return `<li>
-    <div class="node">
-      <strong>${esc(node.label)}</strong>
-      <span class="muted">${esc(node.meta)}</span>
-    </div>
-    ${children ? `<ul>${children}</ul>` : ''}
-  </li>`
-}
-
-function treeChildrenToHtml(tree, emptyText) {
-  const children = tree?.children || []
-  if (children.length === 0) {
-    return `<li><div class="node"><strong>${esc(emptyText)}</strong></div></li>`
-  }
-
-  return children.map((child) => treeToHtml(child)).join('')
-}
-
-function flattenTreeChildrenRows(tree, emptyText) {
-  const rows = []
-  const children = tree?.children || []
-  children.forEach((child) => flattenTreeRows(child, 0, rows))
-  if (rows.length === 0) {
-    rows.push([emptyText, '-'])
-  }
-  return rows
 }
 
 export function printBirdOverview(filteredBirds) {
@@ -847,10 +943,6 @@ export function printGeslachtsbepalingCards(selectedBirdKeys, birds, contacts) {
     throw new Error('Popup geblokkeerd. Sta popups toe om kaartjes te maken.')
   }
 
-  function fieldRow(label, value) {
-    return `<tr><th>${esc(label)}</th><td>${esc(value || '-')}</td></tr>`
-  }
-
   function kleurMutatieLine(bird) {
     const values = [bird.Mutatie, bird.Factor, splitLabel(bird)].filter((value) => value && value !== '-')
     return values.length > 0 ? values.join(', ') : '-'
@@ -1004,54 +1096,99 @@ export function printGeslachtsbepalingCards(selectedBirdKeys, birds, contacts) {
   w.focus()
 }
 
-export function printTree(type, selectedBirdKey, birds, ancestors, descendants) {
-  if (!selectedBirdKey) {
-    throw new Error('Selecteer eerst een vogel in de stamboom-tab.')
+function renderPedigreeNodeCell(nodeData) {
+  if (!nodeData) return ''
+
+  if (nodeData.unknown) {
+    return `
+      <div class="pedigree-node unknown">
+        <div class="pedigree-body"><div class="pedigree-name">${esc(nodeData.name || 'Onbekend')}</div></div>
+      </div>
+    `
   }
 
-  const label = type === 'descendants' ? 'Nakomelingen' : 'Voorouders'
-  const tree = type === 'descendants' ? descendants : ancestors
-  const emptyText = type === 'descendants' ? 'Geen nakomelingen gevonden' : 'Geen voorouders gevonden'
-  const selectedBird = birds[selectedBirdKey]
-  const html = `${selectedBirdDetailsHtml(selectedBird)}<ul class="tree">${treeChildrenToHtml(tree, emptyText)}</ul>`
-  openPrintDocument(`Stamboom - ${label}`, html)
+  const colorClass = nodeData.colorClass || 'unsexed'
+  const detailRows = (nodeData.details || []).map((row) => `<div class="pedigree-field"><span>${esc(row.label)}:</span> ${esc(row.value)}</div>`).join('')
+
+  return `
+    <div class="pedigree-node ${colorClass}">
+      <div class="pedigree-body">
+        <div class="pedigree-name">${esc(nodeData.name || 'Onbekend')}</div>
+        <div class="pedigree-fields">${detailRows}</div>
+      </div>
+    </div>
+  `
 }
 
-export function exportTreePdf(type, selectedBirdKey, birds, ancestors, descendants) {
-  if (!selectedBirdKey) {
-    throw new Error('Selecteer eerst een vogel in de stamboom-tab.')
-  }
+// ─── Nakomelingen: koppel bovenaan, elk kind (met eigen partner) eronder ─────
+function renderDescendantNodeLi(node) {
+  if (!node) return ''
 
-  const label = type === 'descendants' ? 'Nakomelingen' : 'Voorouders'
-  const tree = type === 'descendants' ? descendants : ancestors
-  const emptyText = type === 'descendants' ? 'Geen nakomelingen gevonden' : 'Geen voorouders gevonden'
-  const rows = flattenTreeChildrenRows(tree, emptyText)
-  const selectedBird = birds[selectedBirdKey]
-  const generatedAt = new Date().toLocaleString('nl-BE')
-  const fileStamp = new Date().toISOString().slice(0, 10)
+  const coupleHtml = `
+    <div class="pedigree-couple">
+      ${renderPedigreeNodeCell(node.subject)}
+      ${node.partner ? `<span class="pedigree-mate">×</span>${renderPedigreeNodeCell(node.partner)}` : ''}
+    </div>
+  `
 
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
-  doc.setFontSize(16)
-  doc.text(`Stamboom - ${label}`, 12, 12)
-  doc.setFontSize(10)
-  doc.setTextColor(84, 102, 114)
-  doc.text(`Gegenereerd op ${generatedAt}`, 12, 17)
-  doc.text(`Startvogel: ${vogelNaam(selectedBird)}`, 12, 22)
-  const detailsEndY = addSelectedBirdDetailsToPdf(doc, selectedBird, 27)
+  const childrenHtml = node.children && node.children.length > 0
+    ? `<div class="pedigree-stem"></div><ul class="pedigree-tree-ul">${node.children.map(renderDescendantNodeLi).join('')}</ul>`
+    : ''
 
-  autoTable(doc, {
-    startY: detailsEndY + 2,
-    head: [['Vogel', 'Info']],
-    body: rows,
-    margin: { left: 10, right: 10 },
-    styles: { fontSize: 9, cellPadding: 2, lineWidth: 0.1 },
-    headStyles: { fillColor: [15, 115, 115] },
-    alternateRowStyles: { fillColor: [247, 251, 252] },
-    columnStyles: { 0: { cellWidth: 92 } },
-  })
+  return `<li class="pedigree-tree-li">${coupleHtml}${childrenHtml}</li>`
+}
 
-  doc.save(`stamboom-${label.toLowerCase()}-${fileStamp}.pdf`)
-  return `PDF opgeslagen: stamboom ${label.toLowerCase()}.`
+function buildDescendantPedigreeHtml(tree) {
+  if (!tree) return '<p>Geen nakomelingen gevonden.</p>'
+  return `<ul class="pedigree-tree">${renderDescendantNodeLi(tree)}</ul>`
+}
+
+// ─── Voorouders: oudste koppel bovenaan, lijnen zakken naar het kind eronder ─
+function renderAncestorNodeLi(bird) {
+  if (!bird) return ''
+
+  const [father, mother] = bird.children || []
+  const hasParents = Boolean(father || mother)
+
+  const parentsHtml = hasParents
+    ? `<ul class="pedigree-tree-ul pedigree-tree-ul--up">
+        ${father ? renderAncestorNodeLi(father) : ''}
+        ${father && mother ? '<li class="pedigree-mate-li" aria-hidden="true"><span class="pedigree-mate">×</span></li>' : ''}
+        ${mother ? renderAncestorNodeLi(mother) : ''}
+      </ul>`
+    : ''
+
+  const stemHtml = hasParents ? '<div class="pedigree-stem"></div>' : ''
+
+  return `<li class="pedigree-tree-li pedigree-tree-li--up">${parentsHtml}${stemHtml}<div class="pedigree-couple">${renderPedigreeNodeCell(buildPedigreeNodeData(bird))}</div></li>`
+}
+
+function buildAncestorPedigreeHtml(tree) {
+  if (!tree || !(tree.Vader || tree.Moeder)) return '<p>Geen voorouders gevonden.</p>'
+  return `<ul class="pedigree-tree pedigree-tree--up">${renderAncestorNodeLi(tree)}</ul>`
+}
+
+function buildPedigreeLegendHtml() {
+  return `<div class="pedigree-legend">${PEDIGREE_LEGEND.map((item) => `<span class="pedigree-legend-item ${item.className}" style="background:${item.color};">${esc(item.label)}</span>`).join('')}</div>`
+}
+
+function buildPedigreePrintHtml(rootNode, title, sectionTitle, isDescendant) {
+  const treeHtml = isDescendant ? buildDescendantPedigreeHtml(rootNode) : buildAncestorPedigreeHtml(rootNode)
+
+  return `
+    <div class="pedigree-print-sheet">
+      <div class="pedigree-header">
+        <div class="pedigree-title">${esc(title)}</div>
+      </div>
+      <div class="pedigree-body">
+        <section class="pedigree-section">
+          <h2>${esc(sectionTitle)}</h2>
+          ${buildPedigreeLegendHtml()}
+          ${treeHtml}
+        </section>
+      </div>
+    </div>
+  `
 }
 
 export function printFullTree(selectedBirdKey, birds, ancestors, descendants) {
@@ -1059,21 +1196,107 @@ export function printFullTree(selectedBirdKey, birds, ancestors, descendants) {
     throw new Error('Selecteer eerst een vogel in de stamboom-tab.')
   }
 
-  const ancestorsHtml = treeChildrenToHtml(ancestors, 'Geen voorouders gevonden')
-  const descendantsHtml = treeChildrenToHtml(descendants, 'Geen nakomelingen gevonden')
   const selectedBird = birds[selectedBirdKey]
-  
-  const html = `
-    ${selectedBirdDetailsHtml(selectedBird)}
-    
-    <h2 style="margin-top: 20px; margin-bottom: 10px;">Voorouders</h2>
-    <ul class="tree">${ancestorsHtml}</ul>
-    
-    <h2 style="margin-top: 20px; margin-bottom: 10px;">Nakomelingen</h2>
-    <ul class="tree">${descendantsHtml}</ul>
-  `
-  
+  const ancestorTree = ancestors || selectedBird
+  const descendantTree = descendants || { subject: buildPedigreeNodeData(selectedBird), partner: null, children: [] }
+
+  const html = `${buildPedigreePrintHtml(ancestorTree, 'VOORBEELDSCHEMA PARENTEEL - VOOROUDERS', 'Voorouders', false)}
+    ${buildPedigreePrintHtml(descendantTree, 'VOORBEELDSCHEMA PARENTEEL - NAKOMELINGEN', 'Nakomelingen', true)}`
+
   openPrintDocument('Volledige stamboom', html)
+}
+
+// ─── PDF: generieke boom-layout (kind gecentreerd onder het koppel dat het produceerde) ─
+function countLeaves(node) {
+  const children = node?.children || []
+  if (children.length === 0) return 1
+  return children.reduce((sum, child) => sum + countLeaves(child), 0) || 1
+}
+
+function hexToRgb(hex) {
+  const value = hex.replace('#', '')
+  const bigint = parseInt(value, 16)
+  return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255]
+}
+
+const PEDIGREE_LEGEND_COLORS = Object.fromEntries(PEDIGREE_LEGEND.map((item) => [item.className, hexToRgb(item.color)]))
+
+function layoutCoupleTree(node, depth, x0, x1) {
+  if (!node) return null
+  const children = node.children || []
+  const entry = { node, depth, x: (x0 + x1) / 2, children: [] }
+  if (children.length === 0) return entry
+
+  const weights = children.map((child) => countLeaves(child))
+  const total = weights.reduce((sum, w) => sum + w, 0) || 1
+  let cursor = x0
+  children.forEach((child, index) => {
+    const width = (weights[index] / total) * (x1 - x0)
+    const childEntry = layoutCoupleTree(child, depth + 1, cursor, cursor + width)
+    if (childEntry) entry.children.push(childEntry)
+    cursor += width
+  })
+  return entry
+}
+
+function drawPdfPersonBox(doc, x, y, boxWidth, nodeData) {
+  if (!nodeData) return 0
+
+  if (nodeData.unknown) {
+    const height = 9
+    doc.setDrawColor(45, 57, 64)
+    doc.setLineWidth(0.3)
+    doc.rect(x - boxWidth / 2, y, boxWidth, height)
+    doc.setFontSize(4.4)
+    doc.setTextColor(120, 130, 138)
+    doc.text('Onbekend', x, y + height / 2 + 1.2, { align: 'center' })
+    return height
+  }
+
+  const rows = [
+    ['Vogel', nodeData.name || 'Onbekend'],
+    ['Geslacht', nodeData.Geslacht || '-'],
+    ['Jaar', nodeData.Kweekjaar || '-'],
+    ['Stamnummer', nodeData.Stamnummer || '-'],
+    ['Ringnummer', nodeData.Ringnummer || '-'],
+    ['Mutatie', nodeData.Mutatie || '-'],
+    ['Split', [nodeData.Split1, nodeData.Split2, nodeData.Split3, nodeData.Split4].filter(Boolean).join(', ') || nodeData.Split || '-'],
+    ['Factor', nodeData.Factor || '-'],
+    ['Status', nodeData.Status || '-'],
+  ]
+  const rowHeight = 4.2
+  const [fillR, fillG, fillB] = PEDIGREE_LEGEND_COLORS[nodeData.colorClass] || PEDIGREE_LEGEND_COLORS.unsexed
+  doc.setDrawColor(45, 57, 64)
+  doc.setLineWidth(0.35)
+  doc.rect(x - boxWidth / 2, y, boxWidth, rowHeight * rows.length)
+  rows.forEach(([label, value], rowIndex) => {
+    const rowTop = y + rowIndex * rowHeight
+    if (rowIndex === 0) {
+      doc.setFillColor(fillR, fillG, fillB)
+      doc.rect(x - boxWidth / 2, rowTop, boxWidth, rowHeight, 'F')
+      doc.rect(x - boxWidth / 2, rowTop, boxWidth, rowHeight, 'S')
+    }
+    if (rowIndex > 0) doc.line(x - boxWidth / 2, rowTop, x + boxWidth / 2, rowTop)
+    doc.setTextColor(25, 31, 36)
+    doc.setFontSize(rowIndex === 0 ? 4.6 : 3.8)
+    doc.text(`${label}: ${String(value).slice(0, 32)}`, x - boxWidth / 2 + 1.5, rowTop + 3, { maxWidth: boxWidth - 3 })
+  })
+  return rowHeight * rows.length
+}
+
+function drawPdfLegend(doc, startX, y) {
+  doc.setFontSize(7.5)
+  let x = startX
+  PEDIGREE_LEGEND.forEach((item) => {
+    const [r, g, b] = PEDIGREE_LEGEND_COLORS[item.className] || [200, 200, 200]
+    doc.setFillColor(r, g, b)
+    doc.setDrawColor(45, 57, 64)
+    doc.setLineWidth(0.2)
+    doc.rect(x, y - 3, 4, 4, 'FD')
+    doc.setTextColor(25, 31, 36)
+    doc.text(item.label, x + 6, y)
+    x += 6 + doc.getTextWidth(item.label) + 10
+  })
 }
 
 export function exportFullTreePdf(selectedBirdKey, birds, ancestors, descendants) {
@@ -1081,49 +1304,90 @@ export function exportFullTreePdf(selectedBirdKey, birds, ancestors, descendants
     throw new Error('Selecteer eerst een vogel in de stamboom-tab.')
   }
 
-  const ancestorsRows = flattenTreeChildrenRows(ancestors, 'Geen voorouders gevonden')
-  const descendantsRows = flattenTreeChildrenRows(descendants, 'Geen nakomelingen gevonden')
   const selectedBird = birds[selectedBirdKey]
-  const generatedAt = new Date().toLocaleString('nl-BE')
   const fileStamp = new Date().toISOString().slice(0, 10)
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
 
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
-  
-  // Header
-  doc.setFontSize(16)
-  doc.text('Volledige stamboom', 12, 12)
-  doc.setFontSize(10)
-  doc.setTextColor(84, 102, 114)
-  doc.text(`Gegenereerd op ${generatedAt}`, 12, 17)
-  doc.text(`Startvogel: ${vogelNaam(selectedBird)}`, 12, 22)
-  const detailsEndY = addSelectedBirdDetailsToPdf(doc, selectedBird, 27)
+  const pageWidth = 297
+  const pageHeight = 210
+  const marginX = 16
+  const contentWidth = pageWidth - marginX * 2
+  const rowHeight = 46
+  const startY = 34
+  const boxWidth = 58
 
-  // Ancestors table
-  doc.setTextColor(20, 20, 20)
-  doc.setFontSize(11)
-  autoTable(doc, {
-    startY: detailsEndY + 2,
-    head: [['Voorouders', 'Info']],
-    body: ancestorsRows,
-    margin: { left: 10, right: 10 },
-    styles: { fontSize: 8, cellPadding: 1.5, lineWidth: 0.1 },
-    headStyles: { fillColor: [15, 115, 115] },
-    alternateRowStyles: { fillColor: [247, 251, 252] },
-    columnStyles: { 0: { cellWidth: 80 } },
-  })
+  const drawSection = (rootEntry, title, addPage, isDescendant) => {
+    if (addPage) doc.addPage()
+    doc.setFillColor(255, 255, 255)
+    doc.rect(0, 0, pageWidth, pageHeight, 'F')
+    doc.setTextColor(25, 31, 36)
+    doc.setFontSize(16)
+    doc.setFont(undefined, 'normal')
+    doc.text(`VOORBEELDSCHEMA PARENTEEL - ${title.toUpperCase()}`, 8, 10)
+    drawPdfLegend(doc, 8, 20)
 
-  // Descendants table
-  const descendantsStartY = doc.lastAutoTable.finalY + 10
-  autoTable(doc, {
-    startY: descendantsStartY,
-    head: [['Nakomelingen', 'Info']],
-    body: descendantsRows,
-    margin: { left: 10, right: 10 },
-    styles: { fontSize: 8, cellPadding: 1.5, lineWidth: 0.1 },
-    headStyles: { fillColor: [15, 115, 115] },
-    alternateRowStyles: { fillColor: [247, 251, 252] },
-    columnStyles: { 0: { cellWidth: 80 } },
-  })
+    if (!rootEntry) {
+      doc.setFontSize(11)
+      doc.setTextColor(90, 100, 110)
+      doc.text(isDescendant ? 'Geen nakomelingen gevonden' : 'Geen voorouders gevonden', marginX, startY)
+      return
+    }
+
+    const maxDepth = (() => {
+      let max = 0
+      const walk = (entry) => { max = Math.max(max, entry.depth); entry.children.forEach(walk) }
+      walk(rootEntry)
+      return max
+    })()
+    const depthToY = (depth) => (isDescendant ? startY + depth * rowHeight : startY + (maxDepth - depth) * rowHeight)
+
+    const drawEntry = (entry) => {
+      const y = depthToY(entry.depth)
+      let boxHeight = 0
+
+      if (isDescendant) {
+        const { subject, partner } = entry.node
+        if (partner) {
+          boxHeight = Math.max(
+            drawPdfPersonBox(doc, entry.x - boxWidth / 2 - 3, y, boxWidth, subject),
+            drawPdfPersonBox(doc, entry.x + boxWidth / 2 + 3, y, boxWidth, partner),
+          )
+          doc.setFontSize(6.5)
+          doc.setTextColor(25, 31, 36)
+          doc.text('×', entry.x, y + boxHeight / 2 + 1, { align: 'center' })
+        } else {
+          boxHeight = drawPdfPersonBox(doc, entry.x, y, boxWidth, subject)
+        }
+      } else {
+        boxHeight = drawPdfPersonBox(doc, entry.x, y, boxWidth, buildPedigreeNodeData(entry.node))
+        if (entry.children.length === 2) {
+          const midX = (entry.children[0].x + entry.children[1].x) / 2
+          doc.setFontSize(6.5)
+          doc.setTextColor(25, 31, 36)
+          doc.text('×', midX, depthToY(entry.depth + 1) - 4, { align: 'center' })
+        }
+      }
+
+      entry.children.forEach((childEntry) => {
+        const childY = depthToY(childEntry.depth)
+        const midY = isDescendant ? y + boxHeight + (rowHeight - boxHeight) / 2 : childY - (rowHeight - boxHeight) / 2
+        doc.setDrawColor(45, 57, 64)
+        doc.setLineWidth(0.35)
+        doc.line(entry.x, y + boxHeight, entry.x, midY)
+        doc.line(entry.x, midY, childEntry.x, midY)
+        doc.line(childEntry.x, midY, childEntry.x, childY)
+        drawEntry(childEntry)
+      })
+    }
+
+    drawEntry(rootEntry)
+  }
+
+  const ancestorRoot = layoutCoupleTree(ancestors || selectedBird, 0, marginX, marginX + contentWidth)
+  const descendantRoot = layoutCoupleTree(descendants || { subject: buildPedigreeNodeData(selectedBird), partner: null, children: [] }, 0, marginX, marginX + contentWidth)
+
+  drawSection(ancestorRoot, 'Voorouders', false, false)
+  drawSection(descendantRoot, 'Nakomelingen', true, true)
 
   doc.save(`stamboom-volledig-${fileStamp}.pdf`)
   return 'PDF opgeslagen: volledige stamboom.'

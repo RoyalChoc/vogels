@@ -3,10 +3,28 @@
     "BOFBN712-002": {
       "certificate": null,
       "photos": []
+    },
+    "Geel Blauw-2023109": {
+      "certificate": {
+        "id": "a656e3d9-fd8d-4a2c-90f7-c9c271d39dca.pdf",
+        "name": "Nachtegalen.pdf",
+        "contentType": "application/pdf",
+        "size": 84341,
+        "uploadedAt": "2026-09-04T09:55:33.642Z"
+      },
+      "photos": []
     }
   },
   "archive": [],
   "audit": [
+    {
+      "id": "2a46ff38-59d9-4cfa-b307-6dbfd26760b3",
+      "at": "2026-09-04T09:55:33.642Z",
+      "userId": "0a056333-5492-44a4-b202-9a125d8af938",
+      "action": "certificate-uploaded",
+      "birdKey": "Geel Blauw-2023109",
+      "fileName": "Nachtegalen.pdf"
+    },
     {
       "id": "4f2772c9-2253-4783-ad33-9eb634046580",
       "at": "2026-09-02T07:10:32.816Z",
