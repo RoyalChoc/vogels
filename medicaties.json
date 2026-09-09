@@ -125,7 +125,7 @@
       "RedenDiagnose": "",
       "Dierenarts": "",
       "DatumHercontrole": "2026-09-29",
-      "Afgerond": false,
+      "Afgerond": true,
       "Opmerking": "",
       "id": "dbb1aee5-ec18-4700-b4bb-272e489fc796",
       "VogelKey": "PSNL02492-009"
@@ -138,7 +138,7 @@
       "RedenDiagnose": "",
       "Dierenarts": "",
       "DatumHercontrole": "2026-09-29",
-      "Afgerond": false,
+      "Afgerond": true,
       "Opmerking": "",
       "id": "8b3feff5-b3ac-4d8b-a451-ee9dcb13d922",
       "VogelKey": "PSNL7770-003"
@@ -151,7 +151,7 @@
       "RedenDiagnose": "",
       "Dierenarts": "",
       "DatumHercontrole": "2026-09-29",
-      "Afgerond": false,
+      "Afgerond": true,
       "Opmerking": "",
       "id": "539b7054-fb87-411d-8eb4-32217366625e",
       "VogelKey": "BOFBN712-002"
@@ -177,7 +177,7 @@
       "RedenDiagnose": "",
       "Dierenarts": "",
       "DatumHercontrole": "2026-09-29",
-      "Afgerond": false,
+      "Afgerond": true,
       "Opmerking": "",
       "id": "9e3a7cf9-8b82-484d-84f7-375ad79262b3",
       "VogelKey": "PEP2025-41"
