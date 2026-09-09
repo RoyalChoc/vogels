@@ -30,6 +30,8 @@ export default function BirdList({
   mediaByBird,
   onOpenCertificate,
   onOpenPhotos,
+  medicationCountByBird,
+  onOpenMedication,
 }) {
   const [columnSortOrders, setColumnSortOrders] = useState({
     vogelsoort: '',
@@ -167,6 +169,7 @@ export default function BirdList({
               <th>Opmerking</th>
               <th>Certificaat</th>
               <th>Foto</th>
+              <th>Medicatie</th>
             </tr>
             <tr className="tableFilters">
               <th>
@@ -351,6 +354,7 @@ export default function BirdList({
               </th>
               <th />
               <th />
+              <th />
             </tr>
           </thead>
           <tbody>
@@ -399,6 +403,18 @@ export default function BirdList({
                     }}
                   >
                     Foto&apos;s ({photoCount}/10)
+                  </button>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    className="mediaTableButton"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      onOpenMedication(key)
+                    }}
+                  >
+                    Medicatie ({medicationCountByBird?.[key] || 0})
                   </button>
                 </td>
               </tr>

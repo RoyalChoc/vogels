@@ -11,6 +11,8 @@ export default function BirdForm({
   onSave,
   onClear,
   onDelete,
+  medicationRecords,
+  onOpenMedication,
 }) {
   const factorOptions = optionSets?.factor || []
   const gezoomdOptions = optionSets?.gezoomd || []
@@ -263,6 +265,26 @@ export default function BirdForm({
           onChange={(e) => setBirdForm({ ...birdForm, Opmerking: e.target.value })}
         />
       </div>
+
+      {editingBirdKey && (
+        <div className="birdMedicationSummary">
+          <h3>Medicatie</h3>
+          {(() => {
+            const birdMedications = (medicationRecords || []).filter((record) => record.VogelKey === editingBirdKey)
+            const openCount = birdMedications.filter((record) => !record.Afgerond).length
+            return (
+              <p>
+                {birdMedications.length === 0
+                  ? 'Nog geen medicatie geregistreerd.'
+                  : `${birdMedications.length} record(s), waarvan ${openCount} nog niet afgerond.`}
+              </p>
+            )
+          })()}
+          <button type="button" className="ghost" onClick={() => onOpenMedication?.(editingBirdKey)}>
+            Medicatie bekijken / toevoegen
+          </button>
+        </div>
+      )}
 
       <div className="rowActions">
         <button type="button" className="primary" onClick={onSave}>

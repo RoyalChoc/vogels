@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import ContactDataPanel from './ContactDataPanel'
+import MedicatiePanel from './MedicatiePanel'
 import UserRolesPanel from './UserRolesPanel'
 
 function cloneOptionsMap(optionsMap) {
@@ -205,6 +206,14 @@ export default function AdminTab({
   onStatus,
   token,
   currentUserId,
+  birds,
+  medicationRecords,
+  reminderDagenVooraf,
+  onSaveMedicationRecord,
+  onSaveMedicationRecords,
+  onDeleteMedicationRecord,
+  onToggleMedicationAfgerond,
+  onSaveReminderDays,
 }) {
   const [activeKey, setActiveKey] = useState(optionDefinitions[0]?.key || '')
   const [draftOptions, setDraftOptions] = useState(() => cloneOptionsMap(optionsMap))
@@ -507,6 +516,18 @@ export default function AdminTab({
         contacts={contacts}
         customFieldNames={customContactFieldNames}
         onSaveContacts={onSaveContacts}
+        onStatus={onStatus}
+      />
+      <MedicatiePanel
+        records={medicationRecords}
+        reminderDagenVooraf={reminderDagenVooraf}
+        medicijnOptions={optionsMap?.medicijnen || []}
+        birds={birds}
+        onSaveRecord={onSaveMedicationRecord}
+        onSaveRecords={onSaveMedicationRecords}
+        onDeleteRecord={onDeleteMedicationRecord}
+        onToggleAfgerond={onToggleMedicationAfgerond}
+        onSaveReminderDays={onSaveReminderDays}
         onStatus={onStatus}
       />
       <UserRolesPanel token={token} currentUserId={currentUserId} onStatus={onStatus} />

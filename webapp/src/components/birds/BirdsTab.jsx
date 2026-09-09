@@ -1,5 +1,6 @@
 import BirdForm from './BirdForm'
 import BirdList from './BirdList'
+import BirdMedicationChecklist from '../medication/BirdMedicationChecklist'
 
 export default function BirdsTab({
   birdForm,
@@ -22,6 +23,14 @@ export default function BirdsTab({
   mediaByBird,
   onOpenCertificate,
   onOpenPhotos,
+  medicationCountByBird,
+  onOpenMedication,
+  medicationRecords,
+  birds,
+  isReadOnly,
+  selectedTreatmentBirdKeys,
+  onSelectedTreatmentBirdKeysChange,
+  onOpenBulkMedication,
 }) {
   return (
     <section className="panel">
@@ -37,6 +46,8 @@ export default function BirdsTab({
           onSave={onFormSave}
           onClear={onFormClear}
           onDelete={onFormDelete}
+          medicationRecords={medicationRecords}
+          onOpenMedication={onOpenMedication}
         />
       </div>
 
@@ -51,7 +62,31 @@ export default function BirdsTab({
         mediaByBird={mediaByBird}
         onOpenCertificate={onOpenCertificate}
         onOpenPhotos={onOpenPhotos}
+        medicationCountByBird={medicationCountByBird}
+        onOpenMedication={onOpenMedication}
       />
+
+      {!isReadOnly && (
+        <article className="card adminCard">
+          <h2>Medicatie voor selectie</h2>
+          <p>Vink de vogels aan die je wil behandelen en voeg in één keer medicatie toe.</p>
+          <BirdMedicationChecklist
+            birds={birds}
+            selectedKeys={selectedTreatmentBirdKeys}
+            onSelectionChange={onSelectedTreatmentBirdKeysChange}
+          />
+          <div className="rowActions">
+            <button
+              type="button"
+              className="primary"
+              disabled={selectedTreatmentBirdKeys.length === 0}
+              onClick={onOpenBulkMedication}
+            >
+              Medicatie toevoegen voor selectie ({selectedTreatmentBirdKeys.length})
+            </button>
+          </div>
+        </article>
+      )}
     </section>
   )
 }

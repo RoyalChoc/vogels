@@ -9,6 +9,7 @@ const USERS_FILE = path.resolve(__dirname, '../users.json')
 const SESSIONS_FILE = path.resolve(__dirname, '../sessions.json')
 const COUPLES_FILE = path.resolve(__dirname, '../koppels.json')
 const CONTACTS_FILE = path.resolve(__dirname, '../contacts.json')
+const MEDICATIONS_FILE = path.resolve(__dirname, '../medicaties.json')
 const MEDIA_FILE = path.resolve(__dirname, '../media.json')
 const MEDIA_DIRECTORY = path.resolve(__dirname, '../uploads')
 const MAX_CERTIFICATE_SIZE = 20 * 1024 * 1024
@@ -27,6 +28,7 @@ const OPTION_FILES = {
   contactvelden: path.resolve(__dirname, '../contactvelden.json'),
   vogelsoorten: path.resolve(__dirname, '../vogelsoorten.json'),
   monstertypes: path.resolve(__dirname, '../monstertypes.json'),
+  medicijnen: path.resolve(__dirname, '../medicijnen.json'),
 }
 
 async function readJsonFile(filePath, fallback) {
@@ -74,6 +76,21 @@ function getRequestBuffer(req) {
     req.on('end', () => resolve(Buffer.concat(chunks)))
     req.on('error', reject)
   })
+}
+
+function emptyMedicationsStore() {
+  return { records: [], instellingen: { reminderDagenVooraf: 7 } }
+}
+
+async function readMedicationsStore() {
+  const store = await readJsonFile(MEDICATIONS_FILE, emptyMedicationsStore())
+  const reminderDagenVooraf = Number(store?.instellingen?.reminderDagenVooraf)
+  return {
+    records: Array.isArray(store?.records) ? store.records : [],
+    instellingen: {
+      reminderDagenVooraf: Number.isFinite(reminderDagenVooraf) && reminderDagenVooraf >= 0 ? reminderDagenVooraf : 7,
+    },
+  }
 }
 
 function emptyMediaStore() {
@@ -293,6 +310,42 @@ function stateApiPlugin() {
             const parsed = JSON.parse(bodyText || '{}')
             const contacts = parsed?.contacts && typeof parsed.contacts === 'object' ? parsed.contacts : {}
             await writeJsonFile(CONTACTS_FILE, contacts)
+
+            sendJson(res, 200, { ok: true })
+          } catch {
+            sendJson(res, 400, { ok: false, error: 'Ongeldige JSON payload.' })
+          }
+          return
+        }
+
+        res.statusCode = 405
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        res.end(JSON.stringify({ ok: false, error: 'Method not allowed' }))
+      })
+
+      server.middlewares.use('/api/medicaties', async (req, res) => {
+        if (req.method === 'GET') {
+          const medicaties = await readMedicationsStore()
+          res.setHeader('Content-Type', 'application/json; charset=utf-8')
+          res.end(JSON.stringify({ medicaties }))
+          return
+        }
+
+        if (req.method === 'POST') {
+          const user = await requireAdmin(req, res)
+          if (!user) return
+
+          try {
+            const bodyText = await getRequestBody(req)
+            const parsed = JSON.parse(bodyText || '{}')
+            const records = Array.isArray(parsed?.medicaties?.records) ? parsed.medicaties.records : []
+            const reminderDagenVooraf = Number(parsed?.medicaties?.instellingen?.reminderDagenVooraf)
+            await writeJsonFile(MEDICATIONS_FILE, {
+              records,
+              instellingen: {
+                reminderDagenVooraf: Number.isFinite(reminderDagenVooraf) && reminderDagenVooraf >= 0 ? reminderDagenVooraf : 7,
+              },
+            })
 
             sendJson(res, 200, { ok: true })
           } catch {

@@ -1188,6 +1188,89 @@ tbody tr.selected {
   font-size: 0.9rem;
 }
 
+.medicationRow {
+  grid-template-columns: 1fr auto auto auto;
+}
+
+.adminInlineCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ink-soft);
+}
+
+.adminInlineCheckbox input {
+  width: auto;
+}
+
+.adminReminderSetting {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ink-soft);
+}
+
+.adminReminderSetting input {
+  width: 5rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--ink);
+  padding: 0.45rem 0.5rem;
+  font: inherit;
+}
+
+.birdMedicationSummary {
+  margin-top: 0.85rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.85rem;
+}
+
+.birdMedicationSummary h3 {
+  margin: 0 0 0.35rem;
+}
+
+.birdMedicationSummary p {
+  margin: 0 0 0.6rem;
+  color: var(--ink-soft);
+}
+
+.medicationDialog {
+  width: min(720px, 100%);
+}
+
+.birdMedicationChecklist {
+  margin-top: 0.5rem;
+}
+
+.birdMedicationChecklist input[type='search'] {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  margin-bottom: 0.5rem;
+}
+
+.reminderList {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.reminderList li {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.5rem 0.65rem;
+  background: rgba(255, 255, 255, 0.9);
+}
+
 .contactExtraValue {
   display: block;
   margin-top: 0.2rem;

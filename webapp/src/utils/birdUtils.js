@@ -15,6 +15,14 @@ export function findBirdByName(birds, name) {
   return Object.values(birds).find((v) => vogelNaam(v) === name) || null
 }
 
+// Naamweergave voor medicatie-koppeling: Mutatie, Stamnummer, Ringnummer (in die volgorde).
+export function medicatieVogelLabel(vogel) {
+  const parts = [vogel?.Mutatie, vogel?.Stamnummer, vogel?.Ringnummer]
+    .map((value) => String(value || '').trim())
+    .filter(Boolean)
+  return parts.join(' ') || 'Onbekende vogel'
+}
+
 // Vogelsoort-opties worden opgeslagen als één string "Naam — Wetenschappelijke naam" zodat beide altijd gekoppeld blijven.
 export const VOGELSOORT_SEPARATOR = ' — '
 

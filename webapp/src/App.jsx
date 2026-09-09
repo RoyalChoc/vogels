@@ -6,6 +6,7 @@ import ProfilePage from './components/auth/ProfilePage'
 import { loadState, saveState } from './utils/storage'
 import { loadOptions, saveOptions } from './utils/optionsStorage'
 import { loadContacts, saveContacts } from './utils/contactStorage'
+import { loadMedicaties, saveMedicaties } from './utils/medicationStorage'
 import {
   exportContactsExcel,
   exportContactsPdf,
@@ -25,6 +26,7 @@ import { splitOptions } from './data/splitOptions'
 import { statusOptions } from './data/statusOptions'
 import { vogelsoortOptions } from './data/vogelsoortOptions'
 import { monstertypeOptions } from './data/monstertypeOptions'
+import { medicijnOptions } from './data/medicijnOptions'
 import { 
   vogelNaam, 
   vogelKey, 
@@ -53,6 +55,8 @@ import ContactsTab from './components/contacts/ContactsTab'
 import SplendidCalculatorTab from './components/splendid/SplendidCalculatorTab'
 import GeslachtsbepalingTab from './components/geslachtsbepaling/GeslachtsbepalingTab'
 import BirdMediaDialog from './components/birds/BirdMediaDialog'
+import BirdMedicationDialog from './components/birds/BirdMedicationDialog'
+import BirdMedicationBulkDialog from './components/birds/BirdMedicationBulkDialog'
 import { archiveBirdMedia, loadBirdMedia, renameBirdMedia } from './utils/media'
 
 const emptyBird = {
@@ -111,6 +115,7 @@ const EXCLUDED_BIRD_STATUSES = new Set(['verkocht', 'overleden'])
 const EMPTY_BIRDS = {}
 const EMPTY_COUPLES = {}
 const EMPTY_CONTACTS = {}
+const EMPTY_MEDICATIES = { records: [], instellingen: { reminderDagenVooraf: 7 } }
 const STANDARD_CONTACT_FIELD_NAMES = new Set([
   'Naam',
   'Voornaam',
@@ -141,6 +146,7 @@ const OPTION_DEFINITIONS = [
     fileName: 'vogelsoorten.json',
   },
   { key: 'monstertypes', label: 'Monstertypes', fileName: 'monstertypes.json' },
+  { key: 'medicijnen', label: 'Medicijnen', fileName: 'medicijnen.json' },
 ]
 const DEFAULT_OPTION_SETS = {
   factor: factorOptions,
@@ -156,6 +162,7 @@ const DEFAULT_OPTION_SETS = {
   status: statusOptions,
   vogelsoorten: vogelsoortOptions,
   monstertypes: monstertypeOptions,
+  medicijnen: medicijnOptions,
 }
 
 function normalizeStatus(status) {
@@ -262,6 +269,12 @@ function AppContent() {
   const [selectedSexDeterminationKeys, setSelectedSexDeterminationKeys] = useState([])
   const [mediaByBird, setMediaByBird] = useState({})
   const [mediaDialog, setMediaDialog] = useState(null)
+  const [medications, setMedications] = useState(EMPTY_MEDICATIES.records)
+  const [reminderDagenVooraf, setReminderDagenVooraf] = useState(EMPTY_MEDICATIES.instellingen.reminderDagenVooraf)
+  const [medicationDialogBirdKey, setMedicationDialogBirdKey] = useState(null)
+  const [reminderDismissed, setReminderDismissed] = useState(false)
+  const [selectedTreatmentBirdKeys, setSelectedTreatmentBirdKeys] = useState([])
+  const [showBulkMedicationDialog, setShowBulkMedicationDialog] = useState(false)
 
   const [status, setStatus] = useState('Klaar voor beheer.')
   const [isAdminUnlocked, setIsAdminUnlocked] = useState(false)
@@ -275,10 +288,11 @@ function AppContent() {
     let cancelled = false
 
     async function hydrateFromFiles() {
-      const [nextState, nextOptions, nextContacts] = await Promise.all([
+      const [nextState, nextOptions, nextContacts, nextMedicaties] = await Promise.all([
         loadState(EMPTY_BIRDS, EMPTY_COUPLES),
         loadOptions(DEFAULT_OPTION_SETS),
         loadContacts(EMPTY_CONTACTS),
+        loadMedicaties(EMPTY_MEDICATIES),
       ])
       if (cancelled) return
 
@@ -286,6 +300,8 @@ function AppContent() {
       setCouples(nextState.couples)
       setOptionSets(nextOptions)
       setContacts(normalizeContactsMap(nextContacts))
+      setMedications(nextMedicaties.records)
+      setReminderDagenVooraf(nextMedicaties.instellingen.reminderDagenVooraf)
     }
 
     hydrateFromFiles()
@@ -384,6 +400,72 @@ function AppContent() {
       ),
     [birdEntries],
   )
+
+  const medicationCountByBird = useMemo(() => {
+    const counts = {}
+    medications.forEach((record) => {
+      counts[record.VogelKey] = (counts[record.VogelKey] || 0) + 1
+    })
+    return counts
+  }, [medications])
+
+  const dueMedicationReminders = useMemo(() => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    return medications
+      .filter((record) => !record.Afgerond && record.DatumHercontrole)
+      .filter((record) => {
+        const due = new Date(record.DatumHercontrole)
+        if (Number.isNaN(due.getTime())) return false
+        due.setHours(0, 0, 0, 0)
+        const diffDays = Math.round((due.getTime() - today.getTime()) / 86400000)
+        return diffDays <= reminderDagenVooraf
+      })
+      .sort((a, b) => a.DatumHercontrole.localeCompare(b.DatumHercontrole))
+  }, [medications, reminderDagenVooraf])
+
+  async function persistMedicaties(nextRecords, nextReminderDagenVooraf) {
+    await saveMedicaties({
+      records: nextRecords,
+      instellingen: { reminderDagenVooraf: nextReminderDagenVooraf },
+    })
+  }
+
+  async function handleSaveMedicationRecord(record) {
+    const exists = medications.some((item) => item.id === record.id)
+    const nextRecords = exists
+      ? medications.map((item) => (item.id === record.id ? record : item))
+      : [...medications, record]
+
+    await persistMedicaties(nextRecords, reminderDagenVooraf)
+    setMedications(nextRecords)
+  }
+
+  async function handleSaveMedicationRecords(newRecords) {
+    const nextRecords = [...medications, ...newRecords]
+    await persistMedicaties(nextRecords, reminderDagenVooraf)
+    setMedications(nextRecords)
+  }
+
+  async function handleDeleteMedicationRecord(id) {
+    const nextRecords = medications.filter((item) => item.id !== id)
+    await persistMedicaties(nextRecords, reminderDagenVooraf)
+    setMedications(nextRecords)
+  }
+
+  async function handleToggleMedicationAfgerond(id) {
+    const nextRecords = medications.map((item) =>
+      item.id === id ? { ...item, Afgerond: !item.Afgerond } : item,
+    )
+    await persistMedicaties(nextRecords, reminderDagenVooraf)
+    setMedications(nextRecords)
+  }
+
+  async function handleSaveReminderDays(days) {
+    await persistMedicaties(medications, days)
+    setReminderDagenVooraf(days)
+  }
 
   const availableMaleNamesForNewCouple = useMemo(() => {
     const targetYear = String(coupleForm.kweekjaar || '').trim()
@@ -1312,6 +1394,14 @@ function AppContent() {
           mediaByBird={mediaByBird}
           onOpenCertificate={(birdKey) => setMediaDialog({ birdKey, mode: 'certificate' })}
           onOpenPhotos={(birdKey) => setMediaDialog({ birdKey, mode: 'photo' })}
+          medicationCountByBird={medicationCountByBird}
+          onOpenMedication={(birdKey) => setMedicationDialogBirdKey(birdKey)}
+          medicationRecords={medications}
+          birds={birds}
+          isReadOnly={isReadOnly}
+          selectedTreatmentBirdKeys={selectedTreatmentBirdKeys}
+          onSelectedTreatmentBirdKeysChange={setSelectedTreatmentBirdKeys}
+          onOpenBulkMedication={() => setShowBulkMedicationDialog(true)}
         />
       )}
 
@@ -1325,6 +1415,58 @@ function AppContent() {
           onClose={() => setMediaDialog(null)}
           onMediaChanged={(birdKey, media) => setMediaByBird((current) => ({ ...current, [birdKey]: media }))}
         />
+      )}
+
+      {medicationDialogBirdKey && birds[medicationDialogBirdKey] && (
+        <BirdMedicationDialog
+          birdKey={medicationDialogBirdKey}
+          birdName={vogelNaam(birds[medicationDialogBirdKey])}
+          records={medications}
+          medicijnOptions={optionSets?.medicijnen || []}
+          isReadOnly={isReadOnly}
+          onClose={() => setMedicationDialogBirdKey(null)}
+          onSaveRecord={handleSaveMedicationRecord}
+          onDeleteRecord={handleDeleteMedicationRecord}
+          onToggleAfgerond={handleToggleMedicationAfgerond}
+          onStatus={setStatus}
+        />
+      )}
+
+      {showBulkMedicationDialog && selectedTreatmentBirdKeys.length > 0 && (
+        <BirdMedicationBulkDialog
+          birdKeys={selectedTreatmentBirdKeys}
+          birds={birds}
+          medicijnOptions={optionSets?.medicijnen || []}
+          onClose={() => setShowBulkMedicationDialog(false)}
+          onSaveRecords={async (records) => {
+            await handleSaveMedicationRecords(records)
+            setSelectedTreatmentBirdKeys([])
+          }}
+          onStatus={setStatus}
+        />
+      )}
+
+      {isAuthenticated && !reminderDismissed && dueMedicationReminders.length > 0 && (
+        <div className="pinGateBackdrop" role="dialog" aria-modal="true" aria-label="Medicatie herinnering">
+          <article className="card pinGateCard">
+            <h2>Medicatie hercontrole</h2>
+            <p>Deze medicatie heeft een hercontroledatum die nadert of al voorbij is:</p>
+            <ul className="reminderList">
+              {dueMedicationReminders.map((record) => (
+                <li key={record.id}>
+                  <strong>{vogelNaam(birds[record.VogelKey] || {}) || record.VogelKey}</strong>
+                  {' — '}
+                  {record.Medicijnnaam || '-'} · Hercontrole: {record.DatumHercontrole}
+                </li>
+              ))}
+            </ul>
+            <div className="rowActions">
+              <button type="button" className="primary" onClick={() => setReminderDismissed(true)}>
+                OK
+              </button>
+            </div>
+          </article>
+        </div>
       )}
 
       {tab === 'koppels' && (
@@ -1420,6 +1562,14 @@ function AppContent() {
           onStatus={setStatus}
           token={token}
           currentUserId={currentUser?.id}
+          birds={birds}
+          medicationRecords={medications}
+          reminderDagenVooraf={reminderDagenVooraf}
+          onSaveMedicationRecord={handleSaveMedicationRecord}
+          onSaveMedicationRecords={handleSaveMedicationRecords}
+          onDeleteMedicationRecord={handleDeleteMedicationRecord}
+          onToggleMedicationAfgerond={handleToggleMedicationAfgerond}
+          onSaveReminderDays={handleSaveReminderDays}
         />
       )}
     </main>
