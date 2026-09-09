@@ -7,6 +7,7 @@ import { loadState, saveState } from './utils/storage'
 import { loadOptions, saveOptions } from './utils/optionsStorage'
 import { loadContacts, saveContacts } from './utils/contactStorage'
 import { loadMedicaties, saveMedicaties } from './utils/medicationStorage'
+import { buildDoseSchedule, DEFAULT_DOSAGE_UNITS } from './utils/medicationProfiles'
 import {
   exportContactsExcel,
   exportContactsPdf,
@@ -115,7 +116,12 @@ const EXCLUDED_BIRD_STATUSES = new Set(['verkocht', 'overleden'])
 const EMPTY_BIRDS = {}
 const EMPTY_COUPLES = {}
 const EMPTY_CONTACTS = {}
-const EMPTY_MEDICATIES = { records: [], instellingen: { reminderDagenVooraf: 7 } }
+const EMPTY_MEDICATIES = {
+  records: [],
+  profielen: [],
+  doseringEenheden: DEFAULT_DOSAGE_UNITS,
+  instellingen: { reminderDagenVooraf: 7 },
+}
 const STANDARD_CONTACT_FIELD_NAMES = new Set([
   'Naam',
   'Voornaam',
@@ -270,6 +276,8 @@ function AppContent() {
   const [mediaByBird, setMediaByBird] = useState({})
   const [mediaDialog, setMediaDialog] = useState(null)
   const [medications, setMedications] = useState(EMPTY_MEDICATIES.records)
+  const [medicationProfiles, setMedicationProfiles] = useState(EMPTY_MEDICATIES.profielen)
+  const [dosageUnits, setDosageUnits] = useState(EMPTY_MEDICATIES.doseringEenheden)
   const [reminderDagenVooraf, setReminderDagenVooraf] = useState(EMPTY_MEDICATIES.instellingen.reminderDagenVooraf)
   const [medicationDialogBirdKey, setMedicationDialogBirdKey] = useState(null)
   const [reminderDismissed, setReminderDismissed] = useState(false)
@@ -301,6 +309,8 @@ function AppContent() {
       setOptionSets(nextOptions)
       setContacts(normalizeContactsMap(nextContacts))
       setMedications(nextMedicaties.records)
+      setMedicationProfiles(nextMedicaties.profielen)
+      setDosageUnits(nextMedicaties.doseringEenheden)
       setReminderDagenVooraf(nextMedicaties.instellingen.reminderDagenVooraf)
     }
 
@@ -425,9 +435,16 @@ function AppContent() {
       .sort((a, b) => a.DatumHercontrole.localeCompare(b.DatumHercontrole))
   }, [medications, reminderDagenVooraf])
 
-  async function persistMedicaties(nextRecords, nextReminderDagenVooraf) {
+  async function persistMedicaties(
+    nextRecords,
+    nextReminderDagenVooraf = reminderDagenVooraf,
+    nextProfiles = medicationProfiles,
+    nextDosageUnits = dosageUnits,
+  ) {
     await saveMedicaties({
       records: nextRecords,
+      profielen: nextProfiles,
+      doseringEenheden: nextDosageUnits,
       instellingen: { reminderDagenVooraf: nextReminderDagenVooraf },
     })
   }
@@ -460,6 +477,58 @@ function AppContent() {
     )
     await persistMedicaties(nextRecords, reminderDagenVooraf)
     setMedications(nextRecords)
+  }
+
+  async function handleSetMedicationDoseStatus(changes, administered) {
+    const doseIdsByRecord = new Map()
+    changes.forEach(({ recordId, doseId }) => {
+      doseIdsByRecord.set(recordId, new Set([...(doseIdsByRecord.get(recordId) || []), doseId]))
+    })
+    const administeredAt = administered ? new Date().toISOString() : ''
+    const nextRecords = medications.map((record) => {
+      const doseIds = doseIdsByRecord.get(record.id)
+      if (!doseIds) return record
+      return {
+        ...record,
+        Doses: (record.Doses || []).map((dose) => doseIds.has(dose.id)
+          ? { ...dose, toegediend: administered, toegediendOp: administeredAt }
+          : dose),
+      }
+    })
+    await persistMedicaties(nextRecords)
+    setMedications(nextRecords)
+  }
+
+  async function handleSaveMedicationConfiguration(nextProfiles, nextDosageUnits, changedProfile, updateActive) {
+    let nextRecords = medications
+    if (changedProfile && updateActive) {
+      nextRecords = medications.map((record) => {
+        if (record.ProfielId !== changedProfile.id || record.Afgerond) return record
+        const times = Array.isArray(record.DagelijkseTijden) ? record.DagelijkseTijden : []
+        if (times.length !== changedProfile.frequentiePerDag) return record
+        const existingByTime = new Map((record.Doses || []).map((dose) => [dose.geplandOp, dose]))
+        const Doses = buildDoseSchedule(record.DatumToediening, times, changedProfile.duurDagen).map((dose) => ({
+          ...dose,
+          ...(existingByTime.get(dose.geplandOp) || {}),
+        }))
+        return {
+          ...record,
+          Medicijnnaam: changedProfile.medicijnnaam,
+          Dosering: `${changedProfile.doseringWaarde} ${changedProfile.doseringEenheid}`.trim(),
+          DoseringWaarde: changedProfile.doseringWaarde,
+          DoseringEenheid: changedProfile.doseringEenheid,
+          Toedieningswijze: changedProfile.toedieningswijze,
+          FrequentiePerDag: changedProfile.frequentiePerDag,
+          DuurDagen: changedProfile.duurDagen,
+          ProfielSnapshot: { ...changedProfile },
+          Doses,
+        }
+      })
+    }
+    await persistMedicaties(nextRecords, reminderDagenVooraf, nextProfiles, nextDosageUnits)
+    setMedications(nextRecords)
+    setMedicationProfiles(nextProfiles)
+    setDosageUnits(nextDosageUnits)
   }
 
   async function handleSaveReminderDays(days) {
@@ -1398,7 +1467,9 @@ function AppContent() {
           onOpenMedication={(birdKey) => setMedicationDialogBirdKey(birdKey)}
           medicationRecords={medications}
           birds={birds}
-          isReadOnly={isReadOnly}
+          isAdmin={isAdmin}
+          medicationProfiles={medicationProfiles}
+          onSetMedicationDoseStatus={handleSetMedicationDoseStatus}
           selectedTreatmentBirdKeys={selectedTreatmentBirdKeys}
           onSelectedTreatmentBirdKeysChange={setSelectedTreatmentBirdKeys}
           onOpenBulkMedication={() => setShowBulkMedicationDialog(true)}
@@ -1423,11 +1494,13 @@ function AppContent() {
           birdName={vogelNaam(birds[medicationDialogBirdKey])}
           records={medications}
           medicijnOptions={optionSets?.medicijnen || []}
-          isReadOnly={isReadOnly}
+          profiles={medicationProfiles}
+          isAdmin={isAdmin}
           onClose={() => setMedicationDialogBirdKey(null)}
           onSaveRecord={handleSaveMedicationRecord}
           onDeleteRecord={handleDeleteMedicationRecord}
           onToggleAfgerond={handleToggleMedicationAfgerond}
+          onSetDoseStatus={handleSetMedicationDoseStatus}
           onStatus={setStatus}
         />
       )}
@@ -1437,6 +1510,8 @@ function AppContent() {
           birdKeys={selectedTreatmentBirdKeys}
           birds={birds}
           medicijnOptions={optionSets?.medicijnen || []}
+          profiles={medicationProfiles}
+          isAdmin={isAdmin}
           onClose={() => setShowBulkMedicationDialog(false)}
           onSaveRecords={async (records) => {
             await handleSaveMedicationRecords(records)
@@ -1565,11 +1640,14 @@ function AppContent() {
           birds={birds}
           medicationRecords={medications}
           reminderDagenVooraf={reminderDagenVooraf}
+          medicationProfiles={medicationProfiles}
+          dosageUnits={dosageUnits}
           onSaveMedicationRecord={handleSaveMedicationRecord}
           onSaveMedicationRecords={handleSaveMedicationRecords}
           onDeleteMedicationRecord={handleDeleteMedicationRecord}
           onToggleMedicationAfgerond={handleToggleMedicationAfgerond}
           onSaveReminderDays={handleSaveReminderDays}
+          onSaveMedicationConfiguration={handleSaveMedicationConfiguration}
         />
       )}
     </main>

@@ -1,6 +1,7 @@
 import BirdForm from './BirdForm'
 import BirdList from './BirdList'
 import BirdMedicationChecklist from '../medication/BirdMedicationChecklist'
+import MedicationDoseOverview from '../medication/MedicationDoseOverview'
 
 export default function BirdsTab({
   birdForm,
@@ -27,7 +28,9 @@ export default function BirdsTab({
   onOpenMedication,
   medicationRecords,
   birds,
-  isReadOnly,
+  isAdmin,
+  medicationProfiles,
+  onSetMedicationDoseStatus,
   selectedTreatmentBirdKeys,
   onSelectedTreatmentBirdKeysChange,
   onOpenBulkMedication,
@@ -66,7 +69,9 @@ export default function BirdsTab({
         onOpenMedication={onOpenMedication}
       />
 
-      {!isReadOnly && (
+      <MedicationDoseOverview records={medicationRecords} birds={birds} onSetDoseStatus={onSetMedicationDoseStatus} />
+
+      {(isAdmin || medicationProfiles.some((profile) => profile.actief && profile.isStandaard)) && (
         <article className="card adminCard">
           <h2>Medicatie voor selectie</h2>
           <p>Vink de vogels aan die je wil behandelen en voeg in één keer medicatie toe.</p>

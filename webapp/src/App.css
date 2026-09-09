@@ -1254,6 +1254,138 @@ tbody tr.selected {
   margin-bottom: 0.5rem;
 }
 
+.checklistActions {
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.checklistActions span {
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.medicationFieldLabel {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.medicationFieldLabel input,
+.medicationFieldLabel select,
+.unitManager + .rowActions input,
+.medicationDoseChecklist > input[type='search'] {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  padding: 0.52rem 0.6rem;
+  font: inherit;
+}
+
+.medicationProfileSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem;
+  padding: 0.65rem;
+  border-left: 4px solid var(--accent);
+  background: #f4faf9;
+}
+
+.medicationProfileSummary span {
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+}
+
+.medicationProfileRow {
+  grid-template-columns: 1fr auto auto;
+}
+
+.unitManager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+
+.unitManager > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.25rem 0.45rem;
+  background: #fff;
+}
+
+.unitManager button {
+  border: 0;
+  background: transparent;
+  color: var(--danger);
+  cursor: pointer;
+  font: inherit;
+}
+
+.doseToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.6rem 0;
+}
+
+.doseList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  max-height: 48vh;
+  overflow: auto;
+}
+
+.doseList li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.6rem;
+  background: #fff;
+}
+
+.doseList li.completed {
+  opacity: 0.68;
+}
+
+.doseList li > div {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.doseList li span {
+  overflow-wrap: anywhere;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 720px) {
+  .medicationProfileSummary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .doseList li {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .doseList li > button {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
 .reminderList {
   list-style: none;
   margin: 0.5rem 0;

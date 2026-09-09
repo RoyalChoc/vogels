@@ -11,8 +11,9 @@ Welkom bij de Vogels App! Dit is een applicatie voor het beheren van vogelgegeve
 3. [Het Tabblad Vogels](#het-tabblad-vogels)
 4. [Het Tabblad Koppels](#het-tabblad-koppels)
 5. [Het Tabblad Stamboom](#het-tabblad-stamboom)
-6. [Gegevensopslag](#gegevensopslag)
-7. [Tips & Trucs](#tips--trucs)
+6. [Medicatie](#medicatie)
+7. [Gegevensopslag](#gegevensopslag)
+8. [Tips & Trucs](#tips--trucs)
 
 ---
 
@@ -150,6 +151,27 @@ Het paneel **"Vogeloverzicht"** toont:
 
 ---
 
+## Medicatie
+
+### Behandelprofielen beheren
+
+Een beheerder maakt bij **Beheer > Behandelprofielen** per medicijn een vaste combinatie van dosering, eenheid, frequentie, duur en toedieningswijze. Markeer een profiel als standaard om het voor gebruikers beschikbaar te maken. Een gebruikt profiel kan worden gearchiveerd; bestaande behandelingen behouden hun opgeslagen gegevens.
+
+### Een behandeling toevoegen
+
+1. Open de medicatie van een vogel of selecteer meerdere vogels bij **Medicatie voor selectie**.
+2. Kies een medicijn met een actief standaardprofiel.
+3. Kies de startdatum en vul voor iedere dagelijkse dosis een tijdstip in.
+4. Sla de behandeling op. Dosering, frequentie, duur en toedieningswijze staan vast volgens het profiel.
+
+Bij de vogelselectie selecteert **Selecteer alles** alleen de vogels die binnen het huidige zoekresultaat zichtbaar zijn. Verkochte en overleden vogels worden uitgesloten.
+
+### Doses afvinken
+
+Het **Medicatieschema** toont de geplande doses over alle vogels. De medicatiedialoog van een vogel toont dezelfde planning voor die vogel. Alleen doses waarvan het geplande tijdstip bereikt is, kunnen worden afgevinkt. **Selecteer alles** selecteert hier alleen de zichtbare, vervallen doses. Een toegediende dosis kan opnieuw worden geopend. Een volledige behandeling wordt altijd handmatig afgerond.
+
+---
+
 ## Gegevensopslag
 
 ### Automatisch Opslaan
@@ -158,6 +180,7 @@ Alle gegevens worden automatisch opgeslagen in de volgende JSON-bestanden:
 
 - `vogels.json` - Alle vogelgegevens
 - `koppels.json` - Alle koppelgegevens
+- `medicaties.json` - Behandelprofielen, behandelingen en geplande doses
 - `mutaties.json`, `factor.json`, etc. - Referentiedata
 
 ### Handmatig Opslaan
@@ -169,6 +192,7 @@ Gegevens worden realtime opgeslagen. Je hoeft niet handmatig te bewaren.
 Voor veiligheid is het verstandig regelmatig een back-up te maken van:
 - `vogels.json`
 - `koppels.json`
+- `medicaties.json`
 
 Kopieër deze bestanden naar een backup-locatie.
 

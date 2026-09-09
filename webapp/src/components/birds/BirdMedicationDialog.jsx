@@ -1,10 +1,14 @@
 import { useMemo, useState } from 'react'
-import MedicationRecordFields from '../medication/MedicationRecordFields'
+import { createMedicationId, createProfileTreatment, todayDateInputValue, validateTreatmentInput } from '../../utils/medicationProfiles'
+import MedicationDoseChecklist from '../medication/MedicationDoseChecklist'
+import MedicationTreatmentFields from '../medication/MedicationTreatmentFields'
 
 const emptyRecord = {
   id: '',
   VogelKey: '',
-  DatumToediening: '',
+  DatumToediening: todayDateInputValue(),
+  ProfielId: '',
+  DagelijkseTijden: [],
   Medicijnnaam: '',
   Dosering: '',
   Toedieningswijze: '',
@@ -15,20 +19,18 @@ const emptyRecord = {
   Opmerking: '',
 }
 
-function createId() {
-  return typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `med-${Date.now()}-${Math.random().toString(16).slice(2)}`
-}
-
 export default function BirdMedicationDialog({
   birdKey,
   birdName,
   records,
   medicijnOptions,
-  isReadOnly,
+  profiles,
+  isAdmin,
   onClose,
   onSaveRecord,
   onDeleteRecord,
   onToggleAfgerond,
+  onSetDoseStatus,
   onStatus,
 }) {
   const [draft, setDraft] = useState({ ...emptyRecord, VogelKey: birdKey })
@@ -53,12 +55,22 @@ export default function BirdMedicationDialog({
   }
 
   async function handleSubmit() {
-    if (!draft.Medicijnnaam) {
+    const profile = profiles.find((item) => item.id === draft.ProfielId)
+    if (!editingId && draft.ProfielId) {
+      const validationError = validateTreatmentInput(profile, draft.DatumToediening, draft.DagelijkseTijden)
+      if (validationError) {
+        onStatus(validationError)
+        return
+      }
+    } else if (!draft.Medicijnnaam || (!isAdmin && !profile)) {
       onStatus('Kies een medicijn.')
       return
     }
 
-    const record = { ...draft, VogelKey: birdKey, id: draft.id || createId() }
+    const base = { ...draft, VogelKey: birdKey, id: draft.id || createMedicationId() }
+    const record = !editingId && profile
+      ? createProfileTreatment(profile, { ...base, dagelijkseTijden: draft.DagelijkseTijden }, () => createMedicationId('dose'))
+      : base
     try {
       await onSaveRecord(record)
       onStatus('Medicatie opgeslagen.')
@@ -118,11 +130,11 @@ export default function BirdMedicationDialog({
                 {record.DatumHercontrole && ` · Hercontrole: ${record.DatumHercontrole}`}
                 {record.Afgerond ? ' · Afgerond' : ''}
               </span>
-              {!isReadOnly && (
+              <button type="button" className="ghost" onClick={() => handleToggleAfgerond(record)}>
+                {record.Afgerond ? 'Heropen' : 'Afronden'}
+              </button>
+              {isAdmin && (
                 <>
-                  <button type="button" className="ghost" onClick={() => handleToggleAfgerond(record)}>
-                    {record.Afgerond ? 'Heropen' : 'Afronden'}
-                  </button>
                   <button type="button" className="ghost" onClick={() => startEdit(record)}>
                     Wijzig
                   </button>
@@ -135,22 +147,22 @@ export default function BirdMedicationDialog({
           ))}
         </div>
 
-        {!isReadOnly && (
-          <>
-            <MedicationRecordFields draft={draft} setDraft={setDraft} medicijnOptions={medicijnOptions} />
+        <MedicationDoseChecklist records={birdRecords} birds={{}} birdKey={birdKey} onSetDoseStatus={onSetDoseStatus} />
 
-            <div className="rowActions">
-              <button type="button" className="primary" onClick={handleSubmit}>
-                {editingId ? 'Wijzig medicatie' : 'Medicatie toevoegen'}
-              </button>
-              {editingId && (
-                <button type="button" className="ghost" onClick={resetForm}>
-                  Annuleer
-                </button>
-              )}
-            </div>
-          </>
-        )}
+        <MedicationTreatmentFields
+          draft={draft}
+          setDraft={setDraft}
+          profiles={profiles}
+          medicijnOptions={medicijnOptions}
+          isAdmin={isAdmin}
+        />
+
+        <div className="rowActions">
+          <button type="button" className="primary" onClick={handleSubmit}>
+            {editingId ? 'Wijzig medicatie' : 'Medicatie toevoegen'}
+          </button>
+          {editingId && <button type="button" className="ghost" onClick={resetForm}>Annuleer</button>}
+        </div>
       </section>
     </div>
   )

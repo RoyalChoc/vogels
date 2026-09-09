@@ -12,6 +12,7 @@ const CONTACTS_FILE = path.resolve(__dirname, '../contacts.json')
 const MEDICATIONS_FILE = path.resolve(__dirname, '../medicaties.json')
 const MEDIA_FILE = path.resolve(__dirname, '../media.json')
 const MEDIA_DIRECTORY = path.resolve(__dirname, '../uploads')
+const DEFAULT_DOSAGE_UNITS = ['mg', 'ml', 'druppel(s)', 'tablet(ten)', 'g', 'mg/kg']
 const MAX_CERTIFICATE_SIZE = 20 * 1024 * 1024
 const MAX_PHOTO_SIZE = 10 * 1024 * 1024
 const OPTION_FILES = {
@@ -79,7 +80,12 @@ function getRequestBuffer(req) {
 }
 
 function emptyMedicationsStore() {
-  return { records: [], instellingen: { reminderDagenVooraf: 7 } }
+  return {
+    records: [],
+    profielen: [],
+    doseringEenheden: DEFAULT_DOSAGE_UNITS,
+    instellingen: { reminderDagenVooraf: 7 },
+  }
 }
 
 async function readMedicationsStore() {
@@ -87,6 +93,8 @@ async function readMedicationsStore() {
   const reminderDagenVooraf = Number(store?.instellingen?.reminderDagenVooraf)
   return {
     records: Array.isArray(store?.records) ? store.records : [],
+    profielen: Array.isArray(store?.profielen) ? store.profielen : [],
+    doseringEenheden: Array.isArray(store?.doseringEenheden) ? store.doseringEenheden : DEFAULT_DOSAGE_UNITS,
     instellingen: {
       reminderDagenVooraf: Number.isFinite(reminderDagenVooraf) && reminderDagenVooraf >= 0 ? reminderDagenVooraf : 7,
     },
@@ -190,6 +198,104 @@ async function requireAdmin(req, res) {
     return null
   }
   return user
+}
+
+async function requireUser(req, res) {
+  const user = await getSessionUser(req)
+  if (!user) {
+    sendJson(res, 401, { ok: false, error: 'Niet aangemeld.' })
+    return null
+  }
+  return user
+}
+
+function localDateParts(dateValue) {
+  const [year, month, day] = String(dateValue || '').split('-').map(Number)
+  return year && month && day ? { year, month, day } : null
+}
+
+function expectedDoseTimes(startDate, times, durationDays) {
+  const dateParts = localDateParts(startDate)
+  if (!dateParts) return []
+  const result = []
+  for (let offset = 0; offset < durationDays; offset += 1) {
+    const date = new Date(dateParts.year, dateParts.month - 1, dateParts.day + offset)
+    const dateText = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+    times.forEach((time) => result.push(`${dateText}T${time}`))
+  }
+  return result
+}
+
+function sanitizeNewUserMedication(record, profiles) {
+  const profile = profiles.find((item) => item.id === record?.ProfielId && item.actief && item.isStandaard)
+  const frequency = Number(profile?.frequentiePerDag)
+  const duration = Number(profile?.duurDagen)
+  const times = Array.isArray(record?.DagelijkseTijden) ? [...record.DagelijkseTijden].sort() : []
+  if (!profile || !Number.isInteger(frequency) || frequency < 1 || !Number.isInteger(duration) || duration < 1) return null
+  if (times.length !== frequency || new Set(times).size !== frequency || times.some((time) => !/^\d{2}:\d{2}$/.test(time))) return null
+
+  const plannedTimes = expectedDoseTimes(record.DatumToediening, times, duration)
+  if (plannedTimes.length !== frequency * duration) return null
+  const incomingDoses = Array.isArray(record.Doses) ? record.Doses : []
+
+  return {
+    id: String(record.id || crypto.randomUUID()),
+    VogelKey: String(record.VogelKey || ''),
+    DatumToediening: String(record.DatumToediening || ''),
+    Medicijnnaam: profile.medicijnnaam,
+    Dosering: `${profile.doseringWaarde} ${profile.doseringEenheid}`.trim(),
+    DoseringWaarde: profile.doseringWaarde,
+    DoseringEenheid: profile.doseringEenheid,
+    Toedieningswijze: profile.toedieningswijze,
+    FrequentiePerDag: frequency,
+    DuurDagen: duration,
+    DagelijkseTijden: times,
+    ProfielId: profile.id,
+    ProfielSnapshot: { ...profile },
+    RedenDiagnose: String(record.RedenDiagnose || ''),
+    Dierenarts: String(record.Dierenarts || ''),
+    DatumHercontrole: String(record.DatumHercontrole || ''),
+    Afgerond: false,
+    Opmerking: String(record.Opmerking || ''),
+    Doses: plannedTimes.map((geplandOp, index) => ({
+      id: String(incomingDoses[index]?.id || crypto.randomUUID()),
+      geplandOp,
+      toegediend: false,
+      toegediendOp: '',
+    })),
+  }
+}
+
+function mergeUserMedicationRecords(currentRecords, incomingRecords, profiles) {
+  const incomingById = new Map(incomingRecords.map((record) => [record.id, record]))
+  const currentIds = new Set(currentRecords.map((record) => record.id))
+  const merged = currentRecords.map((record) => {
+    const incoming = incomingById.get(record.id)
+    if (!incoming) return record
+    const incomingDoses = new Map((incoming.Doses || []).map((dose) => [dose.id, dose]))
+    return {
+      ...record,
+      Afgerond: Boolean(incoming.Afgerond),
+      Doses: (record.Doses || []).map((dose) => {
+        const changed = incomingDoses.get(dose.id)
+        const plannedAt = new Date(dose.geplandOp)
+        const canAdminister = !Number.isNaN(plannedAt.getTime()) && plannedAt.getTime() <= Date.now()
+        if (!changed || (changed.toegediend && !canAdminister)) return dose
+        return {
+          ...dose,
+          toegediend: Boolean(changed.toegediend),
+          toegediendOp: changed.toegediend ? String(changed.toegediendOp || '') : '',
+        }
+      }),
+    }
+  })
+
+  incomingRecords.forEach((record) => {
+    if (currentIds.has(record.id)) return
+    const sanitized = sanitizeNewUserMedication(record, profiles)
+    if (sanitized?.VogelKey) merged.push(sanitized)
+  })
+  return merged
 }
 
 async function readOptionsFiles() {
@@ -332,20 +438,34 @@ function stateApiPlugin() {
         }
 
         if (req.method === 'POST') {
-          const user = await requireAdmin(req, res)
+          const user = await requireUser(req, res)
           if (!user) return
 
           try {
             const bodyText = await getRequestBody(req)
             const parsed = JSON.parse(bodyText || '{}')
-            const records = Array.isArray(parsed?.medicaties?.records) ? parsed.medicaties.records : []
-            const reminderDagenVooraf = Number(parsed?.medicaties?.instellingen?.reminderDagenVooraf)
-            await writeJsonFile(MEDICATIONS_FILE, {
-              records,
-              instellingen: {
-                reminderDagenVooraf: Number.isFinite(reminderDagenVooraf) && reminderDagenVooraf >= 0 ? reminderDagenVooraf : 7,
-              },
-            })
+            const current = await readMedicationsStore()
+            const incoming = parsed?.medicaties && typeof parsed.medicaties === 'object' ? parsed.medicaties : {}
+            const incomingRecords = Array.isArray(incoming.records) ? incoming.records : []
+
+            if (user.rol === 'admin') {
+              const reminderDagenVooraf = Number(incoming?.instellingen?.reminderDagenVooraf)
+              await writeJsonFile(MEDICATIONS_FILE, {
+                records: incomingRecords,
+                profielen: Array.isArray(incoming.profielen) ? incoming.profielen : current.profielen,
+                doseringEenheden: Array.isArray(incoming.doseringEenheden)
+                  ? dedupeAndSortOptionValues(incoming.doseringEenheden.map((value) => String(value || '').trim()).filter(Boolean))
+                  : current.doseringEenheden,
+                instellingen: {
+                  reminderDagenVooraf: Number.isFinite(reminderDagenVooraf) && reminderDagenVooraf >= 0 ? reminderDagenVooraf : 7,
+                },
+              })
+            } else {
+              await writeJsonFile(MEDICATIONS_FILE, {
+                ...current,
+                records: mergeUserMedicationRecords(current.records, incomingRecords, current.profielen),
+              })
+            }
 
             sendJson(res, 200, { ok: true })
           } catch {

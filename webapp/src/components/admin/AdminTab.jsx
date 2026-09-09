@@ -3,6 +3,7 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import ContactDataPanel from './ContactDataPanel'
 import MedicatiePanel from './MedicatiePanel'
+import MedicationProfilesPanel from './MedicationProfilesPanel'
 import UserRolesPanel from './UserRolesPanel'
 
 function cloneOptionsMap(optionsMap) {
@@ -209,11 +210,14 @@ export default function AdminTab({
   birds,
   medicationRecords,
   reminderDagenVooraf,
+  medicationProfiles,
+  dosageUnits,
   onSaveMedicationRecord,
   onSaveMedicationRecords,
   onDeleteMedicationRecord,
   onToggleMedicationAfgerond,
   onSaveReminderDays,
+  onSaveMedicationConfiguration,
 }) {
   const [activeKey, setActiveKey] = useState(optionDefinitions[0]?.key || '')
   const [draftOptions, setDraftOptions] = useState(() => cloneOptionsMap(optionsMap))
@@ -518,10 +522,19 @@ export default function AdminTab({
         onSaveContacts={onSaveContacts}
         onStatus={onStatus}
       />
+      <MedicationProfilesPanel
+        medicines={optionsMap?.medicijnen || []}
+        profiles={medicationProfiles}
+        dosageUnits={dosageUnits}
+        records={medicationRecords}
+        onSave={onSaveMedicationConfiguration}
+        onStatus={onStatus}
+      />
       <MedicatiePanel
         records={medicationRecords}
         reminderDagenVooraf={reminderDagenVooraf}
         medicijnOptions={optionsMap?.medicijnen || []}
+        profiles={medicationProfiles}
         birds={birds}
         onSaveRecord={onSaveMedicationRecord}
         onSaveRecords={onSaveMedicationRecords}

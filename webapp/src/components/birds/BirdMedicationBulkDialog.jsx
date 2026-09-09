@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import { medicatieVogelLabel } from '../../utils/birdUtils'
-import MedicationRecordFields from '../medication/MedicationRecordFields'
+import { createMedicationId, createProfileTreatment, todayDateInputValue, validateTreatmentInput } from '../../utils/medicationProfiles'
+import MedicationTreatmentFields from '../medication/MedicationTreatmentFields'
 
 const emptyDraft = {
+  ProfielId: '',
   Medicijnnaam: '',
-  DatumToediening: '',
+  DatumToediening: todayDateInputValue(),
+  DagelijkseTijden: [],
   Dosering: '',
   Toedieningswijze: '',
   RedenDiagnose: '',
@@ -14,27 +17,31 @@ const emptyDraft = {
   Opmerking: '',
 }
 
-function createId() {
-  return typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `med-${Date.now()}-${Math.random().toString(16).slice(2)}`
-}
-
-export default function BirdMedicationBulkDialog({ birdKeys, birds, medicijnOptions, onClose, onSaveRecords, onStatus }) {
+export default function BirdMedicationBulkDialog({ birdKeys, birds, medicijnOptions, profiles, isAdmin, onClose, onSaveRecords, onStatus }) {
   const [draft, setDraft] = useState(emptyDraft)
   const [saving, setSaving] = useState(false)
 
   async function handleSubmit() {
-    if (!draft.Medicijnnaam) {
+    const profile = profiles.find((item) => item.id === draft.ProfielId)
+    if (draft.ProfielId) {
+      const validationError = validateTreatmentInput(profile, draft.DatumToediening, draft.DagelijkseTijden)
+      if (validationError) {
+        onStatus(validationError)
+        return
+      }
+    } else if (!isAdmin || !draft.Medicijnnaam) {
       onStatus('Kies een medicijn.')
       return
     }
 
     setSaving(true)
     try {
-      const records = birdKeys.map((vogelKey) => ({
-        ...draft,
-        id: createId(),
-        VogelKey: vogelKey,
-      }))
+      const records = birdKeys.map((vogelKey) => {
+        const base = { ...draft, id: createMedicationId(), VogelKey: vogelKey }
+        return profile
+          ? createProfileTreatment(profile, { ...base, dagelijkseTijden: draft.DagelijkseTijden }, () => createMedicationId('dose'))
+          : base
+      })
       await onSaveRecords(records)
       onStatus(`Medicatie opgeslagen voor ${records.length} vogel(s).`)
       onClose()
@@ -70,7 +77,13 @@ export default function BirdMedicationBulkDialog({ birdKeys, birds, medicijnOpti
           ))}
         </ul>
 
-        <MedicationRecordFields draft={draft} setDraft={setDraft} medicijnOptions={medicijnOptions} />
+        <MedicationTreatmentFields
+          draft={draft}
+          setDraft={setDraft}
+          profiles={profiles}
+          medicijnOptions={medicijnOptions}
+          isAdmin={isAdmin}
+        />
 
         <div className="rowActions">
           <button type="button" className="primary" onClick={handleSubmit} disabled={saving}>

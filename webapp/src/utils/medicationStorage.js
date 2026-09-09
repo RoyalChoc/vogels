@@ -6,6 +6,8 @@ function safeMedicaties(value, fallback) {
   if (!value || typeof value !== 'object') return fallback
   return {
     records: Array.isArray(value.records) ? value.records : fallback.records,
+    profielen: Array.isArray(value.profielen) ? value.profielen : fallback.profielen,
+    doseringEenheden: Array.isArray(value.doseringEenheden) ? value.doseringEenheden : fallback.doseringEenheden,
     instellingen: {
       reminderDagenVooraf: Number.isFinite(Number(value.instellingen?.reminderDagenVooraf))
         ? Number(value.instellingen.reminderDagenVooraf)

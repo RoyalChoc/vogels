@@ -60,6 +60,17 @@ export default function BirdMedicationChecklist({ birds, selectedKeys, onSelecti
     onSelectionChange([...selectedKeys, key])
   }
 
+  const visibleKeys = entries.map((entry) => entry.key)
+  const allVisibleSelected = visibleKeys.length > 0 && visibleKeys.every((key) => selectedSet.has(key))
+
+  function toggleAllVisible() {
+    if (allVisibleSelected) {
+      onSelectionChange(selectedKeys.filter((key) => !visibleKeys.includes(key)))
+      return
+    }
+    onSelectionChange(Array.from(new Set([...selectedKeys, ...visibleKeys])))
+  }
+
   return (
     <div className="birdMedicationChecklist">
       <input
@@ -68,6 +79,13 @@ export default function BirdMedicationChecklist({ birds, selectedKeys, onSelecti
         value={search}
         onChange={(event) => setSearch(event.target.value)}
       />
+
+      <div className="rowActions checklistActions">
+        <button type="button" className="ghost" onClick={toggleAllVisible} disabled={entries.length === 0}>
+          {allVisibleSelected ? 'Deselecteer alles' : 'Selecteer alles'}
+        </button>
+        <span>{selectedKeys.length} geselecteerd</span>
+      </div>
 
       {entries.length === 0 ? (
         <p className="adminEmpty">Geen vogels gevonden.</p>

@@ -365,6 +365,22 @@
       "VogelKey": "WK-54"
     }
   ],
+  "profielen": [
+    {
+      "id": "ccddebf1-2d38-4e9a-a973-ff2392893b81",
+      "medicijnnaam": "Soludox",
+      "doseringWaarde": "0,07",
+      "doseringEenheid": "ML/50ML",
+      "frequentiePerDag": 1,
+      "duurDagen": 10,
+      "toedieningswijze": "Via drinkwater",
+      "isStandaard": true,
+      "actief": true
+    }
+  ],
+  "doseringEenheden": [
+    "ML/50ML"
+  ],
   "instellingen": {
     "reminderDagenVooraf": 1
   }

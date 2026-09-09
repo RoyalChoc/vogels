@@ -1,13 +1,16 @@
 import { useMemo, useState } from 'react'
 import { vogelNaam } from '../../utils/birdUtils'
 import { exportMedicatiesExcel, exportMedicatiesPdf } from '../../utils/medicationExport'
+import { createMedicationId, createProfileTreatment, todayDateInputValue, validateTreatmentInput } from '../../utils/medicationProfiles'
 import BirdMedicationChecklist from '../medication/BirdMedicationChecklist'
-import MedicationRecordFields from '../medication/MedicationRecordFields'
+import MedicationTreatmentFields from '../medication/MedicationTreatmentFields'
 
 const emptyRecord = {
   id: '',
   VogelKey: '',
-  DatumToediening: '',
+  DatumToediening: todayDateInputValue(),
+  ProfielId: '',
+  DagelijkseTijden: [],
   Medicijnnaam: '',
   Dosering: '',
   Toedieningswijze: '',
@@ -18,14 +21,11 @@ const emptyRecord = {
   Opmerking: '',
 }
 
-function createId() {
-  return typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `med-${Date.now()}-${Math.random().toString(16).slice(2)}`
-}
-
 export default function MedicatiePanel({
   records,
   reminderDagenVooraf,
   medicijnOptions,
+  profiles,
   birds,
   onSaveRecord,
   onSaveRecords,
@@ -66,7 +66,14 @@ export default function MedicatiePanel({
   }
 
   async function handleSubmit() {
-    if (!draft.Medicijnnaam) {
+    const profile = profiles.find((item) => item.id === draft.ProfielId)
+    if (!editingId && draft.ProfielId) {
+      const validationError = validateTreatmentInput(profile, draft.DatumToediening, draft.DagelijkseTijden)
+      if (validationError) {
+        onStatus(validationError)
+        return
+      }
+    } else if (!draft.Medicijnnaam) {
       onStatus('Kies een medicijn. Beheer de lijst hierboven bij "Medicijnen".')
       return
     }
@@ -82,11 +89,12 @@ export default function MedicatiePanel({
         }
 
         const { id: _unusedId, VogelKey: _unusedVogelKey, ...sharedFields } = draft
-        const newRecords = selectedVogelKeys.map((vogelKey) => ({
-          ...sharedFields,
-          id: createId(),
-          VogelKey: vogelKey,
-        }))
+        const newRecords = selectedVogelKeys.map((vogelKey) => {
+          const base = { ...sharedFields, id: createMedicationId(), VogelKey: vogelKey }
+          return profile
+            ? createProfileTreatment(profile, { ...base, dagelijkseTijden: draft.DagelijkseTijden }, () => createMedicationId('dose'))
+            : base
+        })
         await onSaveRecords(newRecords)
         onStatus(`Medicatie opgeslagen voor ${newRecords.length} vogel(s).`)
       }
@@ -157,7 +165,13 @@ export default function MedicatiePanel({
         </>
       )}
 
-      <MedicationRecordFields draft={draft} setDraft={setDraft} medicijnOptions={medicijnOptions} />
+      <MedicationTreatmentFields
+        draft={draft}
+        setDraft={setDraft}
+        profiles={profiles}
+        medicijnOptions={medicijnOptions}
+        isAdmin
+      />
 
       <div className="rowActions">
         <button type="button" className="primary" onClick={handleSubmit}>
