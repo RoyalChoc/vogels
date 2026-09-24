@@ -11,6 +11,16 @@ services:
       - "5433:5432"
     volumes:
       - vogels_postgres_data:/var/lib/postgresql/data
+  webinterface:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_web
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kristofae@hotmail.com
+      PGADMIN_DEFAULT_PASSWORD: vogels
+    ports:
+      - "7001:80"
+    depends_on:
+      - postgres
   vogels:
     build:
       context: .
