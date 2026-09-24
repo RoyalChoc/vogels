@@ -16,6 +16,7 @@ export default function CouplesTab({
   setNewChild,
   onFormSave,
   onFormNew,
+  onFormAdd,
   onFormPrint,
   onFormExportPdf,
   onFormDelete,
@@ -46,8 +47,10 @@ export default function CouplesTab({
         femaleNames={femaleNames}
         optionSets={optionSets}
         selectedCouple={selectedCouple}
+        birds={birds}
         onSave={onFormSave}
         onNew={onFormNew}
+        onAdd={onFormAdd}
         onPrint={onFormPrint}
         onExportPdf={onFormExportPdf}
         onDelete={onFormDelete}

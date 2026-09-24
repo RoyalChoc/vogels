@@ -15,6 +15,30 @@ export function findBirdByName(birds, name) {
   return Object.values(birds).find((v) => vogelNaam(v) === name) || null
 }
 
+// Vogelsoort-opties worden opgeslagen als één string "Naam — Wetenschappelijke naam" zodat beide altijd gekoppeld blijven.
+export const VOGELSOORT_SEPARATOR = ' — '
+
+export function parseVogelsoortOption(optionValue) {
+  const raw = String(optionValue || '')
+  const separatorIndex = raw.indexOf(VOGELSOORT_SEPARATOR)
+  if (separatorIndex === -1) {
+    return { naam: raw.trim(), wetenschappelijkeNaam: '' }
+  }
+
+  return {
+    naam: raw.slice(0, separatorIndex).trim(),
+    wetenschappelijkeNaam: raw.slice(separatorIndex + VOGELSOORT_SEPARATOR.length).trim(),
+  }
+}
+
+export function formatVogelsoortOption(naam, wetenschappelijkeNaam) {
+  const cleanNaam = String(naam || '').trim()
+  const cleanWetenschappelijkeNaam = String(wetenschappelijkeNaam || '').trim()
+  if (!cleanNaam && !cleanWetenschappelijkeNaam) return ''
+  if (!cleanWetenschappelijkeNaam) return cleanNaam
+  return `${cleanNaam}${VOGELSOORT_SEPARATOR}${cleanWetenschappelijkeNaam}`
+}
+
 export function buildAncestorsTree(birds, bird, maxGen = 4, gen = 1, seen = new Set()) {
   if (!bird) return { label: 'Onbekend', meta: `Generatie ${gen}`, children: [] }
 

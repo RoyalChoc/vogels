@@ -34,9 +34,13 @@ export default function TreeViewer({
         <div className="listHeadActions">
           <select value={selectedBirdKey} onChange={(e) => onSelectBird(e.target.value)}>
             <option value="">Selecteer startvogel</option>
-            {birdEntries.map(([key, bird]) => (
+            {[...birdEntries].sort(([, a], [, b]) => {
+              const labelA = (a.Mutatie ? `${a.Mutatie} - ${vogelNaam(a)}` : vogelNaam(a)).toLowerCase()
+              const labelB = (b.Mutatie ? `${b.Mutatie} - ${vogelNaam(b)}` : vogelNaam(b)).toLowerCase()
+              return labelA.localeCompare(labelB, undefined, { numeric: true, sensitivity: 'base' })
+            }).map(([key, bird]) => (
               <option key={key} value={key}>
-                {vogelNaam(bird)}
+                {bird.Mutatie ? `${bird.Mutatie} - ${vogelNaam(bird)}` : vogelNaam(bird)}
               </option>
             ))}
           </select>

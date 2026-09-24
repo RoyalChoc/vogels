@@ -1,4 +1,5 @@
 import { PrintIcon, PdfIcon } from '../icons'
+import { findBirdByName } from '../../utils/birdUtils'
 
 function calculateUitkomdatum(legdatum) {
   if (!legdatum) return ''
@@ -28,10 +29,12 @@ export default function CoupleForm({
   setCoupleForm,
   maleNames,
   femaleNames,
+  birds,
   optionSets,
   selectedCouple,
   onSave,
   onNew,
+  onAdd,
   onPrint,
   onExportPdf,
   onDelete,
@@ -165,11 +168,18 @@ export default function CoupleForm({
           onChange={(e) => setCoupleForm({ ...coupleForm, man: e.target.value })}
         >
           <option value="">{!isEditing && !yearSelected ? 'Kies eerst kweekjaar' : 'Man'}</option>
-          {maleNames.map((v) => (
-            <option key={v} value={v}>
-              {v}
-            </option>
-          ))}
+          {[...maleNames].sort((a, b) => {
+            const labelA = (findBirdByName(birds || {}, a)?.Mutatie ? `${findBirdByName(birds || {}, a).Mutatie} - ${a}` : a).toLowerCase()
+            const labelB = (findBirdByName(birds || {}, b)?.Mutatie ? `${findBirdByName(birds || {}, b).Mutatie} - ${b}` : b).toLowerCase()
+            return labelA.localeCompare(labelB, undefined, { numeric: true, sensitivity: 'base' })
+          }).map((v) => {
+            const mutatie = findBirdByName(birds || {}, v)?.Mutatie
+            return (
+              <option key={v} value={v}>
+                {mutatie ? `${mutatie} - ${v}` : v}
+              </option>
+            )
+          })}
         </select>
 
         <select
@@ -178,11 +188,18 @@ export default function CoupleForm({
           onChange={(e) => setCoupleForm({ ...coupleForm, pop: e.target.value })}
         >
           <option value="">{!isEditing && !yearSelected ? 'Kies eerst kweekjaar' : 'Pop'}</option>
-          {femaleNames.map((v) => (
-            <option key={v} value={v}>
-              {v}
-            </option>
-          ))}
+          {[...femaleNames].sort((a, b) => {
+            const labelA = (findBirdByName(birds || {}, a)?.Mutatie ? `${findBirdByName(birds || {}, a).Mutatie} - ${a}` : a).toLowerCase()
+            const labelB = (findBirdByName(birds || {}, b)?.Mutatie ? `${findBirdByName(birds || {}, b).Mutatie} - ${b}` : b).toLowerCase()
+            return labelA.localeCompare(labelB, undefined, { numeric: true, sensitivity: 'base' })
+          }).map((v) => {
+            const mutatie = findBirdByName(birds || {}, v)?.Mutatie
+            return (
+              <option key={v} value={v}>
+                {mutatie ? `${mutatie} - ${v}` : v}
+              </option>
+            )
+          })}
         </select>
 
         <select
@@ -213,6 +230,9 @@ export default function CoupleForm({
       <div className="rowActions singleLineActions">
         <button type="button" className="primary" onClick={onSave}>
           {isEditingCurrent ? 'Wijzig koppel' : 'Nieuw koppel'}
+        </button>
+        <button type="button" className="primary" onClick={onAdd}>
+          Koppel toevoegen
         </button>
         <button type="button" onClick={onNew}>
           Extra koppel toevoegen

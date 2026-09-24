@@ -34,8 +34,7 @@ export default function Header({
   return (
     <header className="heroBar">
       <div>
-        <p className="eyebrow">Splendid Parkieten</p>
-        <h1>Voliere bestand</h1>
+        <h1>Vogelbestand</h1>
         <p className="subline">App voor vogels</p>
 
         <section className="yearOverview">

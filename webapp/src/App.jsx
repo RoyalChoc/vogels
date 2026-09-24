@@ -20,6 +20,8 @@ import { mutatieOptions } from './data/mutatieOptions'
 import { ringmaatOptions } from './data/ringmaatOptions'
 import { splitOptions } from './data/splitOptions'
 import { statusOptions } from './data/statusOptions'
+import { vogelsoortOptions } from './data/vogelsoortOptions'
+import { monstertypeOptions } from './data/monstertypeOptions'
 import { 
   vogelNaam, 
   vogelKey, 
@@ -35,6 +37,7 @@ import {
   printBreedingCards,
   printFullTree,
   exportFullTreePdf,
+  printGeslachtsbepalingCards,
 } from './utils/print'
 import Header from './components/Header'
 import StatusBar from './components/StatusBar'
@@ -45,6 +48,7 @@ import TreeTab from './components/tree/TreeTab'
 import AdminTab from './components/admin/AdminTab'
 import ContactsTab from './components/contacts/ContactsTab'
 import SplendidCalculatorTab from './components/splendid/SplendidCalculatorTab'
+import GeslachtsbepalingTab from './components/geslachtsbepaling/GeslachtsbepalingTab'
 
 const emptyBird = {
   Stamnummer: '',
@@ -66,6 +70,10 @@ const emptyBird = {
   Vader: '',
   Moeder: '',
   Opmerking: '',
+  Vogelsoort: '',
+  WetenschappelijkeNaam: '',
+  Monstertype: '',
+  EigenaarContactId: '',
 }
 
 const emptyCouple = {
@@ -110,6 +118,12 @@ const OPTION_DEFINITIONS = [
   { key: 'split', label: 'Split', fileName: 'split.json' },
   { key: 'status', label: 'Status', fileName: 'status.json' },
   { key: 'contactvelden', label: 'Contactvelden', fileName: 'contactvelden.json' },
+  {
+    key: 'vogelsoorten',
+    label: 'Vogelsoorten (formaat: Naam — Wetenschappelijke naam)',
+    fileName: 'vogelsoorten.json',
+  },
+  { key: 'monstertypes', label: 'Monstertypes', fileName: 'monstertypes.json' },
 ]
 const DEFAULT_OPTION_SETS = {
   factor: factorOptions,
@@ -123,6 +137,8 @@ const DEFAULT_OPTION_SETS = {
   ringmaten: ringmaatOptions,
   split: splitOptions,
   status: statusOptions,
+  vogelsoorten: vogelsoortOptions,
+  monstertypes: monstertypeOptions,
 }
 
 function normalizeStatus(status) {
@@ -141,6 +157,10 @@ function normalizeBirdSplits(bird) {
     Split4: bird?.Split4 ?? '',
     AankoopContactId: bird?.AankoopContactId ?? '',
     Opmerking: bird?.Opmerking ?? '',
+    Vogelsoort: bird?.Vogelsoort ?? '',
+    WetenschappelijkeNaam: bird?.WetenschappelijkeNaam ?? '',
+    Monstertype: bird?.Monstertype ?? '',
+    EigenaarContactId: bird?.EigenaarContactId ?? '',
   }
 }
 
@@ -218,6 +238,7 @@ function App() {
   const [contactForm, setContactForm] = useState(emptyContact)
   const [newChild, setNewChild] = useState('')
   const [selectedBreedingCouples, setSelectedBreedingCouples] = useState([])
+  const [selectedSexDeterminationKeys, setSelectedSexDeterminationKeys] = useState([])
 
   const [status, setStatus] = useState('Klaar voor beheer.')
   const [isAdminUnlocked, setIsAdminUnlocked] = useState(false)
@@ -252,6 +273,10 @@ function App() {
   useEffect(() => {
     setSelectedBreedingCouples((current) => current.filter((name) => Boolean(couples[name])))
   }, [couples])
+
+  useEffect(() => {
+    setSelectedSexDeterminationKeys((current) => current.filter((key) => Boolean(birds[key])))
+  }, [birds])
 
   function persist(nextBirds, nextCouples) {
     setBirds(nextBirds)
@@ -292,6 +317,14 @@ function App() {
 
   const femaleNames = useMemo(
     () => birdEntries.map(([, b]) => b).filter((b) => b.Geslacht === 'Pop').map((b) => vogelNaam(b)),
+    [birdEntries],
+  )
+
+  const unsexedBirdEntries = useMemo(
+    () =>
+      birdEntries.filter(
+        ([, bird]) => !String(bird.Geslacht || '').trim() && !EXCLUDED_BIRD_STATUSES.has(normalizeStatus(bird.Status)),
+      ),
     [birdEntries],
   )
 
@@ -610,6 +643,77 @@ function App() {
     persist(birds, nextCouples)
     setSelectedCouple(name)
     setStatus(isEditingCurrent ? `Koppel gewijzigd: ${name}` : `Nieuw koppel toegevoegd: ${name}`)
+  }
+
+  function addCouple() {
+    const name = coupleForm.name.trim()
+
+    if (!name || !coupleForm.man || !coupleForm.pop || !coupleForm.kooi || !coupleForm.kweekjaar) {
+      setStatus('Vul alle koppelvelden in.')
+      return
+    }
+
+    if (coupleForm.man === coupleForm.pop) {
+      setStatus('Man en pop moeten verschillend zijn.')
+      return
+    }
+
+    if (findBirdByName(birds, coupleForm.man)?.Geslacht !== 'Man') {
+      setStatus('Gekozen man is ongeldig.')
+      return
+    }
+
+    if (findBirdByName(birds, coupleForm.pop)?.Geslacht !== 'Pop') {
+      setStatus('Gekozen pop is ongeldig.')
+      return
+    }
+
+    if (couples[name]) {
+      setStatus('Koppelnaam bestaat al.')
+      return
+    }
+
+    const dup = Object.values(couples).some(
+      (c) => c.man === coupleForm.man && c.pop === coupleForm.pop && String(c.kweekjaar || '').trim() === coupleForm.kweekjaar,
+    )
+    if (dup) {
+      setStatus('Dit koppel bestaat al.')
+      return
+    }
+
+    const usedManInYear = Object.values(couples).some(
+      (c) => String(c.kweekjaar || '').trim() === coupleForm.kweekjaar && c.man === coupleForm.man,
+    )
+    if (usedManInYear) {
+      setStatus('Deze man is al gekozen in dit kweekjaar.')
+      return
+    }
+
+    const usedPopInYear = Object.values(couples).some(
+      (c) => String(c.kweekjaar || '').trim() === coupleForm.kweekjaar && c.pop === coupleForm.pop,
+    )
+    if (usedPopInYear) {
+      setStatus('Deze pop is al gekozen in dit kweekjaar.')
+      return
+    }
+
+    const nextCouples = {
+      ...couples,
+      [name]: {
+        man: coupleForm.man,
+        pop: coupleForm.pop,
+        kooi: coupleForm.kooi,
+        kweekjaar: coupleForm.kweekjaar,
+        jongen: [],
+        rondes: Array.isArray(coupleForm.rondes) ? coupleForm.rondes : [],
+        aantalJongUit: coupleForm.aantalJongUit || '',
+        opmerkingKweek: coupleForm.opmerkingKweek || '',
+      },
+    }
+
+    persist(birds, nextCouples)
+    setSelectedCouple(name)
+    setStatus(`Nieuw koppel toegevoegd: ${name}`)
   }
 
   function deleteCouple() {
@@ -931,6 +1035,15 @@ function App() {
     }
   }
 
+  function handlePrintSexDeterminationCards() {
+    try {
+      printGeslachtsbepalingCards(selectedSexDeterminationKeys, birds, contacts)
+      setStatus(`Geslachtsbepaling-kaartjes geopend: ${selectedSexDeterminationKeys.length} geselecteerde vogel(s).`)
+    } catch (error) {
+      setStatus(error.message)
+    }
+  }
+
   async function handleSaveOptions(nextOptions) {
     await saveOptions(nextOptions)
     setOptionSets(nextOptions)
@@ -1113,6 +1226,7 @@ function App() {
           setNewChild={setNewChild}
           onFormSave={saveCouple}
           onFormNew={createExtraCouple}
+          onFormAdd={addCouple}
           onFormPrint={handlePrintCouple}
           onFormExportPdf={handleExportCouplePdf}
           onFormDelete={deleteCouple}
@@ -1167,6 +1281,15 @@ function App() {
       )}
 
       {tab === 'splendid-calculator' && <SplendidCalculatorTab />}
+
+      {tab === 'geslachtsbepaling' && (
+        <GeslachtsbepalingTab
+          birdEntries={unsexedBirdEntries}
+          selectedKeys={selectedSexDeterminationKeys}
+          onSelectionChange={setSelectedSexDeterminationKeys}
+          onPrintCards={handlePrintSexDeterminationCards}
+        />
+      )}
 
       {tab === 'beheer' && (
         <AdminTab
