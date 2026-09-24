@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -71,155 +71,14 @@ async function writeOptionsFiles(optionsPayload) {
 
 function stateApiPlugin() {
   return {
-    name: 'state-api-plugin',
-    configureServer(server) {
-      server.middlewares.use('/api/state', async (req, res) => {
-        if (req.method === 'GET') {
-          const birds = await readJsonFile(BIRDS_FILE, {})
-          const couples = await readJsonFile(COUPLES_FILE, {})
-          res.setHeader('Content-Type', 'application/json; charset=utf-8')
-          res.end(JSON.stringify({ birds, couples }))
-          return
-        }
-
-        if (req.method === 'POST') {
-          let body = ''
-
-          req.on('data', (chunk) => {
-            body += chunk
-          })
-
-          req.on('end', async () => {
-            try {
-              const parsed = JSON.parse(body || '{}')
-              const birds = parsed?.birds && typeof parsed.birds === 'object' ? parsed.birds : {}
-              const couples = parsed?.couples && typeof parsed.couples === 'object' ? parsed.couples : {}
-
-              await writeJsonFile(BIRDS_FILE, birds)
-              await writeJsonFile(COUPLES_FILE, couples)
-
-              res.statusCode = 200
-              res.setHeader('Content-Type', 'application/json; charset=utf-8')
-              res.end(JSON.stringify({ ok: true }))
-            } catch {
-              res.statusCode = 400
-              res.setHeader('Content-Type', 'application/json; charset=utf-8')
-              res.end(JSON.stringify({ ok: false, error: 'Ongeldige JSON payload.' }))
-            }
-          })
-
-          req.on('error', () => {
-            res.statusCode = 500
-            res.setHeader('Content-Type', 'application/json; charset=utf-8')
-            res.end(JSON.stringify({ ok: false, error: 'Kon request body niet lezen.' }))
-          })
-
-          return
-        }
-
-        res.statusCode = 405
-        res.setHeader('Content-Type', 'application/json; charset=utf-8')
-        res.end(JSON.stringify({ ok: false, error: 'Method not allowed' }))
-      })
-
-      server.middlewares.use('/api/options', async (req, res) => {
-        if (req.method === 'GET') {
-          const options = await readOptionsFiles()
-          res.setHeader('Content-Type', 'application/json; charset=utf-8')
-          res.end(JSON.stringify({ options }))
-          return
-        }
-
-        if (req.method === 'POST') {
-          let body = ''
-
-          req.on('data', (chunk) => {
-            body += chunk
-          })
-
-          req.on('end', async () => {
-            try {
-              const parsed = JSON.parse(body || '{}')
-              await writeOptionsFiles(parsed?.options)
-
-              res.statusCode = 200
-              res.setHeader('Content-Type', 'application/json; charset=utf-8')
-              res.end(JSON.stringify({ ok: true }))
-            } catch {
-              res.statusCode = 400
-              res.setHeader('Content-Type', 'application/json; charset=utf-8')
-              res.end(JSON.stringify({ ok: false, error: 'Ongeldige JSON payload.' }))
-            }
-          })
-
-          req.on('error', () => {
-            res.statusCode = 500
-            res.setHeader('Content-Type', 'application/json; charset=utf-8')
-            res.end(JSON.stringify({ ok: false, error: 'Kon request body niet lezen.' }))
-          })
-
-          return
-        }
-
-        res.statusCode = 405
-        res.setHeader('Content-Type', 'application/json; charset=utf-8')
-        res.end(JSON.stringify({ ok: false, error: 'Method not allowed' }))
-      })
-
-      server.middlewares.use('/api/contacts', async (req, res) => {
-        if (req.method === 'GET') {
-          const contacts = await readJsonFile(CONTACTS_FILE, {})
-          res.setHeader('Content-Type', 'application/json; charset=utf-8')
-          res.end(JSON.stringify({ contacts: contacts && typeof contacts === 'object' ? contacts : {} }))
-          return
-        }
-
-        if (req.method === 'POST') {
-          let body = ''
-
-          req.on('data', (chunk) => {
-            body += chunk
-          })
-
-          req.on('end', async () => {
-            try {
-              const parsed = JSON.parse(body || '{}')
-              const contacts = parsed?.contacts && typeof parsed.contacts === 'object' ? parsed.contacts : {}
-              await writeJsonFile(CONTACTS_FILE, contacts)
-
-              res.statusCode = 200
-              res.setHeader('Content-Type', 'application/json; charset=utf-8')
-              res.end(JSON.stringify({ ok: true }))
-            } catch {
-              res.statusCode = 400
-              res.setHeader('Content-Type', 'application/json; charset=utf-8')
-              res.end(JSON.stringify({ ok: false, error: 'Ongeldige JSON payload.' }))
-            }
-          })
-
-          req.on('error', () => {
-            res.statusCode = 500
-            res.setHeader('Content-Type', 'application/json; charset=utf-8')
-            res.end(JSON.stringify({ ok: false, error: 'Kon request body niet lezen.' }))
-          })
-
-          return
-        }
-
-        res.statusCode = 405
-        res.setHeader('Content-Type', 'application/json; charset=utf-8')
-        res.end(JSON.stringify({ ok: false, error: 'Method not allowed' }))
-      })
+    plugins: [react()],
+    server: {
+      proxy: {
+        '/api': {
+          target: apiBase,
+          changeOrigin: true,
+        },
+      },
     },
   }
-}
-
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), stateApiPlugin()],
-  server: {
-    fs: {
-      allow: ['..'],
-    },
-  },
 })
